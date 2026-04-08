@@ -13,7 +13,7 @@ const nextConfig = {
   },
   // Ensure server-only code is never accidentally bundled on the client
   experimental: {
-    typedRoutes: true,
+    typedRoutes: false,
   },
 }
 
