@@ -135,6 +135,8 @@ export async function GET(request: Request) {
   // The check-overdue cron has already set status='overdue' on these rows.
   // We send the employer a summary so they can chase manually if needed.
 
+  // ── 2. Employer escalations ────────────────────────────────────────────────
+
   const { data: overdueItems, error: overdueError } = await supabase
     .from('checklist_items')
     .select(`
@@ -146,14 +148,7 @@ export async function GET(request: Request) {
         start_date,
         role_title,
         invitee_name,
-        employer_id,
-        employer_accounts!inner (
-          company_name
-        ),
-        employer_members!inner (
-          full_name,
-          email
-        )
+        employer_id
       )
     `)
     .eq('status', 'overdue');
@@ -161,6 +156,23 @@ export async function GET(request: Request) {
   if (overdueError) {
     results.errors.push(`Overdue items query failed: ${overdueError.message}`);
   } else if (overdueItems && overdueItems.length > 0) {
+
+    // Get unique employer IDs from the results
+    const employerIds = [
+      ...new Set(overdueItems.map((r: any) => r.onboarding_instances.employer_id as string))
+    ];
+
+    // Fetch employer contact details and company name separately
+    const { data: members } = await supabase
+      .from('employer_members')
+      .select('employer_id, full_name, email')
+      .in('employer_id', employerIds);
+
+    const { data: accounts } = await supabase
+      .from('employer_accounts')
+      .select('id, company_name')
+      .in('id', employerIds);
+
     // Group by employer_id
     const byEmployer = new Map<string, EmployerEscalationGroup>();
 
@@ -169,16 +181,14 @@ export async function GET(request: Request) {
       const empId: string = instance.employer_id;
 
       if (!byEmployer.has(empId)) {
-        // employer_members may be an array — take the first (owner)
-        const member = Array.isArray(instance.employer_members)
-          ? instance.employer_members[0]
-          : instance.employer_members;
+        const member = members?.find((m) => m.employer_id === empId);
+        const account = accounts?.find((a) => a.id === empId);
 
         byEmployer.set(empId, {
           employerId: empId,
           employerName: member?.full_name ?? 'there',
           employerEmail: member?.email ?? '',
-          companyName: (instance.employer_accounts as any)?.company_name ?? 'your company',
+          companyName: account?.company_name ?? 'your company',
           onboardings: new Map(),
         });
       }
