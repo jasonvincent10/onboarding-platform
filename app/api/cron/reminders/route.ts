@@ -8,6 +8,23 @@ import {
   type OverdueEntry,
 } from '@/lib/email/reminder-templates';
 
+interface EmployeeReminderGroup {
+  onboardingId: string;
+  employeeName: string;
+  employeeEmail: string;
+  companyName: string;
+  startDate: string;
+  items: ReminderItem[];
+}
+
+interface EmployerEscalationGroup {
+  employerId: string;
+  employerName: string;
+  employerEmail: string;
+  companyName: string;
+  onboardings: Map<string, OverdueEntry>;
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = 'onboarding@resend.dev'; // replace with verified domain before launch
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
@@ -65,17 +82,7 @@ export async function GET(request: Request) {
     results.errors.push(`Upcoming items query failed: ${upcomingError.message}`);
   } else if (upcomingItems && upcomingItems.length > 0) {
     // Group items by onboarding instance so each employee gets ONE email
-    const byOnboarding = new Map
-      string,
-      {
-        onboardingId: string;
-        employeeName: string;
-        employeeEmail: string;
-        companyName: string;
-        startDate: string;
-        items: ReminderItem[];
-      }
-    >();
+    const byOnboarding = new Map<string, EmployeeReminderGroup>();
 
     for (const row of upcomingItems) {
       const instance = row.onboarding_instances as any;
@@ -155,16 +162,7 @@ export async function GET(request: Request) {
     results.errors.push(`Overdue items query failed: ${overdueError.message}`);
   } else if (overdueItems && overdueItems.length > 0) {
     // Group by employer_id
-    const byEmployer = new Map
-      string,
-      {
-        employerId: string;
-        employerName: string;
-        employerEmail: string;
-        companyName: string;
-        onboardings: Map<string, OverdueEntry>;
-      }
-    >();
+    const byEmployer = new Map<string, EmployerEscalationGroup>();
 
     for (const row of overdueItems) {
       const instance = row.onboarding_instances as any;
