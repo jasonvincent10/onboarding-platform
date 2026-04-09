@@ -115,7 +115,7 @@ NEXT_PUBLIC_APP_URL=
 - [x] **2.2** Form-based data entry — NI, bank, emergency contacts *(Opus)*
 - [x] **2.3** Policy acknowledgement *(Sonnet)*
 - [x] **2.4** Employer review workflow *(Sonnet)*
-- [ ] **2.5** Status engine *(Sonnet)*
+- [x] **2.5** Status engine *(Sonnet)*
 - [ ] **2.6** Automated email reminders *(Sonnet)*
 
 ### Phase 3 — Portability & Polish (Weeks 7–9)
@@ -238,6 +238,13 @@ NEXT_PUBLIC_APP_URL=
   - adminClient required for checklist_items UPDATE (RLS blocks employer writes)
   - Signed URL "Object not found" = mismatch between storage file and DB file_path record
   - window.location.reload() used after approve/re-upload to refresh employer view
+  - Task 2.5 complete
+  - recalculate_onboarding_status(UUID) PostgreSQL function live in Supabase
+  - Trigger checklist_status_changed fires on checklist_items changes automatically
+  - Daily cron at app/api/cron/check-overdue/route.ts — 7am UTC
+  - NEXT_PUBLIC_APP_URL updated to https://onboarding-platform.vercel.app
+  - Project now live on GitHub at jasonvincent10/onboarding-platform
+  - Build fixed: typedRoutes removed, clsx installed, TypeScript errors resolved
 ## How to use this file
 
 1. **Start every Claude conversation** by pasting the full contents of this file before your task prompt
