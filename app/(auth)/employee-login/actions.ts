@@ -11,7 +11,7 @@ export async function signUpEmployee(
   const fullName = formData.get('full_name') as string
   const token = formData.get('token') as string
 
-  if (!token) redirect('/auth/login?error=invalid_invite')
+  if (!token) redirect('/auth/login?error=invalid_invite' as any)
 
   const supabase = await createClient()
 
@@ -24,14 +24,12 @@ export async function signUpEmployee(
   })
 
   if (error) {
-    // User might already exist — tell them to sign in instead
     if (error.message.toLowerCase().includes('already')) {
       return { error: 'An account with this email already exists. Sign in instead.' }
     }
     return { error: error.message }
   }
 
-  // Always redirect back to /join so acceptInvitation() can run
   redirect(`/join?token=${token}`)
 }
 
@@ -42,7 +40,7 @@ export async function loginEmployee(
   const password = formData.get('password') as string
   const token = formData.get('token') as string
 
-  if (!token) redirect('/auth/login?error=invalid_invite')
+  if (!token) redirect('/auth/login?error=invalid_invite' as any)
 
   const supabase = await createClient()
 
@@ -52,6 +50,5 @@ export async function loginEmployee(
     return { error: 'Incorrect email or password.' }
   }
 
-  // Always redirect back to /join so acceptInvitation() can run
   redirect(`/join?token=${token}`)
 }

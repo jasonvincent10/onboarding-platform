@@ -1,19 +1,6 @@
-/**
- * AES-256-GCM field-level encryption for sensitive personal data.
- *
- * Used for: NI numbers, bank sort codes, bank account numbers.
- * Supabase already encrypts the database at rest, but field-level
- * encryption adds defence-in-depth so even a DB dump leaks nothing useful.
- *
- * The encryption key is stored in FIELD_ENCRYPTION_KEY env var (64 hex chars = 32 bytes).
- * Generate with: openssl rand -hex 32
- *
- * ⚠️  Server-side only. Never import this in Client Components.
- */
-
 const ALGORITHM = 'AES-GCM'
 const KEY_LENGTH = 256
-const IV_LENGTH = 12 // bytes — GCM standard
+const IV_LENGTH = 12
 
 function hexToBuffer(hex: string): Uint8Array {
   const bytes = new Uint8Array(hex.length / 2)
@@ -38,31 +25,23 @@ async function getKey(): Promise<CryptoKey> {
     )
   }
   const keyBytes = hexToBuffer(keyHex)
-  return crypto.subtle.importKey('raw', keyBytes, { name: ALGORITHM, length: KEY_LENGTH }, false, ['encrypt', 'decrypt'])
+  return crypto.subtle.importKey('raw', keyBytes.buffer as ArrayBuffer, { name: ALGORITHM, length: KEY_LENGTH }, false, ['encrypt', 'decrypt'])
 }
 
-/**
- * Encrypt a plaintext string.
- * Returns a hex string: <iv_hex>:<ciphertext_hex>
- */
 export async function encrypt(plaintext: string): Promise<string> {
   const key = await getKey()
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH))
   const encoded = new TextEncoder().encode(plaintext)
   const ciphertext = await crypto.subtle.encrypt({ name: ALGORITHM, iv }, key, encoded)
-  return `${bufferToHex(iv)}:${bufferToHex(ciphertext)}`
+  return `${bufferToHex(iv.buffer as ArrayBuffer)}:${bufferToHex(ciphertext)}`
 }
 
-/**
- * Decrypt a ciphertext string produced by encrypt().
- * Input format: <iv_hex>:<ciphertext_hex>
- */
 export async function decrypt(ciphertext: string): Promise<string> {
   const [ivHex, ctHex] = ciphertext.split(':')
   if (!ivHex || !ctHex) throw new Error('Invalid ciphertext format')
   const key = await getKey()
   const iv = hexToBuffer(ivHex)
   const ct = hexToBuffer(ctHex)
-  const plaintext = await crypto.subtle.decrypt({ name: ALGORITHM, iv }, key, ct)
+  const plaintext = await crypto.subtle.decrypt({ name: ALGORITHM, iv: iv.buffer as ArrayBuffer }, key, ct.buffer as ArrayBuffer)
   return new TextDecoder().decode(plaintext)
 }

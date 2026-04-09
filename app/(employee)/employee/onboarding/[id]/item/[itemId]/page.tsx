@@ -45,8 +45,8 @@ export default async function ItemPage({ params }: Props) {
   }
 
   const companyName =
-    (onboarding.employer_accounts as { company_name: string } | null)
-      ?.company_name ?? 'Your employer'
+    (onboarding.employer_accounts as { company_name: string }[] | null)
+      ?.[0]?.company_name ?? 'Your employer'
 
   // Status helpers
   const statusConfig = {
@@ -190,9 +190,9 @@ export default async function ItemPage({ params }: Props) {
               <FormEntryHandler
                 onboardingId={onboardingId}
                 checklistItemId={itemId}
-                formFieldKey={item.form_field_key}
+                formFieldKey={item.form_field_key ?? ''}
                 itemName={item.item_name}
-                itemDescription={item.description}
+                itemDescription={item.description ?? undefined}
                 status={item.status}
               />
             ) : item.item_type === 'acknowledgement' ? (

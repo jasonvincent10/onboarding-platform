@@ -97,7 +97,7 @@ interface Onboarding {
   start_date: string | null
   status: string
   readiness_pct: number | null
-  employer_accounts: { company_name: string } | null
+  employer_accounts: { company_name: string }[] | null
 }
 
 function OnboardingCard({ onboarding: o }: { onboarding: Onboarding }) {

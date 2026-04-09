@@ -84,14 +84,14 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
       if (item.item_type === 'document_upload' && item.document_upload_id) {
         const result = await getSignedDocumentUrl(item.document_upload_id, onboardingId)
         if ('error' in result) {
-          setViewError(result.error)
+          setViewError(result.error ?? '')
         } else {
           setDocumentUrl(result.url ?? null)
         }
       } else if (item.item_type === 'form_entry') {
         const result = await getDecryptedFormData(onboardingId, item.data_category)
         if ('error' in result) {
-          setViewError(result.error)
+          setViewError(result.error ?? '')
         } else {
           setFormData(result.fields ?? null)
         }

@@ -405,7 +405,7 @@ export default function DocumentUpload({
       )}
 
       {/* Submit button */}
-      {selectedFile && !isUploading && stage !== 'done' && (
+      {selectedFile && !isUploading && (stage as string) !== 'done' && (
         <button
           onClick={handleSubmit}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50 sm:w-auto"
