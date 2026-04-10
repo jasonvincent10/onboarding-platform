@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { loginEmployee, signUpEmployee } from './actions'
 
-export default function EmployeeLoginPage() {
+function EmployeeLoginForm() {
   const searchParams = useSearchParams()
   const token = searchParams.get('token') ?? ''
 
@@ -141,5 +141,13 @@ export default function EmployeeLoginPage() {
         </button>
       </p>
     </div>
+  )
+}
+
+export default function EmployeeLoginPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-slate-500">Loading…</div>}>
+      <EmployeeLoginForm />
+    </Suspense>
   )
 }
