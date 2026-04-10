@@ -92,18 +92,23 @@ export async function acceptInvitation(
   // - Existing profile with data → review page to carry forward portable items
   // - Existing profile but empty → straight to checklist
   let redirectTo = `/employee/onboarding/${onboardingId}`
-
-  console.log('[acceptInvitation] isNewProfile:', isNewProfile, 'userId:', userId)
+  let debugHasData = 'not-checked'
+  let debugError = 'none'
 
   if (!isNewProfile) {
-    const hasData = await hasPortableData(userId)
-    console.log('[acceptInvitation] hasPortableData result:', hasData)
-    if (hasData) {
-      redirectTo = `/employee/onboarding/${onboardingId}/review`
+    try {
+      const hasData = await hasPortableData(userId)
+      debugHasData = String(hasData)
+      if (hasData) {
+        redirectTo = `/employee/onboarding/${onboardingId}/review`
+      }
+    } catch (err: any) {
+      debugError = err?.message || 'unknown error'
     }
   }
 
-  console.log('[acceptInvitation] final redirectTo:', redirectTo)
+  // TEMPORARY DEBUG: encode the flow state into the redirect URL
+  redirectTo += `?debug_new=${isNewProfile}&debug_hasdata=${debugHasData}&debug_err=${encodeURIComponent(debugError)}&debug_uid=${userId}`
 
   return { redirectTo }
 }
