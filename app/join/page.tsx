@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { acceptInvitation } from './actions'
 
 interface JoinPageProps {
@@ -13,10 +14,11 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
     redirect('/auth/login?error=invalid_invite')
   }
 
-  const supabase = await createClient()
+  // Use admin client to look up the onboarding by token — bypasses RLS
+  // so unauthenticated visitors can validate the invite link before logging in
+  const adminClient = createAdminClient()
 
-  // Check if token is valid before anything else
-  const { data: onboarding, error } = await supabase
+  const { data: onboarding, error } = await adminClient
     .from('onboarding_instances')
     .select('id, invitee_name, invitee_email, role_title, status, employer_accounts(company_name)')
     .eq('invitation_token', token)
@@ -30,11 +32,11 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
     redirect('/employee/dashboard?notice=already_completed')
   }
 
-  // Check if user is already authenticated
+  // Now use the regular client for auth check
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    // Not logged in — send to employee auth with token preserved
     redirect(`/auth/employee-login?token=${token}`)
   }
 
