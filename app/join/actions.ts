@@ -12,8 +12,10 @@ export async function acceptInvitation(
   const supabase = await createClient()
   const adminClient = createAdminClient()
 
-  // Fetch the onboarding first so we have invitee_name available
-  const { data: onboarding } = await supabase
+  // Fetch the onboarding first — use admin client because the employee
+  // doesn't own this onboarding yet (employee_id is still NULL), so RLS
+  // would block a regular SELECT
+  const { data: onboarding } = await adminClient
     .from('onboarding_instances')
     .select('employee_id, status, invitee_email, invitee_name')
     .eq('id', onboardingId)
