@@ -90,12 +90,17 @@ export async function acceptInvitation(
   // - Existing profile but empty → straight to checklist
   let redirectTo = `/employee/onboarding/${onboardingId}`
 
+  console.log('[acceptInvitation] isNewProfile:', isNewProfile, 'userId:', userId)
+
   if (!isNewProfile) {
     const hasData = await hasPortableData(userId)
+    console.log('[acceptInvitation] hasPortableData result:', hasData)
     if (hasData) {
       redirectTo = `/employee/onboarding/${onboardingId}/review`
     }
   }
+
+  console.log('[acceptInvitation] final redirectTo:', redirectTo)
 
   return { redirectTo }
 }
