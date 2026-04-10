@@ -24,14 +24,12 @@ export async function acceptInvitation(
   if (!onboarding) return { error: 'not_found' }
 
   // Get or create employee profile for this user
-  // Use admin client to bypass any RLS edge cases
   let { data: profile } = await adminClient
     .from('employee_profiles')
     .select('id')
     .eq('user_id', userId)
     .single()
 
-  // Track whether this is a brand new profile (first-time employee)
   let isNewProfile = false
 
   if (!profile) {
@@ -76,21 +74,7 @@ export async function acceptInvitation(
     return { error: 'update_failed' }
   }
 
-  // Write audit log
-  await adminClient.from('audit_log').insert({
-    actor_id: userId,
-    actor_type: 'employee',
-    action: 'invitation_accepted',
-    resource_type: 'onboarding_instance',
-    resource_id: onboardingId,
-    employee_id: profile.id,
-    metadata: { token_used: true },
-  })
-
-  // Decide where to send the employee next:
-  // - New profile (just created) → straight to checklist, nothing to carry forward
-  // - Existing profile with data → review page to carry forward portable items
-  // - Existing profile but empty → straight to checklist
+  // Decide where to send the employee next
   let redirectTo = `/employee/onboarding/${onboardingId}`
   let debugHasData = 'not-checked'
   let debugError = 'none'
@@ -125,12 +109,6 @@ export async function acceptInvitation(
       profileId: profile.id,
     },
   })
-
-  return { redirectTo }
-}
-
-  // TEMPORARY DEBUG: encode the flow state into the redirect URL
-  redirectTo += `?debug_new=${isNewProfile}&debug_hasdata=${debugHasData}&debug_err=${encodeURIComponent(debugError)}&debug_uid=${userId}`
 
   return { redirectTo }
 }
