@@ -37,7 +37,7 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect(`/auth/employee-login?token=${token}`)
+    redirect(`/employee-login?token=${token}`)
   }
 
   // Logged in — accept the invitation server-side

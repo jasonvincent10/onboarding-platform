@@ -10,13 +10,12 @@ const PUBLIC_ROUTES = [
   '/privacy',
   '/terms',
   '/join',
-  '/auth/employee-login',
-  '/auth/employee-sign-up',
+  '/employee-login',
 ]
 
 // Routes that authenticated users can access regardless of auth state
 // (i.e. don't redirect away from these even if logged in)
-const ALWAYS_ACCESSIBLE = ['/join', '/auth/employee-login', '/auth/employee-sign-up']
+const ALWAYS_ACCESSIBLE = ['/join', '/employee-login']
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
