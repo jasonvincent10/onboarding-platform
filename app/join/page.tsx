@@ -10,9 +10,6 @@ interface JoinPageProps {
 export default async function JoinPage({ searchParams }: JoinPageProps) {
   const { token } = await searchParams
 
-  export default async function JoinPage({ searchParams }: JoinPageProps) {
-  const { token } = await searchParams
-
   // DEBUG: this redirect should fire if the join page is even running
   if (token === 'PROVE_JOIN_RAN') {
     redirect('/employee/dashboard?join_page_ran=yes')
@@ -21,8 +18,6 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
   if (!token) {
     redirect('/auth/login?error=invalid_invite')
   }
-  
-  // ...rest stays the same
 
   // Use admin client to look up the onboarding by token — bypasses RLS
   // so unauthenticated visitors can validate the invite link before logging in
