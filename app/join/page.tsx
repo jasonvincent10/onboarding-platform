@@ -46,6 +46,23 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
   }
 
   // Logged in — accept the invitation server-side
+  // DEBUG: log that we reached this point in the join page
+  const debugAdminClient = createAdminClient()
+  await debugAdminClient.from('audit_log').insert({
+    actor_id: user.id,
+    actor_type: 'employee',
+    action: 'invitation_accepted',
+    resource_type: 'onboarding_instance',
+    resource_id: onboarding.id,
+    metadata: {
+      DEBUG_TAG: 'join_page_reached_accept',
+      userId: user.id,
+      onboardingId: onboarding.id,
+      token,
+    },
+  })
+
+  // Logged in — accept the invitation server-side
   const result = await acceptInvitation(token, user.id, onboarding.id)
 
   if (result.error) {
