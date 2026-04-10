@@ -24,7 +24,8 @@ export async function acceptInvitation(
   if (!onboarding) return { error: 'not_found' }
 
   // Get or create employee profile for this user
-  let { data: profile } = await supabase
+  // Use admin client to bypass any RLS edge cases
+  let { data: profile } = await adminClient
     .from('employee_profiles')
     .select('id')
     .eq('user_id', userId)

@@ -21,7 +21,6 @@ export interface PortableReviewData {
   roleTitle: string;
   startDate: string;
   matchResult: ProfileMatchResult;
-  /** Masked versions of sensitive data for display */
   maskedData: {
     niNumber: string | null;
     bankSortCode: string | null;
@@ -32,37 +31,45 @@ export interface PortableReviewData {
 }
 
 export interface ConfirmationSelection {
-  /** checklist_item IDs the employee chose to carry forward */
   selectedItemIds: string[];
-  /** data_categories the employee is granting consent for */
   consentCategories: string[];
+}
+
+// ── Helper: resolve auth user → employee profile ID ───────────────────────
+
+async function getProfileIdForUser(userId: string): Promise<string | null> {
+  const adminClient = createAdminClient();
+  const { data: profile } = await adminClient
+    .from('employee_profiles')
+    .select('id')
+    .eq('user_id', userId)
+    .single();
+  return profile?.id || null;
 }
 
 // ── Get Portable Review Data ───────────────────────────────────────────────
 
-/**
- * Fetches everything needed for the portable profile review page:
- * - Employee's existing profile (with masked sensitive fields)
- * - Their existing documents
- * - The new onboarding's checklist items
- * - The matching result
- * 
- * Returns null if the employee has no portable data (shouldn't reach this page).
- */
 export async function getPortableReviewData(
   onboardingId: string
 ): Promise<{ data: PortableReviewData | null; error: string | null }> {
   try {
     const supabase = await createClient();
+    const adminClient = createAdminClient();
 
-    // Get current user
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return { data: null, error: 'Not authenticated' };
     }
 
-    // Get the onboarding instance with employer info
-    const { data: onboarding, error: onbError } = await supabase
+    // Get the employee's profile ID (not their auth user ID)
+    const profileId = await getProfileIdForUser(user.id);
+    if (!profileId) {
+      return { data: null, error: 'Employee profile not found' };
+    }
+
+    // Get the onboarding instance with employer info — use admin client
+    // because the employee's RLS access hinges on employee_id being set
+    const { data: onboarding, error: onbError } = await adminClient
       .from('onboarding_instances')
       .select(`
         id,
@@ -74,7 +81,7 @@ export async function getPortableReviewData(
         employer_accounts!inner ( company_name )
       `)
       .eq('id', onboardingId)
-      .eq('employee_id', user.id)
+      .eq('employee_id', profileId)
       .single();
 
     if (onbError || !onboarding) {
@@ -82,7 +89,7 @@ export async function getPortableReviewData(
     }
 
     // Get employee profile
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await adminClient
       .from('employee_profiles')
       .select('*')
       .eq('user_id', user.id)
@@ -92,44 +99,39 @@ export async function getPortableReviewData(
       return { data: null, error: 'Employee profile not found' };
     }
 
-    // Get existing documents for this employee
-    const { data: documents, error: docError } = await supabase
+    // Get existing documents — document_uploads.employee_id is the profile ID
+    const { data: documents, error: docError } = await adminClient
       .from('document_uploads')
       .select('*')
-      .eq('employee_id', user.id)
+      .eq('employee_id', profileId)
       .order('created_at', { ascending: false });
 
     if (docError) {
       return { data: null, error: 'Failed to load documents' };
     }
 
-    // Get checklist items for this onboarding
-    const { data: checklistItems, error: clError } = await supabase
+    // Get checklist items — order by sort_order if available, else created_at
+    const { data: checklistItems, error: clError } = await adminClient
       .from('checklist_items')
       .select('id, item_name, item_type, data_category, form_field_key, status')
-      .eq('onboarding_id', onboardingId)
-      .order('sort_order', { ascending: true });
+      .eq('onboarding_id', onboardingId);
 
     if (clError) {
       return { data: null, error: 'Failed to load checklist items' };
     }
 
-    // Run the matcher
     const matchResult = matchProfileToChecklist(
       profile as EmployeeProfileData,
       (documents || []) as ExistingDocument[],
       (checklistItems || []) as ChecklistItem[]
     );
 
-    // If no portable data, return null (caller will redirect to checklist)
     if (!matchResult.hasPortableData) {
       return { data: null, error: null };
     }
 
-    // Build masked data for display
     const maskedData = buildMaskedData(profile);
 
-    // Extract employer name safely
     const employerAccounts = onboarding.employer_accounts as any;
     const employerName = employerAccounts?.company_name || 'Unknown Company';
 
@@ -152,13 +154,6 @@ export async function getPortableReviewData(
 
 // ── Confirm Portable Items ─────────────────────────────────────────────────
 
-/**
- * Applies the employee's confirmation choices:
- * 1. Creates consent records for each data category being shared
- * 2. Updates selected checklist items to status='submitted', was_pre_populated=true
- * 3. Links document_upload IDs where applicable
- * 4. Writes audit log entries
- */
 export async function confirmPortableItems(
   onboardingId: string,
   selection: ConfirmationSelection
@@ -167,38 +162,42 @@ export async function confirmPortableItems(
     const supabase = await createClient();
     const adminClient = createAdminClient();
 
-    // Get current user
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return { success: false, error: 'Not authenticated' };
     }
 
+    const profileId = await getProfileIdForUser(user.id);
+    if (!profileId) {
+      return { success: false, error: 'Employee profile not found' };
+    }
+
     // Verify this onboarding belongs to the user
-    const { data: onboarding, error: onbError } = await supabase
+    const { data: onboarding, error: onbError } = await adminClient
       .from('onboarding_instances')
       .select('id, employer_id, employee_id')
       .eq('id', onboardingId)
-      .eq('employee_id', user.id)
+      .eq('employee_id', profileId)
       .single();
 
     if (onbError || !onboarding) {
       return { success: false, error: 'Onboarding not found or access denied' };
     }
 
-    // Re-run the matcher to get document IDs and validate selections
-    const { data: profile } = await supabase
+    // Re-run the matcher
+    const { data: profile } = await adminClient
       .from('employee_profiles')
       .select('*')
       .eq('user_id', user.id)
       .single();
 
-    const { data: documents } = await supabase
+    const { data: documents } = await adminClient
       .from('document_uploads')
       .select('*')
-      .eq('employee_id', user.id)
+      .eq('employee_id', profileId)
       .order('created_at', { ascending: false });
 
-    const { data: checklistItems } = await supabase
+    const { data: checklistItems } = await adminClient
       .from('checklist_items')
       .select('id, item_name, item_type, data_category, form_field_key, status')
       .eq('onboarding_id', onboardingId);
@@ -218,10 +217,10 @@ export async function confirmPortableItems(
     for (const category of uniqueCategories) {
       if (!isCategoryPortable(category)) continue;
 
-      const { error: consentError } = await supabase
+      const { error: consentError } = await adminClient
         .from('consent_records')
         .insert({
-          employee_id: user.id,
+          employee_id: profileId,
           employer_id: onboarding.employer_id,
           data_category: category,
           action: 'granted',
@@ -230,7 +229,6 @@ export async function confirmPortableItems(
 
       if (consentError) {
         console.error('Consent insert error:', consentError);
-        // Continue — don't fail the whole operation for one consent record
       }
     }
 
@@ -244,12 +242,10 @@ export async function confirmPortableItems(
         was_pre_populated: true,
       };
 
-      // If this is a document item, link the existing document
       if (matchItem.existingDocumentId) {
         updateData.document_upload_id = matchItem.existingDocumentId;
       }
 
-      // Use adminClient to bypass RLS for checklist_items UPDATE
       const { error: updateError } = await adminClient
         .from('checklist_items')
         .update(updateData)
@@ -261,7 +257,7 @@ export async function confirmPortableItems(
     }
 
     // 3. Write audit log
-    const { error: auditError } = await supabase
+    const { error: auditError } = await adminClient
       .from('audit_log')
       .insert({
         actor_id: user.id,
@@ -270,7 +266,7 @@ export async function confirmPortableItems(
         resource_type: 'onboarding_instance',
         resource_id: onboardingId,
         employer_id: onboarding.employer_id,
-        employee_id: user.id,
+        employee_id: profileId,
         metadata: {
           items_pre_populated: selection.selectedItemIds.length,
           consent_categories: uniqueCategories,
@@ -290,22 +286,15 @@ export async function confirmPortableItems(
 
 // ── Check if Employee Has Portable Data ────────────────────────────────────
 
-/**
- * Quick check used by acceptInvitation() to decide whether to redirect
- * to the review page or straight to the checklist.
- * 
- * Returns true if the employee has any pre-existing data that could
- * be carried forward (encrypted fields, documents, etc.)
- */
 export async function hasPortableData(userId: string): Promise<boolean> {
   try {
-    const supabase = await createClient();
+    const adminClient = createAdminClient();
 
-    // Check profile for any filled portable fields
-    const { data: profile } = await supabase
+    // Look up the profile by auth user_id
+    const { data: profile } = await adminClient
       .from('employee_profiles')
       .select(
-        'ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, emergency_contacts'
+        'id, ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, emergency_contacts'
       )
       .eq('user_id', userId)
       .single();
@@ -320,11 +309,11 @@ export async function hasPortableData(userId: string): Promise<boolean> {
 
     if (hasFormData) return true;
 
-    // Check for existing right-to-work documents (the only portable document category)
-    const { data: docs, error } = await supabase
+    // Check for right-to-work documents — employee_id is the profile ID
+    const { data: docs } = await adminClient
       .from('document_uploads')
       .select('id')
-      .eq('employee_id', userId)
+      .eq('employee_id', profile.id)
       .eq('data_category', 'right_to_work')
       .limit(1);
 
@@ -338,12 +327,6 @@ export async function hasPortableData(userId: string): Promise<boolean> {
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
-/**
- * Builds masked versions of sensitive data for safe display on the review page.
- * NI: "AB ** ** ** C"
- * Sort code: "**-**-34"
- * Account number: "****5678"
- */
 function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
   let niNumber: string | null = null;
   let bankSortCode: string | null = null;
@@ -351,11 +334,9 @@ function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
   const bankHolderName: string | null = profile.bank_account_holder_name || null;
   const emergencyContacts: { name: string; relationship: string }[] = [];
 
-  // Mask NI number
   if (profile.ni_number_encrypted) {
     try {
       const decrypted = decryptField(profile.ni_number_encrypted);
-      // NI format: AB123456C → show first 2 and last 1
       if (decrypted.length >= 9) {
         niNumber = `${decrypted.slice(0, 2)} ** ** ** ${decrypted.slice(-1)}`;
       } else {
@@ -366,11 +347,9 @@ function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
     }
   }
 
-  // Mask bank sort code
   if (profile.bank_sort_code_encrypted) {
     try {
       const decrypted = decryptField(profile.bank_sort_code_encrypted);
-      // Sort code: 123456 or 12-34-56 → show last 2 digits
       const digits = decrypted.replace(/\D/g, '');
       if (digits.length >= 6) {
         bankSortCode = `**-**-${digits.slice(-2)}`;
@@ -382,11 +361,9 @@ function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
     }
   }
 
-  // Mask bank account number
   if (profile.bank_account_number_encrypted) {
     try {
       const decrypted = decryptField(profile.bank_account_number_encrypted);
-      // Account: 12345678 → show last 4
       if (decrypted.length >= 4) {
         bankAccountNumber = `****${decrypted.slice(-4)}`;
       } else {
@@ -397,7 +374,6 @@ function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
     }
   }
 
-  // Extract emergency contact names (not encrypted)
   if (Array.isArray(profile.emergency_contacts)) {
     for (const contact of profile.emergency_contacts) {
       emergencyContacts.push({
