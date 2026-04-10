@@ -45,5 +45,5 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
     redirect(`/employee/dashboard?error=${result.error}`)
   }
 
-  redirect(`/employee/onboarding/${onboarding.id}?welcomed=true`)
+  redirect(result.redirectTo || `/employee/onboarding/${onboarding.id}?welcomed=true`)
 }

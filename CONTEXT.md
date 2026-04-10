@@ -116,7 +116,7 @@ NEXT_PUBLIC_APP_URL=
 - [x] **2.3** Policy acknowledgement *(Sonnet)*
 - [x] **2.4** Employer review workflow *(Sonnet)*
 - [x] **2.5** Status engine *(Sonnet)*
-- [ ] **2.6** Automated email reminders *(Sonnet)*
+- [x] **2.6** Automated email reminders *(Sonnet)*
 
 ### Phase 3 — Portability & Polish (Weeks 7–9)
 - [ ] **3.1** Portable profile logic *(Opus)*
@@ -209,7 +209,7 @@ NEXT_PUBLIC_APP_URL=
    - Task 2.2 patterns established:
   - Encryption utility at lib/encryption.ts — AES-256-GCM, server-side only
   - Storage format: iv.authTag.ciphertext (dot-separated base64 in TEXT columns)
-  - Env var is FIELD_ENCRYPTION_KEY (64-char hex string, 32 bytes)
+  - Env var is ENCRYPTION_KEY (64-char hex string, 32 bytes)
   - Validation at lib/validation/ — ni-number.ts, bank-details.ts, emergency-contacts.ts
   - Server actions at lib/actions/form-actions.ts — validate → encrypt → update profile → update checklist status → audit log
   - Form components at components/forms/ — NINumberForm, BankDetailsForm, EmergencyContactsForm
@@ -245,6 +245,30 @@ NEXT_PUBLIC_APP_URL=
   - NEXT_PUBLIC_APP_URL updated to https://onboarding-platform.vercel.app
   - Project now live on GitHub at jasonvincent10/onboarding-platform
   - Build fixed: typedRoutes removed, clsx installed, TypeScript errors resolved
+  - Task 2.6 complete
+- Reminder cron at app/api/cron/reminders/route.ts — 8am UTC
+- Email templates at lib/email/reminder-templates.ts
+- REMINDER_WINDOW_DAYS = 3 for employee reminders
+- Employer escalation uses two-step query (employer_members can't be joined 
+  indirectly through onboarding_instances)
+- Cron routes excluded from auth middleware via api/cron pattern in matcher
+- Correct Vercel URL is onboarding-platform-inky.vercel.app (not onboarding-platform.vercel.app)
+- NEXT_PUBLIC_APP_URL needs updating to https://onboarding-platform-inky.vercel.app
+- Task 3.1 patterns established:
+  - Portability config at lib/portability/categories.ts — defines universal/likely_stable/time_sensitive/employer_specific
+  - Profile matcher at lib/portability/profile-matcher.ts — matches existing data to new checklist items
+  - Server actions at lib/actions/portability-actions.ts — getPortableReviewData(), confirmPortableItems(), hasPortableData()
+  - Review page at app/(employee)/employee/onboarding/[id]/review/page.tsx
+  - PortableProfileReview client component at components/portability/PortableProfileReview.tsx
+  - acceptInvitation() in app/join/actions.ts now checks hasPortableData() and redirects returning employees to /review
+  - Pre-population sets was_pre_populated=true and status='submitted' on checklist_items
+  - Consent records created per data_category when employee confirms carry-forward
+  - Sensitive data shown masked on review page (NI: "AB ** ** ** C", bank: "****5678")
+  - Document expiry checked — expired docs flagged with warning and blocked from carry-forward
+  - P45 and policy_acknowledgements are never portable (employer-specific)
+  - Right-to-work documents are portable if not expired
+  - adminClient used for checklist_items UPDATE (same pattern as Task 2.4)
+  - audit_log action: 'profile_data_carried_forward' with metadata showing items + categories
 ## How to use this file
 
 1. **Start every Claude conversation** by pasting the full contents of this file before your task prompt

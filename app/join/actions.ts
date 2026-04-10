@@ -2,12 +2,13 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { hasPortableData } from '@/lib/actions/portability-actions'
 
 export async function acceptInvitation(
   token: string,
   userId: string,
   onboardingId: string
-): Promise<{ error?: string }> {
+): Promise<{ error?: string; redirectTo?: string }> {
   const supabase = await createClient()
   const adminClient = createAdminClient()
 
@@ -26,6 +27,9 @@ export async function acceptInvitation(
     .select('id')
     .eq('user_id', userId)
     .single()
+
+  // Track whether this is a brand new profile (first-time employee)
+  let isNewProfile = false
 
   if (!profile) {
     const { data: { user } } = await supabase.auth.getUser()
@@ -46,6 +50,7 @@ export async function acceptInvitation(
     }
 
     profile = newProfile
+    isNewProfile = true
   }
 
   // Check onboarding isn't already claimed by a different employee
@@ -79,5 +84,18 @@ export async function acceptInvitation(
     metadata: { token_used: true },
   })
 
-  return {}
+  // Decide where to send the employee next:
+  // - New profile (just created) → straight to checklist, nothing to carry forward
+  // - Existing profile with data → review page to carry forward portable items
+  // - Existing profile but empty → straight to checklist
+  let redirectTo = `/employee/onboarding/${onboardingId}`
+
+  if (!isNewProfile) {
+    const hasData = await hasPortableData(userId)
+    if (hasData) {
+      redirectTo = `/employee/onboarding/${onboardingId}/review`
+    }
+  }
+
+  return { redirectTo }
 }
