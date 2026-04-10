@@ -107,6 +107,28 @@ export async function acceptInvitation(
     }
   }
 
+  // DEBUG: write the flow state to audit_log so we can read it via SQL
+  await adminClient.from('audit_log').insert({
+    actor_id: userId,
+    actor_type: 'employee',
+    action: 'invitation_accepted',
+    resource_type: 'onboarding_instance',
+    resource_id: onboardingId,
+    employee_id: profile.id,
+    metadata: {
+      DEBUG_TAG: 'accept_invitation_final',
+      isNewProfile,
+      debugHasData,
+      debugError,
+      redirectTo,
+      userId,
+      profileId: profile.id,
+    },
+  })
+
+  return { redirectTo }
+}
+
   // TEMPORARY DEBUG: encode the flow state into the redirect URL
   redirectTo += `?debug_new=${isNewProfile}&debug_hasdata=${debugHasData}&debug_err=${encodeURIComponent(debugError)}&debug_uid=${userId}`
 
