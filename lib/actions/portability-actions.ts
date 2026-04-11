@@ -13,8 +13,6 @@ import {
 } from '@/lib/portability/profile-matcher';
 import { isCategoryPortable } from '@/lib/portability/categories';
 
-// ── Types ──────────────────────────────────────────────────────────────────
-
 export interface PortableReviewData {
   onboardingId: string;
   employerName: string;
@@ -35,8 +33,6 @@ export interface ConfirmationSelection {
   consentCategories: string[];
 }
 
-// ── Helper: resolve auth user → employee profile ID ───────────────────────
-
 async function getProfileIdForUser(userId: string): Promise<string | null> {
   const adminClient = createAdminClient();
   const { data: profile } = await adminClient
@@ -46,8 +42,6 @@ async function getProfileIdForUser(userId: string): Promise<string | null> {
     .single();
   return profile?.id || null;
 }
-
-// ── Get Portable Review Data ───────────────────────────────────────────────
 
 export async function getPortableReviewData(
   onboardingId: string
@@ -61,25 +55,15 @@ export async function getPortableReviewData(
       return { data: null, error: 'Not authenticated' };
     }
 
-    // Get the employee's profile ID (not their auth user ID)
     const profileId = await getProfileIdForUser(user.id);
     if (!profileId) {
       return { data: null, error: 'Employee profile not found' };
     }
 
-    // Get the onboarding instance with employer info — use admin client
-    // because the employee's RLS access hinges on employee_id being set
+    // Fetch onboarding instance with admin client (RLS bypass)
     const { data: onboarding, error: onbError } = await adminClient
       .from('onboarding_instances')
-      .select(`
-        id,
-        employer_id,
-        employee_id,
-        role_title,
-        start_date,
-        status,
-        employer_accounts!inner ( company_name )
-      `)
+      .select('id, employer_id, employee_id, role_title, start_date, status')
       .eq('id', onboardingId)
       .eq('employee_id', profileId)
       .single();
@@ -88,7 +72,14 @@ export async function getPortableReviewData(
       return { data: null, error: 'Onboarding not found or access denied' };
     }
 
-    // Get employee profile
+    // Fetch employer name separately to avoid join issues
+    const { data: employer } = await adminClient
+      .from('employer_accounts')
+      .select('company_name')
+      .eq('id', onboarding.employer_id)
+      .single();
+
+    // Fetch employee profile
     const { data: profile, error: profileError } = await adminClient
       .from('employee_profiles')
       .select('*')
@@ -99,31 +90,27 @@ export async function getPortableReviewData(
       return { data: null, error: 'Employee profile not found' };
     }
 
-    // Get existing documents — document_uploads.employee_id is the profile ID
-    const { data: documents, error: docError } = await adminClient
+    // Fetch existing documents
+    const { data: documents } = await adminClient
       .from('document_uploads')
       .select('*')
       .eq('employee_id', profileId)
-      .order('created_at', { ascending: false });
+      .order('updated_at', { ascending: false });
 
-    if (docError) {
-      return { data: null, error: 'Failed to load documents' };
-    }
-
-    // Get checklist items — order by sort_order if available, else created_at
-    const { data: checklistItems, error: clError } = await adminClient
+    // Fetch checklist items
+    const { data: checklistItems } = await adminClient
       .from('checklist_items')
       .select('id, item_name, item_type, data_category, form_field_key, status')
       .eq('onboarding_id', onboardingId);
 
-    if (clError) {
+    if (!checklistItems) {
       return { data: null, error: 'Failed to load checklist items' };
     }
 
     const matchResult = matchProfileToChecklist(
       profile as EmployeeProfileData,
       (documents || []) as ExistingDocument[],
-      (checklistItems || []) as ChecklistItem[]
+      checklistItems as ChecklistItem[]
     );
 
     if (!matchResult.hasPortableData) {
@@ -132,13 +119,10 @@ export async function getPortableReviewData(
 
     const maskedData = buildMaskedData(profile);
 
-    const employerAccounts = onboarding.employer_accounts as any;
-    const employerName = employerAccounts?.company_name || 'Unknown Company';
-
     return {
       data: {
         onboardingId,
-        employerName,
+        employerName: employer?.company_name || 'Unknown Company',
         roleTitle: onboarding.role_title || '',
         startDate: onboarding.start_date || '',
         matchResult,
@@ -151,8 +135,6 @@ export async function getPortableReviewData(
     return { data: null, error: 'An unexpected error occurred' };
   }
 }
-
-// ── Confirm Portable Items ─────────────────────────────────────────────────
 
 export async function confirmPortableItems(
   onboardingId: string,
@@ -172,7 +154,6 @@ export async function confirmPortableItems(
       return { success: false, error: 'Employee profile not found' };
     }
 
-    // Verify this onboarding belongs to the user
     const { data: onboarding, error: onbError } = await adminClient
       .from('onboarding_instances')
       .select('id, employer_id, employee_id')
@@ -184,7 +165,6 @@ export async function confirmPortableItems(
       return { success: false, error: 'Onboarding not found or access denied' };
     }
 
-    // Re-run the matcher
     const { data: profile } = await adminClient
       .from('employee_profiles')
       .select('*')
@@ -195,7 +175,7 @@ export async function confirmPortableItems(
       .from('document_uploads')
       .select('*')
       .eq('employee_id', profileId)
-      .order('created_at', { ascending: false });
+      .order('updated_at', { ascending: false });
 
     const { data: checklistItems } = await adminClient
       .from('checklist_items')
@@ -212,27 +192,19 @@ export async function confirmPortableItems(
       checklistItems as ChecklistItem[]
     );
 
-    // 1. Create consent records for each selected data category
     const uniqueCategories = [...new Set(selection.consentCategories)];
     for (const category of uniqueCategories) {
       if (!isCategoryPortable(category)) continue;
 
-      const { error: consentError } = await adminClient
-        .from('consent_records')
-        .insert({
-          employee_id: profileId,
-          employer_id: onboarding.employer_id,
-          data_category: category,
-          action: 'granted',
-          onboarding_id: onboardingId,
-        });
-
-      if (consentError) {
-        console.error('Consent insert error:', consentError);
-      }
+      await adminClient.from('consent_records').insert({
+        employee_id: profileId,
+        employer_id: onboarding.employer_id,
+        data_category: category,
+        action: 'granted',
+        onboarding_id: onboardingId,
+      });
     }
 
-    // 2. Update selected checklist items
     for (const itemId of selection.selectedItemIds) {
       const matchItem = matchResult.items.find((m) => m.checklistItemId === itemId);
       if (!matchItem || !matchItem.canPrePopulate) continue;
@@ -246,36 +218,22 @@ export async function confirmPortableItems(
         updateData.document_upload_id = matchItem.existingDocumentId;
       }
 
-      const { error: updateError } = await adminClient
-        .from('checklist_items')
-        .update(updateData)
-        .eq('id', itemId);
-
-      if (updateError) {
-        console.error('Checklist item update error:', updateError);
-      }
+      await adminClient.from('checklist_items').update(updateData).eq('id', itemId);
     }
 
-    // 3. Write audit log
-    const { error: auditError } = await adminClient
-      .from('audit_log')
-      .insert({
-        actor_id: user.id,
-        actor_type: 'employee',
-        action: 'profile_data_carried_forward',
-        resource_type: 'onboarding_instance',
-        resource_id: onboardingId,
-        employer_id: onboarding.employer_id,
-        employee_id: profileId,
-        metadata: {
-          items_pre_populated: selection.selectedItemIds.length,
-          consent_categories: uniqueCategories,
-        },
-      });
-
-    if (auditError) {
-      console.error('Audit log error:', auditError);
-    }
+    await adminClient.from('audit_log').insert({
+      actor_id: user.id,
+      actor_type: 'employee',
+      action: 'profile_data_carried_forward',
+      resource_type: 'onboarding_instance',
+      resource_id: onboardingId,
+      employer_id: onboarding.employer_id,
+      employee_id: profileId,
+      metadata: {
+        items_pre_populated: selection.selectedItemIds.length,
+        consent_categories: uniqueCategories,
+      },
+    });
 
     return { success: true, error: null };
   } catch (err) {
@@ -284,18 +242,13 @@ export async function confirmPortableItems(
   }
 }
 
-// ── Check if Employee Has Portable Data ────────────────────────────────────
-
 export async function hasPortableData(userId: string): Promise<boolean> {
   try {
     const adminClient = createAdminClient();
 
-    // Look up the profile by auth user_id
     const { data: profile } = await adminClient
       .from('employee_profiles')
-      .select(
-        'id, ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, emergency_contacts'
-      )
+      .select('id, ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, emergency_contacts')
       .eq('user_id', userId)
       .single();
 
@@ -309,7 +262,6 @@ export async function hasPortableData(userId: string): Promise<boolean> {
 
     if (hasFormData) return true;
 
-    // Check for right-to-work documents — employee_id is the profile ID
     const { data: docs } = await adminClient
       .from('document_uploads')
       .select('id')
@@ -317,15 +269,11 @@ export async function hasPortableData(userId: string): Promise<boolean> {
       .eq('data_category', 'right_to_work')
       .limit(1);
 
-    if (docs && docs.length > 0) return true;
-
-    return false;
+    return !!(docs && docs.length > 0);
   } catch {
     return false;
   }
 }
-
-// ── Helpers ─────────────────────────────────────────────────────────────────
 
 function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
   let niNumber: string | null = null;
@@ -337,13 +285,11 @@ function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
   if (profile.ni_number_encrypted) {
     try {
       const decrypted = decryptField(profile.ni_number_encrypted);
-      if (decrypted.length >= 9) {
-        niNumber = `${decrypted.slice(0, 2)} ** ** ** ${decrypted.slice(-1)}`;
-      } else {
-        niNumber = '** *** on file';
-      }
+      niNumber = decrypted.length >= 9
+        ? `${decrypted.slice(0, 2)} ** ** ** ${decrypted.slice(-1)}`
+        : '** *** on file';
     } catch {
-      niNumber = 'NI number on file (encrypted)';
+      niNumber = 'NI number on file';
     }
   }
 
@@ -351,26 +297,18 @@ function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
     try {
       const decrypted = decryptField(profile.bank_sort_code_encrypted);
       const digits = decrypted.replace(/\D/g, '');
-      if (digits.length >= 6) {
-        bankSortCode = `**-**-${digits.slice(-2)}`;
-      } else {
-        bankSortCode = 'Sort code on file';
-      }
+      bankSortCode = digits.length >= 6 ? `**-**-${digits.slice(-2)}` : 'Sort code on file';
     } catch {
-      bankSortCode = 'Sort code on file (encrypted)';
+      bankSortCode = 'Sort code on file';
     }
   }
 
   if (profile.bank_account_number_encrypted) {
     try {
       const decrypted = decryptField(profile.bank_account_number_encrypted);
-      if (decrypted.length >= 4) {
-        bankAccountNumber = `****${decrypted.slice(-4)}`;
-      } else {
-        bankAccountNumber = 'Account on file';
-      }
+      bankAccountNumber = decrypted.length >= 4 ? `****${decrypted.slice(-4)}` : 'Account on file';
     } catch {
-      bankAccountNumber = 'Account on file (encrypted)';
+      bankAccountNumber = 'Account on file';
     }
   }
 
@@ -383,11 +321,5 @@ function buildMaskedData(profile: any): PortableReviewData['maskedData'] {
     }
   }
 
-  return {
-    niNumber,
-    bankSortCode,
-    bankAccountNumber,
-    bankHolderName,
-    emergencyContacts,
-  };
+  return { niNumber, bankSortCode, bankAccountNumber, bankHolderName, emergencyContacts };
 }
