@@ -10,9 +10,10 @@ interface JoinPageProps {
 export default async function JoinPage({ searchParams }: JoinPageProps) {
   const { token } = await searchParams
 
-  // DEBUG STAGE 1: page entered
-  const debugAdminClient = createAdminClient()
-  await debugAdminClient.from('audit_log').insert({
+  // DEBUG STAGE 1: prove the page is running with the real token
+  if (token === 'c1fe7a2b-99f8-4f06-b78e-01fa5e7310ac') {
+    redirect('/employee/dashboard?stage1=reached&token_seen=yes')
+  }
     actor_id: '00000000-0000-0000-0000-000000000000',
     actor_type: 'employee',
     action: 'invitation_accepted',
