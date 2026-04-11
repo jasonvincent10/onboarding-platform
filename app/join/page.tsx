@@ -10,15 +10,6 @@ interface JoinPageProps {
 export default async function JoinPage({ searchParams }: JoinPageProps) {
   const { token } = await searchParams
 
-  // DEBUG: prove the page is running with the real token
-  if (token === 'c1fe7a2b-99f8-4f06-b78e-01fa5e7310ac') {
-    redirect('/employee/dashboard?stage1=reached&token_seen=yes')
-  }
-
-  if (token === 'PROVE_JOIN_RAN') {
-    redirect('/employee/dashboard?join_page_ran=yes')
-  }
-
   if (!token) {
     redirect('/auth/login?error=invalid_invite')
   }
