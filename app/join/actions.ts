@@ -23,35 +23,38 @@ export async function acceptInvitation(
 
   if (!onboarding) return { error: 'not_found' }
 
-  // Get or create employee profile for this user
-  let { data: profile } = await adminClient
+  // Get or create employee profile for this user.
+  // Use upsert on user_id (which has a unique constraint) so this works
+  // whether the row was pre-created by a DB trigger, by an earlier run,
+  // or not at all. This is the single source of truth for profile creation.
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Check if a profile already existed BEFORE we upsert, so we can tell
+  // returning employees from new ones for the redirect decision below.
+  const { data: existingProfile } = await adminClient
     .from('employee_profiles')
     .select('id')
     .eq('user_id', userId)
-    .single()
+    .maybeSingle()
 
-  let isNewProfile = false
+  const isNewProfile = !existingProfile
 
-  if (!profile) {
-    const { data: { user } } = await supabase.auth.getUser()
-
-    const { data: newProfile, error: profileError } = await adminClient
-      .from('employee_profiles')
-      .insert({
+  const { data: profile, error: profileError } = await adminClient
+    .from('employee_profiles')
+    .upsert(
+      {
         user_id: userId,
         email: user?.email ?? '',
         full_name: onboarding.invitee_name ?? '',
-      })
-      .select('id')
-      .single()
+      },
+      { onConflict: 'user_id', ignoreDuplicates: false }
+    )
+    .select('id')
+    .single()
 
-    if (profileError || !newProfile) {
-      console.error('Profile creation error:', profileError)
-      return { error: 'profile_creation_failed' }
-    }
-
-    profile = newProfile
-    isNewProfile = true
+  if (profileError || !profile) {
+    console.error('Profile creation error:', profileError)
+    return { error: 'profile_creation_failed' }
   }
 
   // Check onboarding isn't already claimed by a different employee
@@ -74,24 +77,26 @@ export async function acceptInvitation(
     return { error: 'update_failed' }
   }
 
-  // Decide where to send the employee next
-  let redirectTo = `/employee/onboarding/${onboardingId}`
-  let debugHasData = 'not-checked'
-  let debugError = 'none'
+  // Decide where to send the employee next.
+  // - Returning employee with portable data → /review (consent + confirm in one)
+  // - Everyone else (new profile, or returning with no usable data) → /consent gate
+  // The checklist itself also enforces a consent guard as a safety net.
+  let redirectTo = `/employee/onboarding/${onboardingId}/consent`
 
   if (!isNewProfile) {
     try {
       const hasData = await hasPortableData(userId)
-      debugHasData = String(hasData)
       if (hasData) {
         redirectTo = `/employee/onboarding/${onboardingId}/review`
       }
-    } catch (err: any) {
-      debugError = err?.message || 'unknown error'
+    } catch (err) {
+      // If the portability check fails, fall back to the consent gate.
+      // Safer to re-ask for consent than to skip it on a transient error.
+      console.error('hasPortableData check failed:', err)
     }
   }
 
-  // DEBUG: write the flow state to audit_log so we can read it via SQL
+  // Log the invitation acceptance event
   await adminClient.from('audit_log').insert({
     actor_id: userId,
     actor_type: 'employee',
@@ -100,13 +105,7 @@ export async function acceptInvitation(
     resource_id: onboardingId,
     employee_id: profile.id,
     metadata: {
-      DEBUG_TAG: 'accept_invitation_final',
-      isNewProfile,
-      debugHasData,
-      debugError,
-      redirectTo,
-      userId,
-      profileId: profile.id,
+      is_new_profile: isNewProfile,
     },
   })
 
