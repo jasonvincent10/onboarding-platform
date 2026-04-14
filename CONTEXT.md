@@ -99,6 +99,14 @@ NEXT_PUBLIC_APP_URL=
 ---
 
 ## Current build status
+### Task 3.2 — Consent management (shipped)
+
+- SQL migration `003_consent_helpers.sql` applied: function `get_consent_status_for_employer(employee_id, employer_id)` returns latest action per category; index `idx_consent_records_lookup` supports it.
+- Service layer in `lib/consent.ts` — single source of truth for consent operations. Exports `DATA_CATEGORIES`, `CATEGORY_INFO`, `getRequiredCategories`, `getConsentStatus`, `hasActiveConsent`, `grantConsent`, `withdrawConsent`. All writes use adminClient.
+- First-time accepters redirect to `/employee/onboarding/[id]/consent` (explicit opt-in for every data category required by the onboarding). Returning employees with portable data still go to `/review` — consent integration into `/review` NOT YET BUILT.
+- Checklist page has a safety-net guard: refuses to render unless every required category has an active granted consent, otherwise redirects back to `/consent`.
+- Standing management page at `/employee/consents` lists every employer the employee has shared data with, shows granted/withdrawn state per category, allows withdrawal with confirm dialog.
+- Withdrawals are append-only INSERTs of `action = 'withdrawn'`. Original granted rows preserved. GDPR audit trail intact.
 
 > Tick off tasks as you complete them and note anything important.
 
@@ -119,8 +127,8 @@ NEXT_PUBLIC_APP_URL=
 - [x] **2.6** Automated email reminders *(Sonnet)*
 
 ### Phase 3 — Portability & Polish (Weeks 7–9)
-- [ ] **3.1** Portable profile logic *(Opus)*
-- [ ] **3.2** Consent management *(Opus)*
+- [x] **3.1** Portable profile logic *(Opus)*
+- [x] **3.2** Consent management *(Opus)*
 - [ ] **3.3** Right to work guidance *(Sonnet)*
 - [ ] **3.4** UI polish + responsive design *(Sonnet)*
 - [ ] **3.5** Audit trail *(Sonnet)*
@@ -269,6 +277,56 @@ NEXT_PUBLIC_APP_URL=
   - Right-to-work documents are portable if not expired
   - adminClient used for checklist_items UPDATE (same pattern as Task 2.4)
   - audit_log action: 'profile_data_carried_forward' with metadata showing items + categories
+  - Task 3.1 complete — portable profile system live
+  - Files: lib/portability/categories.ts, lib/portability/profile-matcher.ts,
+    lib/actions/portability-actions.ts,
+    app/(employee)/employee/onboarding/[id]/review/page.tsx,
+    components/portability/PortableProfileReview.tsx
+  - acceptInvitation() in app/join/actions.ts now checks hasPortableData() and 
+    redirects returning employees to /review; first-time employees skip straight 
+    to checklist
+  - Pre-population sets was_pre_populated=true and status='submitted' on checklist_items
+  - Consent records created per data_category when employee confirms carry-forward
+  - Sensitive data shown masked on review page (NI: "AB ** ** ** C", bank: "****5678")
+  - Document expiry checked — expired docs flagged with warning, blocked from carry-forward
+  - Categories: universal (NI), likely_stable (bank, emergency, address), 
+    time_sensitive (right_to_work), employer_specific (P45, policies)
+
+- Critical gotchas discovered during 3.1 (apply to all future tasks):
+  - employee_id on onboarding_instances stores employee_profiles.id, NOT auth.users.id
+    — added getProfileIdForUser() helper to translate auth user → profile ID
+  - audit_action enum was missing 'invitation_accepted' AND 'profile_data_carried_forward' 
+    — added both via ALTER TYPE; insert errors silently broke acceptInvitation flow 
+    for hours of debugging
+  - DO NOT use employer_accounts!inner joins in queries — silently fails, returns null. 
+    Fetch employer separately via two queries
+  - Encryption env var is ENCRYPTION_KEY (NOT FIELD_ENCRYPTION_KEY as previously noted)
+    — must be set in Vercel env vars too, not just .env.local
+  - All portability read queries use adminClient — regular client + RLS too aggressive
+  - Middleware (proxy.ts) needs /join AND /employee-login in both PUBLIC_ROUTES 
+    and ALWAYS_ACCESSIBLE arrays
+  - Join page must use adminClient for token lookup — anonymous visitors hit RLS
+  - Page files MUST be named exactly page.tsx — Next.js won't route page-foo.tsx, 
+    paget.ts, etc.
+  - Employee login lives at /employee-login (route group (auth) is invisible in URL),
+    NOT /auth/employee-login
+  - useSearchParams() must be wrapped in <Suspense> for static prerender to succeed
+  - form_field_key on template_items must be explicitly set on insert — older 
+    employer templates created before fix have NULLs and need patching
+  - When debugging server actions, audit_log inserts are useful but check enum 
+    constraints first — silent enum failures look identical to "code never ran"
+  - Same email cannot be both employer and employee in current routing — Task 3.4 
+    will need a role chooser; for now use temporary employer_members deletion to test
+    - Task 3.2 (consent management) is built but unverified — paused mid-test due to a profile_creation_failed bug in the signup/accept flow. Do not mark 3.2 complete. The consent gate code itself is not the bug; see task prompt below.
+- Followup bug to fix later: acceptInvitation should reject linking an onboarding to an auth user who is also an employer_members row for the same employer (currently produces a corrupted record where the same human is both sides of the onboarding).
+- **Profile creation is owned by `acceptInvitation`, not signup.** `signUpEmployee` only creates the auth user; the `employee_profiles` row is created via upsert in `acceptInvitation`. This handles brand-new employees and returning employees uniformly and is idempotent against DB triggers, retries, and races.
+- **Use `.maybeSingle()` not `.single()`** when checking for optional row existence — `.single()` returns an error on zero rows, which can silently break conditional logic.
+- **Use `upsert` with `onConflict`** for any "get-or-create" pattern on a table with a unique constraint. Select-then-insert is a race waiting to happen.
+- Multi-line TypeScript generic type parameters cause parser errors in this setup. Keep `Record<...>` and similar generics on a single line, or extract to a named type. Same root cause as the multi-line JSX attribute issue.
+- Consent is append-only. NEVER UPDATE or DELETE consent_records. Withdrawal = INSERT new row with `action = 'withdrawn'`. The `get_consent_status_for_employer` function and `has_active_consent` in SQL both read the latest row per category.
+- Next.js 16 + Turbopack can serve a stale server-component render on the first reload after a data change. If a guard or redirect doesn't appear to fire, reload a second time before assuming there's a bug.
+- Followup: consent integration into the existing `/review` page (returning-employee flow) is NOT built. 3.2 is verified for first-timers only. Returning-employee path needs a short follow-up task.
+- Followup: `acceptInvitation` should reject linking an onboarding to an auth user who is also an employer_members row for the same employer.
 ## How to use this file
 
 1. **Start every Claude conversation** by pasting the full contents of this file before your task prompt
