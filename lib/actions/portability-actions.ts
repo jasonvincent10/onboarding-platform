@@ -192,10 +192,13 @@ export async function confirmPortableItems(
       checklistItems as ChecklistItem[]
     );
 
-    const uniqueCategories = [...new Set(selection.consentCategories)];
-    for (const category of uniqueCategories) {
-      if (!isCategoryPortable(category)) continue;
-
+    // Grant consent for ALL categories this onboarding requires, not just
+    // portable ones. The employee has seen the consent notice on the review
+    // page and clicked confirm — that covers employer-specific items too.
+    // Without this, the checklist guard would bounce them to /consent for
+    // non-portable categories like policy_acknowledgements.
+    const allRequiredCategories = [...new Set(checklistItems.map((ci: any) => ci.data_category).filter(Boolean))];
+    for (const category of allRequiredCategories) {
       await adminClient.from('consent_records').insert({
         employee_id: profileId,
         employer_id: onboarding.employer_id,
@@ -231,7 +234,7 @@ export async function confirmPortableItems(
       employee_id: profileId,
       metadata: {
         items_pre_populated: selection.selectedItemIds.length,
-        consent_categories: uniqueCategories,
+        consent_categories: allRequiredCategories,
       },
     });
 

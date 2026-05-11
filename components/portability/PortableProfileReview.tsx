@@ -75,8 +75,9 @@ export default function PortableProfileReview({
   };
 
   const handleSkip = () => {
-    // Skip all pre-population, go straight to checklist
-    router.push(`/employee/onboarding/${onboardingId}`);
+    // Skip pre-population but still need consent before the checklist.
+    // Send to the consent gate where they can grant permissions explicitly.
+    router.push(`/employee/onboarding/${onboardingId}/consent`);
   };
 
   const selectedCount = selectedItems.size;

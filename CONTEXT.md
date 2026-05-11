@@ -103,7 +103,7 @@ NEXT_PUBLIC_APP_URL=
 
 - SQL migration `003_consent_helpers.sql` applied: function `get_consent_status_for_employer(employee_id, employer_id)` returns latest action per category; index `idx_consent_records_lookup` supports it.
 - Service layer in `lib/consent.ts` — single source of truth for consent operations. Exports `DATA_CATEGORIES`, `CATEGORY_INFO`, `getRequiredCategories`, `getConsentStatus`, `hasActiveConsent`, `grantConsent`, `withdrawConsent`. All writes use adminClient.
-- First-time accepters redirect to `/employee/onboarding/[id]/consent` (explicit opt-in for every data category required by the onboarding). Returning employees with portable data still go to `/review` — consent integration into `/review` NOT YET BUILT.
+- First-time accepters redirect to `/employee/onboarding/[id]/consent` (explicit opt-in for every data category required by the onboarding). Returning employees with portable data go to `/review` — consent is granted for ALL required categories (not just portable ones) when they click confirm. Skip button redirects to `/consent` gate.
 - Checklist page has a safety-net guard: refuses to render unless every required category has an active granted consent, otherwise redirects back to `/consent`.
 - Standing management page at `/employee/consents` lists every employer the employee has shared data with, shows granted/withdrawn state per category, allows withdrawal with confirm dialog.
 - Withdrawals are append-only INSERTs of `action = 'withdrawn'`. Original granted rows preserved. GDPR audit trail intact.
@@ -325,8 +325,7 @@ NEXT_PUBLIC_APP_URL=
 - Multi-line TypeScript generic type parameters cause parser errors in this setup. Keep `Record<...>` and similar generics on a single line, or extract to a named type. Same root cause as the multi-line JSX attribute issue.
 - Consent is append-only. NEVER UPDATE or DELETE consent_records. Withdrawal = INSERT new row with `action = 'withdrawn'`. The `get_consent_status_for_employer` function and `has_active_consent` in SQL both read the latest row per category.
 - Next.js 16 + Turbopack can serve a stale server-component render on the first reload after a data change. If a guard or redirect doesn't appear to fire, reload a second time before assuming there's a bug.
-- Followup: consent integration into the existing `/review` page (returning-employee flow) is NOT built. 3.2 is verified for first-timers only. Returning-employee path needs a short follow-up task.
-- Followup: `acceptInvitation` should reject linking an onboarding to an auth user who is also an employer_members row for the same employer.
+- Task 3.2b complete: consent integration into `/review` page for returning employees. confirmPortableItems() now grants consent for ALL required categories (not just portable ones). Skip button on review page redirects to /consent gate instead of checklist.
 ## How to use this file
 
 1. **Start every Claude conversation** by pasting the full contents of this file before your task prompt
