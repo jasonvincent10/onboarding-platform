@@ -299,12 +299,7 @@ function ExistingFileReadOnly({
             <p className="mt-0.5 font-mono text-sm text-slate-600 tracking-widest">
               {shareCodeValue}
             </p>
-            
-              href="https://www.gov.uk/view-right-to-work"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-1.5 inline-block text-xs font-medium text-indigo-600 underline underline-offset-2"
-            >
+            <a href="https://www.gov.uk/view-right-to-work" target="_blank" rel="noopener noreferrer" className="mt-1.5 inline-block text-xs font-medium text-indigo-600 underline underline-offset-2">
               Verify at gov.uk/view-right-to-work
             </a>
           </div>
