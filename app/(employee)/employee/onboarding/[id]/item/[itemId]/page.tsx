@@ -9,6 +9,7 @@ import {
 import DocumentUpload from '@/components/upload/DocumentUpload'
 import FormEntryHandler from '@/components/forms/FormEntryHandler'
 import PolicyAcknowledgement from '@/components/forms/PolicyAcknowledgement'
+import RightToWorkUpload from '@/components/forms/RightToWorkUpload'
 
 interface Props {
   params: Promise<{ id: string; itemId: string }>
@@ -158,10 +159,20 @@ export default async function ItemPage({ params }: Props) {
                     {item.document_uploads && (
                       <ExistingFileReadOnly
                         upload={item.document_uploads}
-                        signedUrl={signedUrl}
+                        signedUrl={item.document_uploads.file_path?.startsWith('share_code:') ? null : signedUrl}
                       />
                     )}
                   </div>
+                ) : item.data_category === 'right_to_work' ? (
+                  <RightToWorkUpload
+                    checklistItemId={itemId}
+                    onboardingId={onboardingId}
+                    onComplete={() => {
+                      if (typeof window !== 'undefined') {
+                        window.location.href = `/employee/onboarding/${onboardingId}`
+                      }
+                    }}
+                  />
                 ) : (
                   <DocumentUpload
                     onboardingId={onboardingId}
@@ -270,8 +281,37 @@ function ExistingFileReadOnly({
   }
   signedUrl: string | null
 }) {
+  const isShareCode = upload.file_path?.startsWith('share_code:')
+  const shareCodeValue = isShareCode ? upload.file_path.replace('share_code:', '') : null
   const isImage =
-    upload.file_path.endsWith('.jpg') || upload.file_path.endsWith('.png')
+    !isShareCode &&
+    (upload.file_path.endsWith('.jpg') || upload.file_path.endsWith('.png'))
+
+  if (isShareCode) {
+    return (
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-lg font-bold text-slate-400">
+            #
+          </div>
+          <div>
+            <p className="text-sm font-medium text-slate-800">GOV.UK share code submitted</p>
+            <p className="mt-0.5 font-mono text-sm text-slate-600 tracking-widest">
+              {shareCodeValue}
+            </p>
+            
+              href="https://www.gov.uk/view-right-to-work"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1.5 inline-block text-xs font-medium text-indigo-600 underline underline-offset-2"
+            >
+              Verify at gov.uk/view-right-to-work
+            </a>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4">
