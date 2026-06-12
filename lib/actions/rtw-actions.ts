@@ -37,11 +37,16 @@ export async function submitRightToWork(
   if (!storagePath) return { success: false, error: 'No document provided' }
 
   // Create the document_uploads row
+  const documentName = input.shareCode
+    ? 'Right to work share code'
+    : (input.filePath?.split('/').pop() ?? input.documentType)
+
   const { data: docUpload, error: uploadError } = await adminClient
     .from('document_uploads')
     .insert({
       employee_id: profile.id,
       document_type: input.documentType,
+      document_name: documentName,
       file_path: storagePath,
       data_category: 'right_to_work',
       verification_status: 'pending',
