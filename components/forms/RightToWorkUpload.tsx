@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
 import { submitRightToWork } from '@/lib/actions/rtw-actions'
 
@@ -68,14 +69,13 @@ type DocTypeValue = (typeof RTW_DOCUMENT_TYPES)[number]['value']
 interface RightToWorkUploadProps {
   checklistItemId: string
   onboardingId: string
-  onComplete: () => void
 }
 
 export default function RightToWorkUpload({
   checklistItemId,
   onboardingId,
-  onComplete,
 }: RightToWorkUploadProps) {
+  const router = useRouter()
   const [selectedDocType, setSelectedDocType] = useState<DocTypeValue | ''>('')
   const [shareCode, setShareCode] = useState('')
   const [expiryDate, setExpiryDate] = useState('')
@@ -199,7 +199,8 @@ export default function RightToWorkUpload({
         }
       }
 
-      onComplete()
+      router.push(`/employee/onboarding/${onboardingId}`)
+      router.refresh()
     } catch {
       setError('An unexpected error occurred. Please try again.')
       setUploading(false)

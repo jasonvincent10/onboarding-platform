@@ -163,15 +163,10 @@ export default async function ItemPage({ params }: Props) {
                       />
                     )}
                   </div>
-                ) : item.data_category === 'right_to_work' ? (
+                  ) : item.data_category === 'right_to_work' ? (
                   <RightToWorkUpload
                     checklistItemId={itemId}
                     onboardingId={onboardingId}
-                    onComplete={() => {
-                      if (typeof window !== 'undefined') {
-                        window.location.href = `/employee/onboarding/${onboardingId}`
-                      }
-                    }}
                   />
                 ) : (
                   <DocumentUpload
