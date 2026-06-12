@@ -253,12 +253,7 @@ export default function RightToWorkUpload({
               ))}
             </ul>
             {docType.isOnlineCheck && (
-              
-                href="https://www.gov.uk/prove-right-to-work"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-block text-sm font-semibold text-amber-900 underline underline-offset-2"
-              >
+              <a href="https://www.gov.uk/prove-right-to-work" target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-semibold text-amber-900 underline underline-offset-2">
                 Go to gov.uk/prove-right-to-work
               </a>
             )}
