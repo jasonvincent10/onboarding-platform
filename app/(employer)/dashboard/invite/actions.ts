@@ -149,8 +149,11 @@ export async function createInvitation(
       onboarding_id: instance.id,
       template_item_id: item.id,
       item_name: item.item_name,
+      description: item.description,
       item_type: item.item_type,
       data_category: item.data_category,
+      form_field_key: item.form_field_key,
+      policy_document_path: item.policy_document_path,
       status: 'not_started',
       // Deadline = start date minus N days. If no deadline_days_before_start, default to start date.
       deadline:
