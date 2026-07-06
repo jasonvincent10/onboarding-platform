@@ -8,14 +8,15 @@
 //
 // ADJUST IMPORTS if your paths differ:
 import { createClient } from "@/lib/supabase/server";
-import { adminClient } from "@/lib/supabase/admin";
-import { decrypt } from "@/lib/encryption"; // AES-256-GCM util from Task 2.2
+import { createAdminClient } from "@/lib/supabase/admin";
+const adminClient = createAdminClient();
+import { decryptField } from "@/lib/encryption"; // AES-256-GCM util from Task 2.2
 import { csvRow } from "@/lib/csv";
 
 function safeDecrypt(value: string | null): string {
   if (!value) return "";
   try {
-    return decrypt(value);
+    return decryptField(value);
   } catch {
     return "(could not decrypt)";
   }

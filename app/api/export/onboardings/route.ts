@@ -9,7 +9,8 @@
 //
 // ADJUST IMPORTS if your paths differ:
 import { createClient } from "@/lib/supabase/server";
-import { adminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/admin";
+const adminClient = createAdminClient();
 import { toCsv, csvResponse } from "@/lib/csv";
 
 export async function GET(request: Request) {

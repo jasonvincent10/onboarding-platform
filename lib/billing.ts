@@ -10,8 +10,7 @@
 //     return { error: "billing_required" }; // redirect user to buy a credit
 //   }
 //
-// ADJUST IMPORT if your path differs:
-import { adminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const FREE_ONBOARDING_LIMIT = 3;
 
@@ -24,6 +23,7 @@ export type BillingState = {
 };
 
 export async function getBillingState(employerId: string): Promise<BillingState | null> {
+  const adminClient = createAdminClient();
   const { data } = await adminClient
     .from("employer_accounts")
     .select("onboardings_used, paid_credits")
@@ -43,9 +43,8 @@ export async function getBillingState(employerId: string): Promise<BillingState 
   };
 }
 
-// Atomic: uses the consume_onboarding_slot() Postgres function from
-// migration 002 so two simultaneous invitations cannot double-spend a credit.
 export async function consumeOnboardingSlot(employerId: string): Promise<boolean> {
+  const adminClient = createAdminClient();
   const { data, error } = await adminClient.rpc("consume_onboarding_slot", {
     p_employer_id: employerId,
   });

@@ -5,7 +5,8 @@
 //
 // ADJUST IMPORTS if your paths differ:
 import { createClient } from "@/lib/supabase/server";
-import { adminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/admin";
+const adminClient = createAdminClient();
 import { getStripe, getHirePricePence } from "@/lib/stripe";
 
 export async function POST(request: Request) {

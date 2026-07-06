@@ -11,7 +11,8 @@
 //    matcher (same pattern as the cron routes).
 //
 // ADJUST IMPORTS if your paths differ:
-import { adminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/admin";
+const adminClient = createAdminClient();
 import { getStripe } from "@/lib/stripe";
 
 export async function POST(request: Request) {

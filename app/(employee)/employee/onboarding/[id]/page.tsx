@@ -1,5 +1,6 @@
 import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import ChecklistView from './ChecklistView'
 
 interface ChecklistPageProps {
@@ -15,17 +16,14 @@ export default async function ChecklistPage({ params, searchParams }: ChecklistP
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/employee-login')
 
-  // Fetch the onboarding instance — employee can only read their own.
-  // Note: employer_id is selected so we can check consent below.
   const { data: onboarding, error } = await supabase
     .from('onboarding_instances')
     .select('id, role_title, start_date, status, readiness_pct, invitee_name, employer_id')
     .eq('id', id)
     .maybeSingle()
 
- if (error || !onboarding) notFound()
+  if (error || !onboarding) notFound()
 
-  const { createAdminClient } = await import('@/lib/supabase/admin')
   const adminClient = createAdminClient()
   const { data: employerAccount } = await adminClient
     .from('employer_accounts')
@@ -34,19 +32,6 @@ export default async function ChecklistPage({ params, searchParams }: ChecklistP
     .maybeSingle()
   const companyName = employerAccount?.company_name ?? 'Your employer'
 
-  const { createAdminClient } = await import('@/lib/supabase/admin')
-  const adminClient = createAdminClient()
-  const { data: employerAccount } = await adminClient
-    .from('employer_accounts')
-    .select('company_name')
-    .eq('id', onboarding.employer_id)
-    .maybeSingle()
-  const companyName = employerAccount?.company_name ?? 'Your employer'
-
-  // Consent guard: refuse to render the checklist unless the employee has
-  // granted consent for every data category this onboarding requires.
-  // This is a safety net — the primary gate is the /consent page reached
-  // via the invitation flow.
   const { getRequiredCategories, getConsentStatus } = await import('@/lib/consent')
   const requiredCategories = await getRequiredCategories(id)
   if (requiredCategories.length > 0) {
@@ -67,7 +52,6 @@ export default async function ChecklistPage({ params, searchParams }: ChecklistP
     }
   }
 
-  // Fetch checklist items for this onboarding
   const { data: items } = await supabase
     .from('checklist_items')
     .select(`
