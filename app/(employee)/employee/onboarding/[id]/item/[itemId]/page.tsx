@@ -11,7 +11,6 @@ import DocumentUpload from '@/components/upload/DocumentUpload'
 import FormEntryHandler from '@/components/forms/FormEntryHandler'
 import PolicyAcknowledgement from '@/components/forms/PolicyAcknowledgement'
 import RightToWorkUpload from '@/components/forms/RightToWorkUpload'
-import { createAdminClient } from '@/lib/supabase/admin'
 
 interface Props {
   params: Promise<{ id: string; itemId: string }>
@@ -33,14 +32,12 @@ export default async function ItemPage({ params }: Props) {
 
   if (!item || !onboarding) notFound()
 
-  // Resolve a signed URL for any existing upload
   let signedUrl: string | null = null
   if (item.document_uploads?.file_path) {
     const result = await getDocumentSignedUrl(item.document_uploads.file_path)
     signedUrl = result.url
   }
 
-  // Resolve a signed URL for a policy PDF if present
   let policyDocumentUrl: string | null = null
   if (item.policy_document_path) {
     const result = await getDocumentSignedUrl(item.policy_document_path)
@@ -55,7 +52,6 @@ export default async function ItemPage({ params }: Props) {
     .maybeSingle()
   const companyName = employerAccount?.company_name ?? 'Your employer'
 
-  // Status helpers
   const statusConfig = {
     not_started: { label: 'Not started', colour: 'bg-slate-100 text-slate-600' },
     in_progress: { label: 'In progress', colour: 'bg-blue-100 text-blue-700' },
@@ -67,7 +63,6 @@ export default async function ItemPage({ params }: Props) {
     statusConfig[item.status as keyof typeof statusConfig] ??
     statusConfig.not_started
 
-  // Data category display labels
   const categoryLabels: Record<string, string> = {
     ni_number: 'National Insurance number',
     bank_details: 'Bank details',
@@ -79,7 +74,6 @@ export default async function ItemPage({ params }: Props) {
   }
   const categoryLabel = categoryLabels[item.data_category] ?? item.data_category
 
-  // Whether this document type should capture an expiry date
   const requiresExpiry =
     item.data_category === 'right_to_work' ||
     item.item_name.toLowerCase().includes('visa') ||
@@ -91,7 +85,6 @@ export default async function ItemPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
-        {/* Back link */}
         <Link
           href={`/employee/onboarding/${onboardingId}`}
           className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800"
@@ -100,7 +93,6 @@ export default async function ItemPage({ params }: Props) {
           Back to checklist
         </Link>
 
-        {/* Header */}
         <div className="mt-6">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -118,7 +110,6 @@ export default async function ItemPage({ params }: Props) {
             </span>
           </div>
 
-          {/* Deadline */}
           {item.deadline && (
             <div className="mt-3 flex items-center gap-1.5 text-sm text-slate-500">
               <ClockIcon className="h-4 w-4" />
@@ -133,7 +124,6 @@ export default async function ItemPage({ params }: Props) {
             </div>
           )}
 
-          {/* Pre-populated badge */}
           {item.was_pre_populated && (
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700">
               <SparkleIcon className="h-3.5 w-3.5" />
@@ -142,9 +132,7 @@ export default async function ItemPage({ params }: Props) {
           )}
         </div>
 
-        {/* Main card */}
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
-          {/* What we need and why */}
           <div className="border-b border-slate-100 px-6 py-5">
             <h2 className="text-sm font-semibold text-slate-800">
               What you need to provide
@@ -154,12 +142,10 @@ export default async function ItemPage({ params }: Props) {
             </p>
           </div>
 
-          {/* Upload area */}
           <div className="px-6 py-6">
             {item.item_type === 'document_upload' ? (
               <>
                 {isReadOnly ? (
-                  /* Approved state — read only */
                   <div className="space-y-4">
                     <ApprovedBanner />
                     {item.document_uploads && (
@@ -219,15 +205,12 @@ export default async function ItemPage({ params }: Props) {
               />
             ) : (
               <div className="rounded-xl border border-dashed border-slate-200 px-6 py-8 text-center">
-                <p className="text-sm text-slate-500">
-                  Unknown item type.
-                </p>
+                <p className="text-sm text-slate-500">Unknown item type.</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Help text */}
         <p className="mt-4 text-center text-xs text-slate-400">
           Your documents are stored securely and only shared with {companyName}{' '}
           with your consent.
@@ -236,8 +219,6 @@ export default async function ItemPage({ params }: Props) {
     </div>
   )
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function getItemGuidance(itemName: string, dataCategory: string): string {
   const name = itemName.toLowerCase()
@@ -259,12 +240,8 @@ function ApprovedBanner() {
         <CheckIcon className="h-5 w-5 text-emerald-600" />
       </div>
       <div>
-        <p className="text-sm font-semibold text-emerald-800">
-          Document approved
-        </p>
-        <p className="text-xs text-emerald-600">
-          No further action needed for this item.
-        </p>
+        <p className="text-sm font-semibold text-emerald-800">Document approved</p>
+        <p className="text-xs text-emerald-600">No further action needed for this item.</p>
       </div>
     </div>
   )
@@ -319,9 +296,7 @@ function ExistingFileReadOnly({
         )}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-slate-800">
-          {upload.document_type}
-        </p>
+        <p className="truncate text-sm font-medium text-slate-800">{upload.document_type}</p>
         {upload.expiry_date && (
           <p className="text-xs text-slate-500">
             Expires{' '}
@@ -341,8 +316,6 @@ function ExistingFileReadOnly({
     </div>
   )
 }
-
-// ─── Inline icons ─────────────────────────────────────────────────────────────
 
 function BackArrow({ className }: { className?: string }) {
   return (
