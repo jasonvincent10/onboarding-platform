@@ -199,8 +199,7 @@ export default function RightToWorkUpload({
         }
       }
 
-      router.push(`/employee/onboarding/${onboardingId}`)
-      router.refresh()
+      window.location.href = `/employee/onboarding/${onboardingId}`
     } catch {
       setError('An unexpected error occurred. Please try again.')
       setUploading(false)
@@ -248,7 +247,7 @@ export default function RightToWorkUpload({
             <ul className="space-y-1.5">
               {docType.guidance.map((point, i) => (
                 <li key={i} className="flex gap-2 text-sm text-amber-800">
-                  <span className="mt-0.5 flex-shrink-0 text-amber-500">&#8226;</span>
+                  <span className="mt-0.5 flex-shrink-0 text-amber-500">-</span>
                   <span>{point}</span>
                 </li>
               ))}
@@ -359,10 +358,17 @@ export default function RightToWorkUpload({
           <button
             onClick={handleSubmit}
             disabled={uploading}
-            style={{ backgroundColor: uploading ? '#a5b4fc' : '#4f46e5', color: '#ffffff' }}
-            className="w-full rounded-md px-4 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {uploading ? 'Submitting...' : 'Submit for review'}
+            {uploading ? (
+              <>
+                <svg className="h-4 w-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                </svg>
+                Submitting...
+              </>
+            ) : 'Submit for review'}
           </button>
         </div>
       )}

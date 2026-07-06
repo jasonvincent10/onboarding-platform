@@ -19,57 +19,62 @@ The core differentiator is a **portable employee profile**: documents and data a
 
 | Layer | Technology |
 |---|---|
-| Frontend | Next.js 14+ App Router |
+| Frontend | Next.js 16.2.1 App Router (Turbopack) |
 | Styling | Tailwind CSS |
 | Backend | Next.js API Routes + Server Actions |
-| Database | Supabase (PostgreSQL) — EU region |
+| Database | Supabase (PostgreSQL) — EU region, project ref `hhdapipznswdeqsxedmy` |
 | Auth | Supabase Auth (email/password + magic links) |
 | File storage | Supabase Storage |
 | Email | Resend |
-| Hosting | Vercel |
+| Hosting | Vercel (London lhr1) |
 | Payments | Stripe (per-hire billing) |
+| Package manager | **npm only** — never yarn or pnpm |
+
+**Live URL:** https://onboarding-platform-inky.vercel.app
+**GitHub:** jasonvincent10/onboarding-platform (master branch)
+**Local path:** `C:\Users\jason\OneDrive\Documents\Client Onboarder\onboarding-platform-scaffold\onboarding-platform`
+(Run all terminal commands from the `onboarding-platform` subfolder, NOT the parent scaffold folder.)
 
 ---
 
-## Database schema
+## Database schema (10 tables, all RLS-enabled)
 
-### Tables
-- [x] `employer_accounts` — id, company_name, company_number, stripe_customer_id, subscription_status, onboardings_used
-- [x] `employer_members` — id, employer_id → employer_accounts, user_id → auth.users, role, full_name, email
-- [x] `employee_profiles` — id, user_id → auth.users, full_name, email, DOB, address, phone, ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, emergency_contacts (JSONB), right_to_work_status, right_to_work_expiry
-- [x] `onboarding_templates` — id, employer_id, template_name, role_type, is_default
-- [x] `template_items` — id, template_id, item_name, description, item_type (enum), data_category (enum), form_field_key, sort_order, deadline_days_before_start
-- [x] `onboarding_instances` — id, employer_id, employee_id, template_id, invitee_name, invitee_email, role_title, start_date, invitation_token, status, readiness_pct
-- [x] `checklist_items` — id, onboarding_id, template_item_id, item_name, item_type, data_category, status (enum), deadline, document_upload_id, acknowledged_at, reviewed_by, reviewer_notes, was_pre_populated
-- [x] `document_uploads` — id, employee_id, document_type, file_path, data_category, verification_status, expiry_date
-- [x] `consent_records` — id, employee_id, employer_id, data_category, action (granted/withdrawn), onboarding_id. APPEND-ONLY.
-- [x] `audit_log` — id, actor_id, actor_type, action (enum), resource_type, resource_id, employer_id, employee_id, metadata (JSONB). APPEND-ONLY.
+- `employer_accounts` — id, company_name, company_number, stripe_customer_id, subscription_status, onboardings_used
+- `employer_members` — id, employer_id → employer_accounts, user_id → auth.users, role, full_name, email
+- `employee_profiles` — id, user_id → auth.users, full_name, email, DOB, address, phone, ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, bank_account_holder_name, emergency_contacts (JSONB), right_to_work_status, right_to_work_expiry
+- `onboarding_templates` — id, employer_id, template_name, role_type, is_default
+- `template_items` — id, template_id, item_name, description, item_type (enum), data_category (enum), form_field_key, policy_document_path, sort_order, deadline_days_before_start
+- `onboarding_instances` — id, employer_id, employee_id, template_id, invitee_name, invitee_email, role_title, start_date, invitation_token, status, readiness_pct
+- `checklist_items` — id, onboarding_id, template_item_id, item_name, description, item_type, data_category, form_field_key, policy_document_path, status (enum), deadline, document_upload_id, acknowledged_at, reviewed_by, reviewer_notes, was_pre_populated
+- `document_uploads` — id, employee_id, document_type, document_name, file_path, data_category, verification_status, expiry_date
+- `consent_records` — id, employee_id, employer_id, data_category, action (granted/withdrawn), onboarding_id. **APPEND-ONLY.**
+- `audit_log` — id, actor_id, actor_type, action (enum), resource_type, resource_id, employer_id, employee_id, metadata (JSONB). **APPEND-ONLY.**
 
 ### Key architectural decisions
 - Documents attach to **employee profile**, not onboarding instance (portability)
 - Template items are COPIED into checklist_items when onboarding is created (templates can change without affecting active onboardings)
-- Sensitive fields use `_encrypted` suffix — AES-256 encrypted at app level before DB write
+- Sensitive fields use `_encrypted` suffix — AES-256-GCM encrypted at app level before DB write
 - Consent is append-only (grant/withdraw creates new rows, latest row wins)
 - `data_category` enum links template items → documents → consent (drives granular sharing)
 - `employer_members` join table supports future multi-user per org
+- **`employee_id` on `onboarding_instances` stores `employee_profiles.id`, NOT `auth.users.id`** — use `getProfileIdForUser()` to translate
+- Data categories: personal_info, ni_number, bank_details, emergency_contacts, right_to_work, documents, policy_acknowledgements
 
-### RLS policies
-- All 10 tables have RLS enabled
+### RLS / helper functions
 - Helper functions: `get_my_employer_id()`, `get_my_employee_id()`, `has_active_consent()`
-- Employers see only their own org data
-- Employees see only their own profile/documents/onboardings
+- Employers see only their own org data; employees see only their own profile/documents/onboardings
 - Employer access to documents requires BOTH active onboarding + active consent for that data_category
 - consent_records and audit_log: INSERT + SELECT only (no UPDATE/DELETE)
 
-### Utility functions
+### Utility / SQL functions
 - `create_default_template(employer_id)` — creates Standard UK Onboarding template with 8 items on signup
-- `create_onboarding_from_template(...)` — copies template items into checklist_items with calculated deadlines
+- `get_consent_status_for_employer(employee_id, employer_id)` — returns latest action per category (migration 003, index `idx_consent_records_lookup`)
+- `recalculate_onboarding_status(UUID)` — recalculates readiness; trigger `checklist_status_changed` fires on checklist_items changes
+- NOTE: there are two overloaded `create_onboarding_from_template` functions in the DB, but **neither is actually called by the app** — the invite flow copies template_items → checklist_items via a direct `.insert()` in `app/(employer)/dashboard/invite/actions.ts`. That insert is the source of truth for what columns get copied.
 
 ---
 
 ## Environment variables
-
-> Fill these in after Task 1.1 (project setup).
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
@@ -78,257 +83,161 @@ SUPABASE_SERVICE_ROLE_KEY=
 RESEND_API_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
-NEXT_PUBLIC_APP_URL=
+NEXT_PUBLIC_APP_URL=https://onboarding-platform-inky.vercel.app
+ENCRYPTION_KEY=        # 64-char hex (32 bytes), AES-256-GCM. MUST be set in Vercel env vars too, not just .env.local
+CRON_SECRET=           # cron route auth
 ```
+- Encryption env var is `ENCRYPTION_KEY` (NOT FIELD_ENCRYPTION_KEY)
 
 ---
 
-## Key decisions made
+## Build status
 
-| Decision | Choice | Reason |
-|---|---|---|
-| Document ownership | Attached to employee profile | Enables portability across employers |
-| Auth provider | Supabase Auth | Built-in, no separate service needed |
-| File storage | Supabase Storage with RLS | Employees can only access their own files |
-| Sensitive field encryption | AES-256 field-level before storage | Defence in depth on top of Supabase at-rest encryption |
-| Billing model | Per-hire via Stripe Checkout | First 3 onboardings free, then paid |
-| Mobile strategy | Responsive web only | No native app for MVP |
-| Right to work | Guidance + manual check only | No GOV.UK API integration yet |
-| E-signatures | Link to DocuSign/Adobe Sign | Complex legal territory, out of MVP scope |
+### Phase 1 — Foundation
+- [x] 1.1 Project setup
+- [x] 1.2 Database schema design
+- [x] 1.3 Employer auth + empty dashboard
+- [x] 1.4 Onboarding template builder
+- [x] 1.5 Employee invitation flow
+- [x] 1.6 Employee portal / checklist view
+
+### Phase 2 — Core Functionality
+- [x] 2.1 Document upload system
+- [x] 2.2 Form-based data entry (NI, bank, emergency)
+- [x] 2.3 Policy acknowledgement
+- [x] 2.4 Employer review workflow
+- [x] 2.5 Status engine
+- [x] 2.6 Automated email reminders
+
+### Phase 3 — Portability & Polish
+- [x] 3.1 Portable profile logic
+- [x] 3.2 Consent management
+- [x] 3.3 Right to work guidance
+- [x] 3.4 UI polish + responsive design
+- [x] 3.5 Audit trail
+- [ ] 3.6 Data export CSV
+
+### Phase 4 — Billing & Launch
+- [ ] 4.1 Stripe integration
+- [ ] 4.2 Free trial / pilot mode
+- [ ] 4.3 Legal pages (Sonnet draft, solicitor review)
+- [ ] 4.4 Security hardening (Opus)
+- [ ] 4.5 Error tracking + monitoring
+- [ ] 4.6 Landing page + sign-up funnel
+
+Opus tasks: 1.2, 2.2, 3.1, 3.2, 4.4. All others Sonnet.
 
 ---
 
-## Current build status
-### Task 3.2 — Consent management (shipped)
+## Recurring gotchas (apply to EVERY task)
 
-- SQL migration `003_consent_helpers.sql` applied: function `get_consent_status_for_employer(employee_id, employer_id)` returns latest action per category; index `idx_consent_records_lookup` supports it.
-- Service layer in `lib/consent.ts` — single source of truth for consent operations. Exports `DATA_CATEGORIES`, `CATEGORY_INFO`, `getRequiredCategories`, `getConsentStatus`, `hasActiveConsent`, `grantConsent`, `withdrawConsent`. All writes use adminClient.
-- First-time accepters redirect to `/employee/onboarding/[id]/consent` (explicit opt-in for every data category required by the onboarding). Returning employees with portable data go to `/review` — consent is granted for ALL required categories (not just portable ones) when they click confirm. Skip button redirects to `/consent` gate.
-- Checklist page has a safety-net guard: refuses to render unless every required category has an active granted consent, otherwise redirects back to `/consent`.
-- Standing management page at `/employee/consents` lists every employer the employee has shared data with, shows granted/withdrawn state per category, allows withdrawal with confirm dialog.
-- Withdrawals are append-only INSERTs of `action = 'withdrawn'`. Original granted rows preserved. GDPR audit trail intact.
+- **`await createClient()`** everywhere — Next.js 16 made `cookies()` async; forgetting this causes subtle failures
+- **Use `adminClient` (service role) for all RLS-protected writes** — checklist_items, employee_profiles, consent records, portability/document queries. Regular client + RLS is too aggressive for these.
+- **`.maybeSingle()` not `.single()`** when a row may not exist — `.single()` errors on zero rows and silently breaks conditional logic
+- **`upsert` with `onConflict`** for any get-or-create pattern — select-then-insert is race-prone
+- **Do NOT use `employer_accounts!inner` (or similar) joins** — they silently return null. Fetch with separate two-step queries. Supabase can't auto-traverse indirect relationships in nested selects.
+- **Keep JSX attributes on a single line**, and keep multi-line TS generics (`Record<...>`) on one line or extract to a named type — both cause Turbopack/parser errors in this setup. Avoid non-ASCII symbols (↗, …, HTML entities) in JSX.
+- **Client Components can't receive function props from Server Components** — pass data only; do redirects via `useRouter().push()/refresh()` inside the client component
+- **`audit_action` enum must be kept up to date** — missing values cause silent insert failures that look identical to "code never ran." Check enum constraints first when debugging server actions.
+- **Always check the `error` returned from an `audit_log` insert, or at minimum know it can fail silently** — `requestReupload()` inserted an enum value (`checklist_item_reupload_requested`) that didn't exist in `audit_action` for an unknown period before being caught in 3.5. The insert's error was never read, so this failed with no visible symptom.
+- **`reviewed_by`** is a FK to `auth.users` — use `user.id`, not `member.id`
+- **Turbopack can serve a stale server-component render** on the first reload after a data change — reload a second time before concluding a guard/redirect is broken
+- **Page files must be named exactly `page.tsx`** — Next.js won't route `page-foo.tsx` etc.
+- **`useSearchParams()` must be wrapped in `<Suspense>`** for static prerender
+- **Consent is append-only** — NEVER UPDATE/DELETE consent_records; withdrawal = INSERT new row with `action = 'withdrawn'`
+- **Vercel redeploy button re-runs the existing commit** — new local files require `git push` first
+- **middleware.ts is now `proxy.ts`** in Next.js 16; needs `/join` AND `/employee-login` in both PUBLIC_ROUTES and ALWAYS_ACCESSIBLE
+- **Resend free tier** only delivers to the verified signup address during dev; from address `onboarding@resend.dev`; email confirmation must be OFF in Supabase Auth settings
+- **Testing:** two entirely different browsers for simultaneous employer/employee sessions (same-browser incognito shares the cookie jar)
+- **Tailwind dynamic/responsive classes inside template literals can silently fail to generate** even after `.next` cache clear and safelist entries — for critical show/hide breakpoint logic, prefer a raw `<style>` tag with a real `@media` query over `lg:` prefixes combined with conditional className strings.
+- **Chrome DevTools device toolbar (Responsive mode, typed dimensions) can fail to trigger a real resize/media-query re-evaluation** — if a responsive fix "isn't working," verify with an actual browser window resize before concluding the code is broken.
 
-> Tick off tasks as you complete them and note anything important.
+---
 
-### Phase 1 — Foundation (Weeks 1–3)
-- [x] **1.1** Project setup *(Sonnet)*
-- [x] **1.2** Database schema design *(Opus)*
-- [x] **1.3** Employer auth + empty dashboard *(Sonnet)*
-- [x] **1.4** Onboarding template builder *(Sonnet)*
-- [x] **1.5** Employee invitation flow *(Sonnet)*
-- [x] **1.6** Employee portal / checklist view *(Sonnet)*
+## File / route map
 
-### Phase 2 — Core Functionality (Weeks 4–6)
-- [x] **2.1** Document upload system *(Sonnet)*
-- [x] **2.2** Form-based data entry — NI, bank, emergency contacts *(Opus)*
-- [x] **2.3** Policy acknowledgement *(Sonnet)*
-- [x] **2.4** Employer review workflow *(Sonnet)*
-- [x] **2.5** Status engine *(Sonnet)*
-- [x] **2.6** Automated email reminders *(Sonnet)*
+- Employee routes: `app/(employee)/employee/dashboard`, `.../onboarding/[id]`, `.../onboarding/[id]/item/[itemId]/page.tsx`
+- Employee login: `/employee-login` (route group `(auth)` is invisible in the URL)
+- Join flow: `/join?token=xxx` → `acceptInvitation()` in `app/join/actions.ts`
+- Employer invite: `app/(employer)/dashboard/invite/` (page.tsx + InviteForm.tsx + actions.ts)
+- Employer review: `app/(employer)/dashboard/onboarding/[id]/`
+- Admin client: `lib/supabase/admin.ts` (`createAdminClient()`)
+- Encryption: `lib/encryption.ts` (AES-256-GCM; format `iv.authTag.ciphertext`, dot-separated base64)
+- Forms: `components/forms/` — NINumberForm, BankDetailsForm, EmergencyContactsForm, FormEntryHandler (routes on form_field_key), PolicyAcknowledgement, RightToWorkUpload
+- Form/policy/RTW actions: `lib/actions/form-actions.ts`, `policy-actions.ts`, `rtw-actions.ts`
+- Portability: `lib/portability/categories.ts`, `lib/portability/profile-matcher.ts`, `lib/actions/portability-actions.ts`, `components/portability/PortableProfileReview.tsx`, review page `app/(employee)/employee/onboarding/[id]/review/page.tsx`
+- Consent service: `lib/consent.ts` (DATA_CATEGORIES, CATEGORY_INFO, getRequiredCategories, getConsentStatus, hasActiveConsent, grantConsent, withdrawConsent); standing management page `/employee/consents`
+- Upload: `components/upload/DocumentUpload.tsx`; storage bucket `employee-documents` (private, 10MB, PDF/JPG/PNG); path `{user_id}/{document_type_slug}_{timestamp}.{ext}`
+- Email: `lib/email/invite-template.ts`, `lib/email/reminder-templates.ts`
+- Cron: `app/api/cron/check-overdue/route.ts` (7am UTC), `app/api/cron/reminders/route.ts` (8am UTC, REMINDER_WINDOW_DAYS=3); cron routes excluded from auth middleware via api/cron matcher pattern
 
-### Phase 3 — Portability & Polish (Weeks 7–9)
-- [x] **3.1** Portable profile logic *(Opus)*
-- [x] **3.2** Consent management *(Opus)*
-- [ ] **3.3** Right to work guidance *(Sonnet)*
-- [ ] **3.4** UI polish + responsive design *(Sonnet)*
-- [ ] **3.5** Audit trail *(Sonnet)*
-- [ ] **3.6** Data export CSV *(Sonnet)*
+---
 
-### Phase 4 — Billing & Launch (Weeks 10–12)
-- [ ] **4.1** Stripe integration *(Sonnet)*
-- [ ] **4.2** Free trial / pilot mode *(Sonnet)*
-- [ ] **4.3** Legal pages — use Sonnet to draft, solicitor to review
-- [ ] **4.4** Security hardening *(Opus)*
-- [ ] **4.5** Error tracking + monitoring *(Sonnet)*
-- [ ] **4.6** Landing page + sign-up funnel *(Sonnet)*
+## Per-task notes (condensed)
 
+- **1.5 invite flow:** validate → get employer_id via employer_members → duplicate guard (same employer_id + invitee_email + status in pending/in_progress) → insert onboarding_instance → copy template_items → checklist_items (deadline = start_date − deadline_days_before_start) → send email (non-fatal on failure) → audit_log. Invite URL: `{NEXT_PUBLIC_APP_URL}/join?token={invitation_token}`.
+- **2.1 upload:** browser → Supabase Storage → recordDocumentUpload() → document_uploads row → checklist_items status='submitted'. checklist_items has no FK to document_uploads — split getChecklistItem() into two queries. document_uploads insert needs `document_name` (NOT NULL).
+- **2.2 forms:** encrypt sensitive fields before write; form_field_key values 'ni_number'/'bank_details'/'emergency_contacts'; NI validation = HMRC prefix/suffix rules; bank = format-only for MVP (full Vocalink modulus check deferred to 4.4); emergency contacts JSONB, not encrypted, max 3.
+- **2.3 policy:** acknowledgement writes checklist_items.status='submitted' + acknowledged_at, consent_records INSERT (granted), audit_log INSERT. Content from checklist_items.description or policy_document_path (PDF signed URL).
+- **2.4 review:** view file via signed URL; one-click approve / re-upload with mandatory note; adminClient for checklist_items UPDATE; `window.location.reload()` after action. Signed-URL "Object not found" = storage file vs DB file_path mismatch.
+- **3.1 portability:** matcher categorises fields universal (NI) / likely_stable (bank, emergency, address) / time_sensitive (right_to_work) / employer_specific (P45, policies). Pre-population sets was_pre_populated=true, status='submitted'. Sensitive data masked on review (NI "AB ** ** ** C", bank "****5678"). Expired docs flagged + blocked from carry-forward. audit action 'profile_data_carried_forward'.
+- **3.2 consent:** first-time accepters → `/employee/onboarding/[id]/consent` (opt-in per required category). Returning employees with portable data → `/review`. Checklist page has a safety-net guard: won't render unless every required category has active granted consent, else redirects to `/consent`.
+- **3.2b:** confirmPortableItems() grants consent for ALL required categories (not just portable ones); review-page Skip button → `/consent` gate.
+- **3.3 right to work (COMPLETE):**
+  - `components/forms/RightToWorkUpload.tsx` — doc type selector (passport, BRP, share code, visa, ILR), per-type guidance, file upload OR GOV.UK share code input, expiry capture where relevant
+  - `lib/actions/rtw-actions.ts` — handles file uploads and share codes; share codes stored in file_path with `share_code:` prefix
+  - Item page routes `data_category === 'right_to_work'` to RightToWorkUpload instead of generic DocumentUpload
+  - `ExistingFileReadOnly` detects `share_code:` prefix → renders code + GOV.UK verify link instead of a file preview
+  - Verified end-to-end (file/passport path): submit → checklist_items.status flows submitted → approved correctly, document_upload_id linked
+  - **3.4 UI polish + responsive design (COMPLETE, 3 passes):**
+  - **Pass 1 (employee journey):** Inline styles → Tailwind across NINumberForm, BankDetailsForm, EmergencyContactsForm, PolicyAcknowledgement, FormEntryHandler, DocumentUpload, RightToWorkUpload. Emoji/HTML entities/ellipsis chars removed throughout (Turbopack parser sensitivity). Two-step employer_accounts fetch via adminClient added to employee dashboard, checklist page, and item page — indirect `employer_accounts (company_name)` joins were silently returning null under RLS. `.single()` → `.maybeSingle()` wherever a row may not exist. RTW upload had no success-path navigation at all (fell out of try block silently) — fixed with `window.location.href` redirect (router.push + router.refresh was self-cancelling). ChecklistItems.tsx created as a client component for per-item navigation spinner. Loading states on all form submit buttons via local state + spinner SVG. Empty states added for employee dashboard (no onboardings) and checklist page (no items).
+  - **Pass 2 (employer journey):** Same indirect-join fix applied to employer dashboard (employer_members → employer_accounts) and OnboardingDetailView. Employer dashboard table (fixed-width grid-cols) replaced with card-based mobile layout below `sm:`, original table preserved above `sm:`. Inline styles, arrow characters, ellipsis chars removed from OnboardingDetailView (approve/reject buttons, modal). Spinner added to approve button.
+  - **Pass 3 (layout shells):** EmployeeNav required no changes — already mobile-friendly. SidebarNav (employer) required a full mobile nav rebuild: hamburger top bar + slide-in panel. **Key learning: Tailwind responsive/dynamic classes (`lg:flex`, template-literal `${cond ? 'flex' : 'hidden'}`) were unreliable in this setup** — JIT scanner intermittently failed to generate the classes even after cache clears and safelist additions. Resolved by injecting a raw `<style>` tag with hand-written CSS and a real `@media (min-width: 1024px)` query, fully bypassing Tailwind class generation for the sidebar show/hide logic. **Also: Chrome DevTools "Responsive" device toolbar with typed dimensions did NOT reliably trigger media query re-evaluation in this debugging session** — resizing the actual browser window worked when the emulator appeared not to. For any future viewport-dependent bug, test with a real window resize before assuming the code is wrong.
+- **3.5 audit trail (COMPLETE):**
+  - Coverage check found most insert sites already logging correctly from earlier tasks (rtw-actions.ts, recordDocumentUpload, approveChecklistItem) — only real gaps were profile-access reads (getSignedDocumentUrl, getDecryptedFormData in employer onboarding actions.ts) and consent grant/withdraw (lib/consent.ts), both now logging `profile_accessed` / `consent_granted` / `consent_withdrawn`.
+  - `audit_action` enum already covered every value needed (`document_uploaded`, `profile_accessed`, `consent_granted`, `consent_withdrawn`, `checklist_item_approved`, `checklist_item_rejected`, `profile_data_carried_forward`) — no migration required.
+  - **Bug found and fixed:** `requestReupload()` was inserting `action: 'checklist_item_reupload_requested'`, a value that does not exist in the `audit_action` enum. Corrected to `checklist_item_rejected` (which is in the enum and was otherwise unused). Insert errors here were not being checked/surfaced, so this had likely been failing silently since 2.4.
+  - New read-only employer view at `app/(employer)/dashboard/onboarding/[id]/audit/page.tsx` — queries audit_log via adminClient filtered by employer_id, then filters in JS by `metadata.onboarding_id` (no dedicated onboarding_id column on audit_log itself). Fine at current volume; revisit as a JSONB query (`metadata->>'onboarding_id'`) inside the `.eq()` if the table grows.
+  - **Known inconsistency, accepted as-is:** `grantConsent`/`withdrawConsent` log `actor_id` as the employee's `employee_profiles.id`, not the auth `user.id` used everywhere else in the codebase (form-actions, rtw-actions, recordDocumentUpload, approveChecklistItem all use `user.id`). `audit_log.actor_id` has no FK constraint so this doesn't break anything, but it means `actor_id` isn't a consistent ID space across all audit rows. Low priority; would need `grantConsent`/`withdrawConsent` to accept the auth user id as a parameter to fix properly.
+
+---
+
+## Outstanding bugs / TODOs (not blockers)
+
+- **document_uploads.verification_status not synced on approval.** Task 2.4's approve/reject updates checklist_items.status but leaves document_uploads.verification_status = 'pending'. Affects all document types. Consider syncing both in the approve/reject action.
+- **consent_records/audit_log actor_id inconsistency.** `grantConsent`/`withdrawConsent` (lib/consent.ts) log `audit_log.actor_id` as `employee_profiles.id`, while every other insert site in the app (form-actions, rtw-actions, recordDocumentUpload, approveChecklistItem) uses the auth `user.id`. No FK constraint on `actor_id` so nothing breaks, but querying "all actions by this actor" across the table won't be reliable until this is unified. Fix = pass the auth user id into grantConsent/withdrawConsent from their call sites.
+- **Session routing bug.** Clicking an invite/join link while another session exists in the same browser sometimes lands on the employer dashboard instead of the employee checklist/join flow. Workaround during testing: re-open the invite link from the email. Likely tied to acceptInvitation / role-detection — relevant to 3.4.
+- **GOV.UK share code path untested end-to-end.** File/passport path fully verified; share code submission + employer-side display (code + verify link) not yet exercised.
+- **acceptInvitation should reject** linking an onboarding to an auth user who is also an employer_members row for the same employer (currently produces a corrupted record where the same human is both sides).
+- **Same email can't be both employer and employee** in current routing — 3.4 will need a role chooser; for now use temporary employer_members deletion to test.
+- **Task 3.4 standalone employee sign-in:** add a sign-in page so returning employees can check progress without re-using an invite link (redirect to /employee/dashboard when no token present). Note prior conflicting notes on path — current employee login is `/employee-login`, NOT `/auth/employee-login`.
+- **Minor:** migration file `001_initial_schema.sql` has a double `.sql.sql` extension to correct.
+- **Profile creation is owned by `acceptInvitation`, not signup.** signUpEmployee only creates the auth user; the employee_profiles row is created via upsert in acceptInvitation (idempotent against triggers/retries/races).
+- Before launch: rename middleware → proxy convention; replace Resend from-address with verified domain; real-time on checklist_items requires REPLICA IDENTITY FULL + adding to supabase_realtime publication via SQL.
+- Employee can reach checklist item pages directly, bypassing the /consent 
+  gate — no server-side guard confirmed on direct navigation. Needs a check 
+  before form submission that active consent exists.
+- No navigation link anywhere in the employee UI to /employee/consents — 
+  page works but is undiscoverable without knowing the URL.
+---
 ---
 
 ## Notes / things to remember
 
-- Next.js 16 requires `await createClient()` everywhere — apply to every new
-  file that calls createClient()
-- Service role client (createAdminClient) needed in auth.ts to bypass RLS
-  on sign-up writes
-- middleware.ts is now called proxy.ts in Next.js 16 — rename before launch
-- Task 1.3 bug FIXED: sign-up action now inserts employer_accounts + employer_members
-  rows using adminClient (service role) after auth.signUp(). Also calls
-  create_default_template() RPC. See TASK-1.3-BUG-FIX.ts for the full replacement
-  signUpEmployer() function.
-- Task 1.5 patterns established:
-  - Invite flow: page.tsx (server, loads templates) + InviteForm.tsx (client)
-    + actions.ts (server action)
-  - Server action pattern: validate → get employer_id via employer_members → check
-    duplicates → insert onboarding_instance → copy template_items to checklist_items
-    with deadline calculation → send email → write audit_log
-  - Checklist deadline formula: start_date minus deadline_days_before_start days
-  - Invite URL format: {NEXT_PUBLIC_APP_URL}/join?token={invitation_token}
-  - Resend from address: use 'onboarding@resend.dev' for dev/testing; replace with
-    verified domain before launch
-  - Duplicate guard: check onboarding_instances for same employer_id + invitee_email
-    + status IN ('pending', 'in_progress') before inserting
-  - Email failure is non-fatal: onboarding_instance still exists, employer can copy
-    the invite link manually from the dashboard
-  - lib/email/invite-template.ts — reusable HTML email builder, safe() helper
-    escapes user input to prevent injection
-- Task 1.6 patterns established:
-  - Employee URL structure: /employee/dashboard, /employee/onboarding/[id]
-  - Route group (employee) at app/(employee)/ wraps all employee routes with auth guard
-  - Join flow: /join?token=xxx → validates token → auth if needed → accept_invitation action → redirect to checklist
-  - acceptInvitation() in app/join/actions.ts: creates employee_profile if first time, links onboarding_instance, writes audit_log
-  - ChecklistView.tsx sorts items: overdue → not_started → in_progress → submitted → approved
-  - CTA links point to /employee/onboarding/[onboardingId]/item/[itemId] — these will be wired in Task 2.1/2.2/2.3
-  - was_pre_populated flag shows "From profile" badge — will be set by Task 3.1 portable profile logic
+- Security hardening pass (Jul 2026): fixed cross-tenant document/checklist
+  access (adminClient calls now verify ownership before every write), 
+  consent now actually gates employer access to NI/bank details, and the 
+  invitation accept flow now derives identity from session not params. 
+  Full detail in Docs/security-fixes-2026-07-03.md.
+- Any new adminClient usage MUST verify caller identity + resource 
+  ownership in code before the query — RLS is bypassed entirely.
+- Encryption key env var is ENCRYPTION_KEY (not FIELD_ENCRYPTION_KEY — 
+  that was a dead/unused module, now deleted).
 
-- Had to run GRANT ALL ON ALL TABLES after schema reset
-- GRANT SELECT ON auth.users TO authenticated + service_role required for invite flow
-- Resend free tier only delivers to verified email address during development
-- Email confirmation must be OFF in Supabase Auth settings
-- Task 2.1 patterns established:
-  - Storage bucket: employee-documents (private, 10MB, PDF/JPG/PNG)
-  - File path convention: {user_id}/{document_type_slug}_{timestamp}.{ext}
-  - Storage RLS: employees upload/read/delete only their own {userId}/ folder
-  - Employers access documents via server-generated signed URLs (service role bypasses RLS)
-  - Upload flow: browser → Supabase Storage → recordDocumentUpload() server action → document_uploads row → checklist_items updated to 'submitted'
-  - Documents always attach to employee_profile (not onboarding) — portability preserved
-  - Expiry date captured for right_to_work / passport / BRP / visa items
-  - Item page at app/(employee)/employee/onboarding/[id]/item/[itemId]/page.tsx
-  - DocumentUpload component at components/upload/DocumentUpload.tsx
-- Task 3.4 TODO: Add standalone employee sign-in page at /auth/employee-login 
-  that redirects to /employee/dashboard when no token is present (for returning 
-  employees who want to check progress without re-using invite link)
-- Task 2.1 complete. Bugs fixed during testing:
-  - Missing lib/supabase/admin.ts — created with createAdminClient() using service role key
-  - Employee login was routing to employer login page — created dedicated
-    app/auth/employee-login/page.tsx and actions.ts that preserve the invite
-    token and redirect back to /join?token=... after auth
-  - acceptInvitation() in app/join/actions.ts — fixed brace structure and moved
-    onboarding query before profile creation so invitee_name is available
-  - document_uploads insert was missing document_name field — added to insert
-  - checklist_items has no FK to document_uploads — split getChecklistItem()
-    into two separate queries instead of a join
-  - TYPE_CONFIG in ChecklistView.tsx doesn't include 'form_entry' — added
-    fallback ?? { label: item.item_type, icon: null } to avoid crash
-  - Checklist CTA button was invisible — Tailwind classes not applying, fixed
-    with inline style={{ backgroundColor: '#4f46e5', color: '#ffffff' }}
-  - Task 3.4 TODO: Add standalone employee sign-in page at /auth/employee-login
-    that redirects to /employee/dashboard when no token is present
-
-   - Task 2.2 patterns established:
-  - Encryption utility at lib/encryption.ts — AES-256-GCM, server-side only
-  - Storage format: iv.authTag.ciphertext (dot-separated base64 in TEXT columns)
-  - Env var is ENCRYPTION_KEY (64-char hex string, 32 bytes)
-  - Validation at lib/validation/ — ni-number.ts, bank-details.ts, emergency-contacts.ts
-  - Server actions at lib/actions/form-actions.ts — validate → encrypt → update profile → update checklist status → audit log
-  - Form components at components/forms/ — NINumberForm, BankDetailsForm, EmergencyContactsForm
-  - FormEntryHandler routes to correct form based on checklist item's form_field_key
-  - form_field_key values: 'ni_number', 'bank_details', 'emergency_contacts'
-  - NI validation follows HMRC rules (prefix/suffix letter restrictions)
-  - Bank validation is format-only for MVP — full Vocalink modulus check deferred to Task 4.4
-  - Emergency contacts stored as JSONB (not encrypted), max 3 contacts
-  - bank_account_holder_name column added to employee_profiles (not encrypted)
-  - getExistingProfileData() server action decrypts profile data for form pre-fill
-  - Historical checklist_items created before form_field_key existed had NULL values — patched directly
-  - Task 2.4 will need decryption to show employer the submitted data (with consent check) 
-- Task 2.3 patterns established:
-  - PolicyAcknowledgement component at components/forms/PolicyAcknowledgement.tsx
-  - acknowledgePolicy() server action at lib/actions/policy-actions.ts
-  - Acknowledgement writes: checklist_items.status='submitted' + acknowledged_at,
-    consent_records INSERT (action='granted'), audit_log INSERT
-  - Policy content from checklist_items.description (text) or policy_document_path (PDF signed URL)
-  - description and policy_document_path added to checklist_items and template_items via SQL migration
-  - create_onboarding_from_template updated to copy both new columns
-  - acknowledged_at added to ChecklistItemWithUpload interface in actions.ts
-  - Task 2.4 patterns established:
-  - Employer review page at app/(employer)/dashboard/onboarding/[id]/
-  - reviewed_by column expects auth.users ID — use user.id not member.id
-  - Action buttons must show even when viewError is set (remove !viewError condition)
-  - adminClient required for checklist_items UPDATE (RLS blocks employer writes)
-  - Signed URL "Object not found" = mismatch between storage file and DB file_path record
-  - window.location.reload() used after approve/re-upload to refresh employer view
-  - Task 2.5 complete
-  - recalculate_onboarding_status(UUID) PostgreSQL function live in Supabase
-  - Trigger checklist_status_changed fires on checklist_items changes automatically
-  - Daily cron at app/api/cron/check-overdue/route.ts — 7am UTC
-  - NEXT_PUBLIC_APP_URL updated to https://onboarding-platform.vercel.app
-  - Project now live on GitHub at jasonvincent10/onboarding-platform
-  - Build fixed: typedRoutes removed, clsx installed, TypeScript errors resolved
-  - Task 2.6 complete
-- Reminder cron at app/api/cron/reminders/route.ts — 8am UTC
-- Email templates at lib/email/reminder-templates.ts
-- REMINDER_WINDOW_DAYS = 3 for employee reminders
-- Employer escalation uses two-step query (employer_members can't be joined 
-  indirectly through onboarding_instances)
-- Cron routes excluded from auth middleware via api/cron pattern in matcher
-- Correct Vercel URL is onboarding-platform-inky.vercel.app (not onboarding-platform.vercel.app)
-- NEXT_PUBLIC_APP_URL needs updating to https://onboarding-platform-inky.vercel.app
-- Task 3.1 patterns established:
-  - Portability config at lib/portability/categories.ts — defines universal/likely_stable/time_sensitive/employer_specific
-  - Profile matcher at lib/portability/profile-matcher.ts — matches existing data to new checklist items
-  - Server actions at lib/actions/portability-actions.ts — getPortableReviewData(), confirmPortableItems(), hasPortableData()
-  - Review page at app/(employee)/employee/onboarding/[id]/review/page.tsx
-  - PortableProfileReview client component at components/portability/PortableProfileReview.tsx
-  - acceptInvitation() in app/join/actions.ts now checks hasPortableData() and redirects returning employees to /review
-  - Pre-population sets was_pre_populated=true and status='submitted' on checklist_items
-  - Consent records created per data_category when employee confirms carry-forward
-  - Sensitive data shown masked on review page (NI: "AB ** ** ** C", bank: "****5678")
-  - Document expiry checked — expired docs flagged with warning and blocked from carry-forward
-  - P45 and policy_acknowledgements are never portable (employer-specific)
-  - Right-to-work documents are portable if not expired
-  - adminClient used for checklist_items UPDATE (same pattern as Task 2.4)
-  - audit_log action: 'profile_data_carried_forward' with metadata showing items + categories
-  - Task 3.1 complete — portable profile system live
-  - Files: lib/portability/categories.ts, lib/portability/profile-matcher.ts,
-    lib/actions/portability-actions.ts,
-    app/(employee)/employee/onboarding/[id]/review/page.tsx,
-    components/portability/PortableProfileReview.tsx
-  - acceptInvitation() in app/join/actions.ts now checks hasPortableData() and 
-    redirects returning employees to /review; first-time employees skip straight 
-    to checklist
-  - Pre-population sets was_pre_populated=true and status='submitted' on checklist_items
-  - Consent records created per data_category when employee confirms carry-forward
-  - Sensitive data shown masked on review page (NI: "AB ** ** ** C", bank: "****5678")
-  - Document expiry checked — expired docs flagged with warning, blocked from carry-forward
-  - Categories: universal (NI), likely_stable (bank, emergency, address), 
-    time_sensitive (right_to_work), employer_specific (P45, policies)
-
-- Critical gotchas discovered during 3.1 (apply to all future tasks):
-  - employee_id on onboarding_instances stores employee_profiles.id, NOT auth.users.id
-    — added getProfileIdForUser() helper to translate auth user → profile ID
-  - audit_action enum was missing 'invitation_accepted' AND 'profile_data_carried_forward' 
-    — added both via ALTER TYPE; insert errors silently broke acceptInvitation flow 
-    for hours of debugging
-  - DO NOT use employer_accounts!inner joins in queries — silently fails, returns null. 
-    Fetch employer separately via two queries
-  - Encryption env var is ENCRYPTION_KEY (NOT FIELD_ENCRYPTION_KEY as previously noted)
-    — must be set in Vercel env vars too, not just .env.local
-  - All portability read queries use adminClient — regular client + RLS too aggressive
-  - Middleware (proxy.ts) needs /join AND /employee-login in both PUBLIC_ROUTES 
-    and ALWAYS_ACCESSIBLE arrays
-  - Join page must use adminClient for token lookup — anonymous visitors hit RLS
-  - Page files MUST be named exactly page.tsx — Next.js won't route page-foo.tsx, 
-    paget.ts, etc.
-  - Employee login lives at /employee-login (route group (auth) is invisible in URL),
-    NOT /auth/employee-login
-  - useSearchParams() must be wrapped in <Suspense> for static prerender to succeed
-  - form_field_key on template_items must be explicitly set on insert — older 
-    employer templates created before fix have NULLs and need patching
-  - When debugging server actions, audit_log inserts are useful but check enum 
-    constraints first — silent enum failures look identical to "code never ran"
-  - Same email cannot be both employer and employee in current routing — Task 3.4 
-    will need a role chooser; for now use temporary employer_members deletion to test
-    - Task 3.2 (consent management) is built but unverified — paused mid-test due to a profile_creation_failed bug in the signup/accept flow. Do not mark 3.2 complete. The consent gate code itself is not the bug; see task prompt below.
-- Followup bug to fix later: acceptInvitation should reject linking an onboarding to an auth user who is also an employer_members row for the same employer (currently produces a corrupted record where the same human is both sides of the onboarding).
-- **Profile creation is owned by `acceptInvitation`, not signup.** `signUpEmployee` only creates the auth user; the `employee_profiles` row is created via upsert in `acceptInvitation`. This handles brand-new employees and returning employees uniformly and is idempotent against DB triggers, retries, and races.
-- **Use `.maybeSingle()` not `.single()`** when checking for optional row existence — `.single()` returns an error on zero rows, which can silently break conditional logic.
-- **Use `upsert` with `onConflict`** for any "get-or-create" pattern on a table with a unique constraint. Select-then-insert is a race waiting to happen.
-- Multi-line TypeScript generic type parameters cause parser errors in this setup. Keep `Record<...>` and similar generics on a single line, or extract to a named type. Same root cause as the multi-line JSX attribute issue.
-- Consent is append-only. NEVER UPDATE or DELETE consent_records. Withdrawal = INSERT new row with `action = 'withdrawn'`. The `get_consent_status_for_employer` function and `has_active_consent` in SQL both read the latest row per category.
-- Next.js 16 + Turbopack can serve a stale server-component render on the first reload after a data change. If a guard or redirect doesn't appear to fire, reload a second time before assuming there's a bug.
-- Task 3.2b complete: consent integration into `/review` page for returning employees. confirmPortableItems() now grants consent for ALL required categories (not just portable ones). Skip button on review page redirects to /consent gate instead of checklist.
+---
 ## How to use this file
 
-1. **Start every Claude conversation** by pasting the full contents of this file before your task prompt
-2. **Update after each task** — fill in the schema, tick off tasks, note key decisions
-3. **The Opus tasks** are: 1.2, 2.2, 3.1, 3.2, 4.4 — open in a fresh conversation, paste context first
-4. **Don't skip ahead** — each phase builds on the previous one
+1. Start every Claude conversation by pasting this whole file before your task prompt.
+2. Update after each task — tick tasks, add condensed notes, log new bugs.
+3. Opus tasks: 1.2, 2.2, 3.1, 3.2, 4.4 — fresh conversation, paste context first.
+4. Don't skip ahead — each phase builds on the previous one.

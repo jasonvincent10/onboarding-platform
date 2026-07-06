@@ -132,6 +132,18 @@ export async function grantConsent(
     onboarding_id: onboardingId,
   })
   if (error) return { error: error.message }
+
+  await admin.from('audit_log').insert({
+    actor_id: employeeId,
+    actor_type: 'employee',
+    action: 'consent_granted',
+    resource_type: 'consent_record',
+    resource_id: employeeId,
+    employer_id: employerId,
+    employee_id: employeeId,
+    metadata: { data_category: category, onboarding_id: onboardingId },
+  })
+
   return { error: null }
 }
 
@@ -153,5 +165,17 @@ export async function withdrawConsent(
     onboarding_id: null,
   })
   if (error) return { error: error.message }
+
+  await admin.from('audit_log').insert({
+    actor_id: employeeId,
+    actor_type: 'employee',
+    action: 'consent_withdrawn',
+    resource_type: 'consent_record',
+    resource_id: employeeId,
+    employer_id: employerId,
+    employee_id: employeeId,
+    metadata: { data_category: category },
+  })
+
   return { error: null }
 }

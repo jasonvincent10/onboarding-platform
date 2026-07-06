@@ -45,15 +45,16 @@ export default function PolicyAcknowledgement({
 
   if (done) {
     return (
-      <div style={{ border: '1px solid #d1fae5', backgroundColor: '#f0fdf4', borderRadius: '8px', padding: '24px', textAlign: 'center' }}>
-        <div style={{ fontSize: '2rem', marginBottom: '8px' }}>✅</div>
-        <p style={{ fontWeight: 600, color: '#166534', marginBottom: '4px' }}>Acknowledged</p>
+      <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-6 py-8 text-center">
+        <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
+          <svg className="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </div>
+        <p className="text-sm font-semibold text-emerald-800">Acknowledged</p>
         {acknowledgedAt && (
-          <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-            Confirmed on{' '}
-            {new Date(acknowledgedAt).toLocaleDateString('en-GB', {
-              day: 'numeric', month: 'long', year: 'numeric',
-            })}
+          <p className="mt-1 text-xs text-gray-500">
+            Confirmed on {new Date(acknowledgedAt).toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})}
           </p>
         )}
       </div>
@@ -63,38 +64,36 @@ export default function PolicyAcknowledgement({
   return (
     <div>
       {policyDocumentUrl ? (
-        <div style={{ marginBottom: '24px' }}>
-          <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '8px' }}>
-            Please read the document below before acknowledging.
-          </p>
-          <div style={{ border: '1px solid #e5e7eb', borderRadius: '8px', overflow: 'hidden', height: '480px' }}>
-            <iframe src={policyDocumentUrl} width="100%" height="100%" title={itemName} style={{ border: 'none' }} />
+        <div className="mb-6">
+          <p className="mb-2 text-sm text-gray-500">Please read the document below before acknowledging.</p>
+          <div className="overflow-hidden rounded-xl border border-gray-200" style={{height: '480px'}}>
+            <iframe src={policyDocumentUrl} width="100%" height="100%" title={itemName} className="border-none" />
           </div>
         </div>
       ) : description ? (
-        <div style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '20px', backgroundColor: '#f9fafb', marginBottom: '24px', maxHeight: '400px', overflowY: 'auto', lineHeight: '1.6', whiteSpace: 'pre-wrap', fontSize: '0.9375rem', color: '#374151' }}>
+        <div className="mb-6 max-h-96 overflow-y-auto rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
           {description}
         </div>
       ) : (
-        <div style={{ border: '1px solid #fde68a', backgroundColor: '#fffbeb', borderRadius: '8px', padding: '16px', marginBottom: '24px', fontSize: '0.875rem', color: '#92400e' }}>
+        <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           No policy content has been attached to this item yet. Contact your employer if you have questions.
         </div>
       )}
 
-      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', marginBottom: '20px', padding: '16px', border: checked ? '1px solid #a5b4fc' : '1px solid #e5e7eb', borderRadius: '8px', backgroundColor: checked ? '#eef2ff' : '#ffffff' }}>
+      <label className={`mb-5 flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-4 transition-colors ${checked ? 'border-indigo-300 bg-indigo-50' : 'border-gray-200 bg-white'}`}>
         <input
           type="checkbox"
           checked={checked}
           onChange={(e) => setChecked(e.target.checked)}
-          style={{ marginTop: '2px', width: '18px', height: '18px', cursor: 'pointer', flexShrink: 0 }}
+          className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-indigo-600"
         />
-        <span style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: '1.5' }}>
+        <span className="text-sm leading-relaxed text-gray-700">
           I confirm that I have read and understood the <strong>{itemName}</strong> and agree to its terms.
         </span>
       </label>
 
       {error && (
-        <div style={{ marginBottom: '16px', padding: '12px 16px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', color: '#dc2626', fontSize: '0.875rem' }}>
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
       )}
@@ -102,9 +101,17 @@ export default function PolicyAcknowledgement({
       <button
         onClick={handleAcknowledge}
         disabled={!checked || loading}
-        style={{ width: '100%', padding: '12px 24px', backgroundColor: checked && !loading ? '#4f46e5' : '#e5e7eb', color: checked && !loading ? '#ffffff' : '#9ca3af', border: 'none', borderRadius: '8px', fontWeight: 600, fontSize: '1rem', cursor: checked && !loading ? 'pointer' : 'not-allowed' }}
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {loading ? 'Recording acknowledgement...' : 'I Acknowledge'}
+        {loading ? (
+          <>
+            <svg className="h-4 w-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Recording acknowledgement...
+          </>
+        ) : 'I Acknowledge'}
       </button>
     </div>
   )

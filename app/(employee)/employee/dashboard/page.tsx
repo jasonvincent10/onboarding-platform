@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { SarExportButton } from '@/components/ExportButtons'
 
 export default async function EmployeeDashboardPage() {
   const supabase = await createClient()
@@ -12,23 +13,32 @@ export default async function EmployeeDashboardPage() {
     .from('employee_profiles')
     .select('id, full_name')
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
 
   // Get all onboardings for this employee
-  const { data: onboardings } = profile
+  const { data: rawOnboardings } = profile
     ? await supabase
         .from('onboarding_instances')
-        .select(`
-          id,
-          role_title,
-          start_date,
-          status,
-          readiness_pct,
-          employer_accounts (company_name)
-        `)
+        .select('id, role_title, start_date, status, readiness_pct, employer_id')
         .eq('employee_id', profile.id)
         .order('created_at', { ascending: false })
     : { data: [] }
+
+  const employerIds = (rawOnboardings ?? []).map((o) => o.employer_id).filter(Boolean)
+
+  const { data: employerRows } = employerIds.length > 0
+    ? await supabase.from('employer_accounts').select('id, company_name').in('id', employerIds)
+    : { data: [] }
+
+  const employerMap: Record<string, string> = {}
+  for (const e of employerRows ?? []) {
+    employerMap[e.id] = e.company_name
+  }
+
+  const onboardings = (rawOnboardings ?? []).map((o) => ({
+    ...o,
+    company_name: employerMap[o.employer_id] ?? 'Your employer',
+  }))
 
   const active = onboardings?.filter(o => o.status !== 'completed') ?? []
   const completed = onboardings?.filter(o => o.status === 'completed') ?? []
@@ -70,7 +80,15 @@ export default async function EmployeeDashboardPage() {
           </div>
         </section>
       )}
-
+      {/* Your data */}
+            {profile && (
+              <section className="pt-2 border-t border-slate-100">
+                <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+                  Your data
+                </h2>
+                <SarExportButton />
+              </section>
+            )}
       {/* Empty state */}
       {(!onboardings || onboardings.length === 0) && (
         <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center">
@@ -97,7 +115,8 @@ interface Onboarding {
   start_date: string | null
   status: string
   readiness_pct: number | null
-  employer_accounts: { company_name: string }[] | null
+  employer_id: string
+  company_name: string
 }
 
 function OnboardingCard({ onboarding: o }: { onboarding: Onboarding }) {
@@ -115,7 +134,7 @@ function OnboardingCard({ onboarding: o }: { onboarding: Onboarding }) {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-sm font-semibold text-slate-900 truncate">
-            {(o.employer_accounts as any)?.company_name ?? 'Unknown Company'}
+            {o.company_name}
           </p>
           <p className="text-xs text-slate-500 mt-0.5">{o.role_title} · Starts {startLabel}</p>
         </div>

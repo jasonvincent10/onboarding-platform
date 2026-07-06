@@ -133,7 +133,99 @@ export default function BankDetailsForm({
   const formValid = isFormValid();
 
   return (
-    <div style={{ maxWidth: '480px' }}>
+    <div className="max-w-lg">
+      <h2 className="text-lg font-semibold text-gray-900 mb-1">Bank Details</h2>
+      <p className="text-sm text-gray-500 mb-6">
+        Your employer needs these to set up your salary payments. You can find
+        your sort code and account number on your bank card, a bank statement,
+        or in your banking app.
+      </p>
+
+      <div className="mb-4">
+        <label htmlFor="holder-name" className="block text-sm font-medium text-gray-700 mb-1">
+          Account holder name
+        </label>
+        <input
+          id="holder-name"
+          type="text"
+          value={accountHolderName}
+          onChange={handleHolderNameChange}
+          placeholder="As shown on your bank account"
+          autoComplete="off"
+          className={`block w-full rounded-lg border px-3 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${holderNameError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+        />
+        {holderNameError && (
+          <p className="mt-1 text-xs text-red-600">{holderNameError}</p>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="sort-code" className="block text-sm font-medium text-gray-700 mb-1">
+          Sort code
+        </label>
+        <input
+          id="sort-code"
+          type="text"
+          value={sortCode}
+          onChange={handleSortCodeChange}
+          placeholder="XX-XX-XX"
+          maxLength={8}
+          autoComplete="off"
+          inputMode="numeric"
+          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${sortCodeError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+        />
+        {sortCodeError && (
+          <p className="mt-1 text-xs text-red-600">{sortCodeError}</p>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="account-number" className="block text-sm font-medium text-gray-700 mb-1">
+          Account number
+        </label>
+        <input
+          id="account-number"
+          type="text"
+          value={accountNumber}
+          onChange={handleAccountNumberChange}
+          placeholder="8 digits"
+          maxLength={8}
+          autoComplete="off"
+          inputMode="numeric"
+          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${accountNumberError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+        />
+        {accountNumberError && (
+          <p className="mt-1 text-xs text-red-600">{accountNumberError}</p>
+        )}
+      </div>
+
+      {serverError && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {serverError}
+        </div>
+      )}
+
+      <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs text-emerald-800">
+        Your sort code and account number are encrypted before being stored. Your employer will only see them with your explicit consent.
+      </div>
+
+      <button
+        onClick={handleSubmit}
+        disabled={!formValid || submitting}
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {submitting ? (
+          <>
+            <svg className="h-4 w-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Saving...
+          </>
+        ) : existingSortCode ? 'Update Bank Details' : 'Submit Bank Details'}
+      </button>
+    </div>
+  );
       <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.5rem' }}>
         Bank Details
       </h2>

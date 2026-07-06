@@ -50,32 +50,33 @@ export default function FormEntryHandler({
 
   // Already submitted — show success state
   if (status === 'submitted' || status === 'approved') {
+    const isApproved = status === 'approved'
     return (
-      <div style={{ maxWidth: '480px', textAlign: 'center', padding: '2rem 0' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>
-          {status === 'approved' ? '✅' : '📤'}
+      <div className="py-8 text-center">
+        <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full ${isApproved ? 'bg-emerald-100' : 'bg-indigo-50'}`}>
+          {isApproved ? (
+            <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          ) : (
+            <svg className="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+          )}
         </div>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.5rem' }}>
-          {status === 'approved' ? 'Approved' : 'Submitted'}
+        <h2 className={`text-base font-semibold ${isApproved ? 'text-emerald-800' : 'text-gray-900'}`}>
+          {isApproved ? 'Approved' : 'Submitted'}
         </h2>
-        <p style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-          {status === 'approved'
+        <p className="mt-1 text-sm text-gray-500">
+          {isApproved
             ? `Your ${itemName.toLowerCase()} has been approved by your employer.`
             : `Your ${itemName.toLowerCase()} has been submitted and is awaiting review.`}
         </p>
         <button
           onClick={() => router.push(`/employee/onboarding/${onboardingId}`)}
-          style={{
-            padding: '0.625rem 1.5rem',
-            backgroundColor: '#4f46e5',
-            color: '#ffffff',
-            border: 'none',
-            borderRadius: '0.375rem',
-            fontSize: '0.9375rem',
-            cursor: 'pointer',
-          }}
+          className="mt-6 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors"
         >
-          Back to Checklist
+          Back to checklist
         </button>
       </div>
     );
@@ -84,12 +85,14 @@ export default function FormEntryHandler({
   // Just submitted — show confirmation
   if (submitted) {
     return (
-      <div style={{ maxWidth: '480px', textAlign: 'center', padding: '2rem 0' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>✓</div>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#22c55e' }}>Saved!</h2>
-        <p style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-          Redirecting to your checklist...
-        </p>
+      <div className="py-8 text-center">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+          <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </div>
+        <h2 className="text-base font-semibold text-emerald-800">Saved!</h2>
+        <p className="mt-1 text-sm text-gray-500">Redirecting to your checklist...</p>
       </div>
     );
   }
@@ -97,7 +100,11 @@ export default function FormEntryHandler({
   // Loading profile data
   if (loading) {
     return (
-      <div style={{ padding: '2rem', color: '#6b7280' }}>
+      <div className="flex items-center gap-3 py-8 text-sm text-gray-500">
+        <svg className="h-4 w-4 animate-spin text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+        </svg>
         Loading your profile data...
       </div>
     );
@@ -139,19 +146,10 @@ export default function FormEntryHandler({
 
     default:
       return (
-        <div
-          style={{
-            padding: '1rem',
-            backgroundColor: '#fef3c7',
-            border: '1px solid #fcd34d',
-            borderRadius: '0.375rem',
-            color: '#92400e',
-          }}
-        >
-          <p style={{ fontWeight: 500 }}>Unknown form type: {formFieldKey}</p>
-          <p style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            This checklist item has a form_field_key that doesn&apos;t match any
-            available form. Please contact support.
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
+          <p className="text-sm font-medium text-amber-800">Unknown form type: {formFieldKey}</p>
+          <p className="mt-1 text-sm text-amber-700">
+            This checklist item has a form_field_key that does not match any available form. Please contact support.
           </p>
         </div>
       );

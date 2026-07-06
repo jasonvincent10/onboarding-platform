@@ -321,8 +321,8 @@ export default function DocumentUpload({
                     </div>
                     <p className="mt-1.5 text-xs text-slate-500">
                       {stage === 'recording'
-                        ? 'Saving record…'
-                        : 'Uploading…'}
+                        ? 'Saving record...'
+                        : 'Uploading...'}
                     </p>
                   </div>
                 )}
@@ -409,7 +409,6 @@ export default function DocumentUpload({
         <button
           onClick={handleSubmit}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50 sm:w-auto"
-          style={{ backgroundColor: '#4f46e5', color: '#ffffff' }}
         >
           <UploadIcon className="h-4 w-4" />
           Submit document
@@ -422,7 +421,7 @@ export default function DocumentUpload({
           className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-indigo-400 px-5 py-3 text-sm font-semibold text-white sm:w-auto"
         >
           <SpinnerIcon className="h-4 w-4 animate-spin" />
-          {stage === 'recording' ? 'Saving…' : 'Uploading…'}
+          {stage === 'recording' ? 'Saving...' : 'Uploading...'}
         </button>
       )}
     </div>

@@ -15,17 +15,28 @@ export default async function EmployerLayout({ children }: { children: React.Rea
 
   const { data: member } = await supabase
     .from('employer_members')
-    .select('full_name, role, employer_accounts(company_name, subscription_status, onboardings_used)')
+    .select('full_name, role, employer_id')
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
 
-  const companyName = (member?.employer_accounts as any)?.company_name ?? 'Your Company'
-  const onboardingsUsed = (member?.employer_accounts as any)?.onboardings_used ?? 0
-  const subscriptionStatus = (member?.employer_accounts as any)?.subscription_status ?? 'trial'
   const memberName = member?.full_name ?? user.email ?? 'You'
 
+  const { createAdminClient } = await import('@/lib/supabase/admin')
+  const adminClient = createAdminClient()
+  const { data: employerAccount } = member?.employer_id
+    ? await adminClient
+        .from('employer_accounts')
+        .select('company_name, subscription_status, onboardings_used')
+        .eq('id', member.employer_id)
+        .maybeSingle()
+    : { data: null }
+
+  const companyName = employerAccount?.company_name ?? 'Your Company'
+  const onboardingsUsed = employerAccount?.onboardings_used ?? 0
+  const subscriptionStatus = employerAccount?.subscription_status ?? 'trial'
+
   return (
-    <div className="min-h-screen bg-stone-50 flex">
+    <div className="min-h-screen bg-stone-50 lg:flex">
       <SidebarNav
         companyName={companyName}
         memberName={memberName}
@@ -33,7 +44,7 @@ export default async function EmployerLayout({ children }: { children: React.Rea
         subscriptionStatus={subscriptionStatus}
       />
       <div className="flex-1 flex flex-col min-w-0">
-        <main className="flex-1 px-6 py-8 lg:px-10 lg:py-10 max-w-6xl">
+        <main className="flex-1 px-4 pt-20 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:px-10 lg:py-10 max-w-6xl">
           {children}
         </main>
       </div>

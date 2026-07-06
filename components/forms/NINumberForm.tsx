@@ -60,22 +60,16 @@ export default function NINumberForm({
   };
 
   return (
-    <div style={{ maxWidth: '480px' }}>
-      <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.5rem' }}>
-        National Insurance Number
-      </h2>
-
-      <p style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+    <div className="max-w-lg">
+      <h2 className="text-lg font-semibold text-gray-900 mb-1">National Insurance Number</h2>
+      <p className="text-sm text-gray-500 mb-6">
         Your NI number is on your payslip, P60, or any letter from HMRC.
-        It&apos;s 2 letters, 6 numbers, then 1 letter (e.g. AB 12 34 56 C).
+        It is 2 letters, 6 numbers, then 1 letter (e.g. AB 12 34 56 C).
         This will be encrypted before storage.
       </p>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label
-          htmlFor="ni-number"
-          style={{ display: 'block', fontWeight: 500, marginBottom: '0.25rem', fontSize: '0.875rem' }}
-        >
+      <div className="mb-4">
+        <label htmlFor="ni-number" className="block text-sm font-medium text-gray-700 mb-1">
           NI Number
         </label>
         <input
@@ -87,82 +81,40 @@ export default function NINumberForm({
           maxLength={13}
           autoComplete="off"
           spellCheck={false}
-          style={{
-            width: '100%',
-            padding: '0.625rem 0.75rem',
-            border: `1px solid ${error ? '#ef4444' : isValid ? '#22c55e' : '#d1d5db'}`,
-            borderRadius: '0.375rem',
-            fontSize: '1.125rem',
-            fontFamily: 'monospace',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
-            outline: 'none',
-          }}
+          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${error ? 'border-red-400 focus:border-red-400' : isValid ? 'border-emerald-400 focus:border-emerald-400' : 'border-gray-300 focus:border-indigo-400'}`}
         />
-
-        {/* Validation feedback */}
         {error && (
-          <p style={{ color: '#ef4444', fontSize: '0.8125rem', marginTop: '0.375rem' }}>
-            {error}
-          </p>
+          <p className="mt-1 text-xs text-red-600">{error}</p>
         )}
-
         {isValid && formatted && (
-          <p style={{ color: '#22c55e', fontSize: '0.8125rem', marginTop: '0.375rem' }}>
-            ✓ Valid format: {formatted}
-          </p>
+          <p className="mt-1 text-xs text-emerald-600">Valid format: {formatted}</p>
         )}
       </div>
 
-      {/* Server error */}
       {serverError && (
-        <div
-          style={{
-            padding: '0.75rem',
-            backgroundColor: '#fef2f2',
-            border: '1px solid #fecaca',
-            borderRadius: '0.375rem',
-            color: '#dc2626',
-            fontSize: '0.875rem',
-            marginBottom: '1rem',
-          }}
-        >
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {serverError}
         </div>
       )}
 
-      {/* Encryption notice */}
-      <div
-        style={{
-          padding: '0.75rem',
-          backgroundColor: '#f0fdf4',
-          border: '1px solid #bbf7d0',
-          borderRadius: '0.375rem',
-          fontSize: '0.8125rem',
-          color: '#166534',
-          marginBottom: '1.5rem',
-        }}
-      >
-        🔒 Your NI number is encrypted before being stored. Your employer will
-        only see it with your explicit consent.
+      <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs text-emerald-800">
+        Your NI number is encrypted before being stored. Your employer will only see it with your explicit consent.
       </div>
 
       <button
         onClick={handleSubmit}
         disabled={!isValid || submitting}
-        style={{
-          width: '100%',
-          padding: '0.75rem',
-          backgroundColor: isValid && !submitting ? '#4f46e5' : '#9ca3af',
-          color: '#ffffff',
-          border: 'none',
-          borderRadius: '0.375rem',
-          fontSize: '1rem',
-          fontWeight: 600,
-          cursor: isValid && !submitting ? 'pointer' : 'not-allowed',
-        }}
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {submitting ? 'Saving...' : existingValue ? 'Update NI Number' : 'Submit NI Number'}
+        {submitting ? (
+          <>
+            <svg className="h-4 w-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Saving...
+          </>
+        ) : existingValue ? 'Update NI Number' : 'Submit NI Number'}
       </button>
     </div>
   );

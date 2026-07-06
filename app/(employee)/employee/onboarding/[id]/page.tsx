@@ -19,22 +19,29 @@ export default async function ChecklistPage({ params, searchParams }: ChecklistP
   // Note: employer_id is selected so we can check consent below.
   const { data: onboarding, error } = await supabase
     .from('onboarding_instances')
-    .select(`
-      id,
-      role_title,
-      start_date,
-      status,
-      readiness_pct,
-      invitee_name,
-      employer_id,
-      employer_accounts (
-        company_name
-      )
-    `)
+    .select('id, role_title, start_date, status, readiness_pct, invitee_name, employer_id')
     .eq('id', id)
-    .single()
+    .maybeSingle()
 
-  if (error || !onboarding) notFound()
+ if (error || !onboarding) notFound()
+
+  const { createAdminClient } = await import('@/lib/supabase/admin')
+  const adminClient = createAdminClient()
+  const { data: employerAccount } = await adminClient
+    .from('employer_accounts')
+    .select('company_name')
+    .eq('id', onboarding.employer_id)
+    .maybeSingle()
+  const companyName = employerAccount?.company_name ?? 'Your employer'
+
+  const { createAdminClient } = await import('@/lib/supabase/admin')
+  const adminClient = createAdminClient()
+  const { data: employerAccount } = await adminClient
+    .from('employer_accounts')
+    .select('company_name')
+    .eq('id', onboarding.employer_id)
+    .maybeSingle()
+  const companyName = employerAccount?.company_name ?? 'Your employer'
 
   // Consent guard: refuse to render the checklist unless the employee has
   // granted consent for every data category this onboarding requires.
@@ -47,7 +54,7 @@ export default async function ChecklistPage({ params, searchParams }: ChecklistP
       .from('employee_profiles')
       .select('id')
       .eq('user_id', user.id)
-      .single()
+      .maybeSingle()
     if (profile) {
       const status = await getConsentStatus(profile.id, onboarding.employer_id)
       const granted = new Set(
@@ -87,7 +94,7 @@ export default async function ChecklistPage({ params, searchParams }: ChecklistP
         status: onboarding.status,
         readinessPct: onboarding.readiness_pct ?? 0,
         inviteeName: onboarding.invitee_name,
-        companyName: (onboarding.employer_accounts as any)?.company_name ?? 'Your employer',
+        companyName: companyName,
       }}
       items={items ?? []}
       welcomed={welcomed === 'true'}

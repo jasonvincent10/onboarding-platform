@@ -54,7 +54,7 @@ export async function getChecklistItem(
     `)
     .eq('id', itemId)
     .eq('onboarding_id', onboardingId)
-    .single()
+    .maybeSingle()
 
   if (error || !data) {
     console.error('getChecklistItem failed:', error)
@@ -88,19 +88,9 @@ export async function getOnboardingContext(onboardingId: string) {
 
   const { data, error } = await supabase
     .from('onboarding_instances')
-    .select(
-      `
-      id,
-      role_title,
-      start_date,
-      status,
-      employer_accounts (
-        company_name
-      )
-    `
-    )
+    .select('id, role_title, start_date, status, employer_id')
     .eq('id', onboardingId)
-    .single()
+    .maybeSingle()
 
   if (error || !data) return null
   return data

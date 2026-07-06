@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import {
   getChecklistItem,
   getOnboardingContext,
@@ -10,6 +11,7 @@ import DocumentUpload from '@/components/upload/DocumentUpload'
 import FormEntryHandler from '@/components/forms/FormEntryHandler'
 import PolicyAcknowledgement from '@/components/forms/PolicyAcknowledgement'
 import RightToWorkUpload from '@/components/forms/RightToWorkUpload'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 interface Props {
   params: Promise<{ id: string; itemId: string }>
@@ -45,9 +47,13 @@ export default async function ItemPage({ params }: Props) {
     policyDocumentUrl = result.url
   }
 
-  const companyName =
-    (onboarding.employer_accounts as { company_name: string }[] | null)
-      ?.[0]?.company_name ?? 'Your employer'
+  const adminClient = createAdminClient()
+  const { data: employerAccount } = await adminClient
+    .from('employer_accounts')
+    .select('company_name')
+    .eq('id', onboarding.employer_id)
+    .maybeSingle()
+  const companyName = employerAccount?.company_name ?? 'Your employer'
 
   // Status helpers
   const statusConfig = {

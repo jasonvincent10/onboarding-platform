@@ -149,7 +149,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
       <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-medium text-gray-700">Day-one readiness</span>
-          <span className="text-2xl font-bold text-gray-900">{readinessPct}%</span>
+          <span className="text-xl font-bold text-gray-900 tabular-nums">{readinessPct}%</span>
         </div>
         <div className="w-full bg-gray-100 rounded-full h-2.5">
           <div
@@ -198,7 +198,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                     )}
                     {item.reviewer_notes && item.status === 'not_started' && (
                       <p className="text-xs text-amber-600 mt-1">
-                        ↩ Re-upload requested: {item.reviewer_notes}
+                        Re-upload requested: {item.reviewer_notes}
                       </p>
                     )}
                   </div>
@@ -224,7 +224,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                 <div className="border-t border-gray-100 bg-gray-50 p-4">
 
                   {viewLoading && (
-                    <p className="text-sm text-gray-500 py-2">Loading submission…</p>
+                    <p className="text-sm text-gray-500 py-2">Loading submission...</p>
                   )}
 
                   {viewError && !viewLoading && (
@@ -268,17 +268,23 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                       <button
                         onClick={() => handleApprove(item.id)}
                         disabled={approvingId === item.id}
-                        style={{ backgroundColor: '#22c55e', color: '#ffffff' }}
-                        className="px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                        className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600 disabled:opacity-50 transition-colors"
                       >
-                        {approvingId === item.id ? 'Approving…' : '✓ Approve'}
+                        {approvingId === item.id ? (
+                          <>
+                            <svg className="h-3.5 w-3.5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                            </svg>
+                            Approving...
+                          </>
+                        ) : 'Approve'}
                       </button>
                       <button
                         onClick={() => openReuploadModal(item)}
-                        style={{ backgroundColor: '#f59e0b', color: '#ffffff' }}
-                        className="px-4 py-2 rounded-lg text-sm font-medium"
+                        className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600 transition-colors"
                       >
-                        ↩ Request re-upload
+                        Request re-upload
                       </button>
                     </div>
                   )}
@@ -292,8 +298,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
       {/* Re-upload modal */}
       {reuploadModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={e => { if (e.target === e.currentTarget) setReuploadModal(null) }}
         >
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
@@ -326,10 +331,17 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
               <button
                 onClick={handleReuploadSubmit}
                 disabled={reuploadLoading}
-                style={{ backgroundColor: '#f59e0b', color: '#ffffff' }}
-                className="flex-1 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-amber-500 py-2 text-sm font-medium text-white hover:bg-amber-600 disabled:opacity-50 transition-colors"
               >
-                {reuploadLoading ? 'Sending…' : 'Send request'}
+                {reuploadLoading ? (
+                  <>
+                    <svg className="h-3.5 w-3.5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                    Sending...
+                  </>
+                ) : 'Send request'}
               </button>
               <button
                 onClick={() => setReuploadModal(null)}

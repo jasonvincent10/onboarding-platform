@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { EmployerExportButton } from "@/components/ExportButtons";
 
 interface OnboardingInstance {
   id: string
@@ -121,13 +122,19 @@ export default async function DashboardPage() {
 
   const { data: member } = await supabase
     .from('employer_members')
-    .select('employer_id, full_name, employer_accounts(company_name)')
+    .select('employer_id, full_name')
     .eq('user_id', user!.id)
-    .single()
+    .maybeSingle()
 
   const employerId = member?.employer_id
-  const companyName = (member?.employer_accounts as any)?.company_name ?? 'your company'
   const firstName = member?.full_name?.split(' ')[0] ?? 'there'
+
+  const { createAdminClient } = await import('@/lib/supabase/admin')
+  const adminClient = createAdminClient()
+  const { data: employerAccount } = employerId
+    ? await adminClient.from('employer_accounts').select('company_name').eq('id', employerId).maybeSingle()
+    : { data: null }
+  const companyName = employerAccount?.company_name ?? 'your company'
 
   const { data: onboardings } = await supabase
     .from('onboarding_instances')
@@ -165,8 +172,10 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
+      {total > 0 && <EmployerExportButton />}
+
       {total > 0 && (
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 gap-3 mb-8 sm:grid-cols-3 sm:gap-4">
           <StatCard label="Active onboardings" value={total} />
           <StatCard label="Needs attention" value={needsAttention} accent="amber" />
           <StatCard label="Complete" value={complete} accent="teal" />
@@ -176,8 +185,8 @@ export default async function DashboardPage() {
       {total === 0 ? (
         <EmptyState />
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="grid grid-cols-[1fr_120px_140px_160px_80px] gap-4 px-6 py-3.5 border-b border-slate-100 bg-slate-50">
+        <div className="space-y-3 sm:space-y-0 sm:bg-white sm:rounded-2xl sm:border sm:border-slate-200 sm:shadow-sm sm:overflow-hidden">
+          <div className="hidden sm:grid sm:grid-cols-[1fr_120px_140px_160px_80px] gap-4 px-6 py-3.5 border-b border-slate-100 bg-slate-50">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">New starter</span>
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Status</span>
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Start date</span>
@@ -185,25 +194,34 @@ export default async function DashboardPage() {
             <span />
           </div>
           {active.map((o) => (
-            <div key={o.id} className="grid grid-cols-[1fr_120px_140px_160px_80px] gap-4 items-center px-6 py-4 border-b border-slate-100 last:border-0 hover:bg-stone-50 transition-colors group">
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-slate-900 truncate">{o.invitee_name}</p>
-                <p className="text-xs text-slate-400 truncate mt-0.5">{o.role_title}</p>
+            <Link key={o.id} href={`/dashboard/onboarding/${o.id}`} className="block bg-white rounded-xl border border-slate-200 px-4 py-4 hover:border-teal-300 hover:shadow-sm transition-all sm:rounded-none sm:border-0 sm:border-b sm:border-slate-100 sm:last:border-0 sm:px-6 sm:hover:bg-stone-50 sm:hover:shadow-none sm:hover:border-slate-100">
+              <div className="flex items-start justify-between gap-3 sm:contents">
+                <div className="min-w-0 flex-1 sm:contents">
+                  <div className="min-w-0 hidden sm:block">
+                    <p className="text-sm font-medium text-slate-900 truncate">{o.invitee_name}</p>
+                    <p className="text-xs text-slate-400 truncate mt-0.5">{o.role_title}</p>
+                  </div>
+                  <div className="sm:hidden">
+                    <p className="text-sm font-semibold text-slate-900">{o.invitee_name}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{o.role_title} · {new Date(o.start_date).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'})}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{daysUntil(o.start_date)}</p>
+                  </div>
+                </div>
+                <div className="shrink-0 sm:hidden">{statusBadge(o.status)}</div>
+                <div className="hidden sm:block">{statusBadge(o.status)}</div>
+                <div className="hidden sm:block">
+                  <p className="text-sm text-slate-700">{new Date(o.start_date).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'})}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{daysUntil(o.start_date)}</p>
+                </div>
+                <div className="hidden sm:block"><ReadinessBar pct={o.readiness_pct ?? 0} /></div>
+                <div className="hidden sm:flex sm:justify-end">
+                  <span className="text-xs font-medium text-teal-700">Review</span>
+                </div>
               </div>
-              <div>{statusBadge(o.status)}</div>
-              <div>
-                <p className="text-sm text-slate-700">
-                  {new Date(o.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                </p>
-                <p className="text-xs text-slate-400 mt-0.5">{daysUntil(o.start_date)}</p>
+              <div className="mt-3 sm:hidden">
+                <ReadinessBar pct={o.readiness_pct ?? 0} />
               </div>
-              <div><ReadinessBar pct={o.readiness_pct ?? 0} /></div>
-              <div className="flex justify-end">
-                <Link href={`/dashboard/onboarding/${o.id}`} className="text-xs font-medium text-teal-700 hover:text-teal-900 opacity-0 group-hover:opacity-100 transition">
-                  Review →
-                </Link>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

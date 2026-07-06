@@ -41,6 +41,10 @@ const config: Config = {
     },
   },
   plugins: [],
+  safelist: [
+    'translate-x-0',
+    '-translate-x-full',
+  ],
 }
 
 export default config

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { logout } from '@/lib/actions/auth'
@@ -62,103 +63,143 @@ export default function SidebarNav({
   subscriptionStatus,
 }: SidebarNavProps) {
   const pathname = usePathname()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   const trialRemaining = Math.max(0, 3 - onboardingsUsed)
   const isOnTrial = subscriptionStatus === 'trial'
 
   return (
-    <aside className="w-60 shrink-0 min-h-screen bg-white border-r border-slate-200 flex flex-col">
-      {/* Logo + company */}
-      <div className="px-5 py-5 border-b border-slate-100">
-        <div className="flex items-center gap-2.5">
+    <>
+      <style>{`
+        .obd-sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          z-index: 50;
+          width: 240px;
+          background: white;
+          border-right: 1px solid #e2e8f0;
+          flex-direction: column;
+          display: none;
+        }
+        .obd-sidebar.obd-open {
+          display: flex;
+        }
+        .obd-topbar {
+          display: flex;
+        }
+        @media (min-width: 1024px) {
+          .obd-sidebar {
+            display: flex;
+            position: static;
+          }
+          .obd-topbar {
+            display: none;
+          }
+        }
+      `}</style>
+
+      {/* Mobile top bar */}
+      <div className="obd-topbar fixed top-0 left-0 right-0 z-30 items-center justify-between bg-white border-b border-slate-200 px-4 h-14">
+        <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-teal-700 flex items-center justify-center shrink-0">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path
-                d="M2 3.5C2 2.67 2.67 2 3.5 2h7C11.33 2 12 2.67 12 3.5v2C12 6.33 11.33 7 10.5 7h-7C2.67 7 2 6.33 2 5.5v-2ZM2 9.5C2 8.67 2.67 8 3.5 8H7c.83 0 1.5.67 1.5 1.5S7.83 11 7 11H3.5C2.67 11 2 10.33 2 9.5Z"
-                fill="white"
-              />
+              <path d="M2 3.5C2 2.67 2.67 2 3.5 2h7C11.33 2 12 2.67 12 3.5v2C12 6.33 11.33 7 10.5 7h-7C2.67 7 2 6.33 2 5.5v-2ZM2 9.5C2 8.67 2.67 8 3.5 8H7c.83 0 1.5.67 1.5 1.5S7.83 11 7 11H3.5C2.67 11 2 10.33 2 9.5Z" fill="white" />
             </svg>
           </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-900 truncate leading-tight">
-              {companyName}
-            </p>
-            <p className="text-[11px] text-slate-400 leading-tight mt-0.5">OnboardIQ</p>
-          </div>
+          <span className="text-sm font-semibold text-slate-900 truncate max-w-[180px]">{companyName}</span>
         </div>
+        <button onClick={() => setMobileOpen(true)} className="p-2 text-slate-500 hover:text-slate-800">
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-teal-50 text-teal-800'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-              }`}
-            >
-              <span className={isActive ? 'text-teal-700' : 'text-slate-400'}>{item.icon}</span>
-              {item.label}
-            </Link>
-          )
-        })}
-      </nav>
-
-      {/* Trial banner */}
-      {isOnTrial && (
-        <div className="mx-3 mb-3 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3.5">
-          <p className="text-xs font-semibold text-amber-800 mb-0.5">Free trial</p>
-          <p className="text-xs text-amber-700 leading-relaxed">
-            {trialRemaining > 0
-              ? `${trialRemaining} free onboarding${trialRemaining !== 1 ? 's' : ''} remaining`
-              : 'Trial complete — add billing to continue'}
-          </p>
-          {trialRemaining === 0 && (
-            <Link
-              href="/settings/billing"
-              className="mt-2 block text-xs font-semibold text-amber-800 underline hover:text-amber-900 transition"
-            >
-              Add payment method →
-            </Link>
-          )}
-        </div>
+      {/* Mobile backdrop */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setMobileOpen(false)} style={{display: 'block'}} />
       )}
 
-      {/* User + logout */}
-      <div className="px-3 py-3 border-t border-slate-100">
-        <div className="flex items-center gap-2.5 px-2 py-2">
-          <div className="w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
-            <span className="text-xs font-semibold text-teal-800">
-              {memberName.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-medium text-slate-700 truncate">{memberName}</p>
-          </div>
-          <form action={logout}>
-            <button
-              type="submit"
-              title="Sign out"
-              className="text-slate-400 hover:text-slate-700 transition p-1"
-            >
+      {/* Sidebar */}
+      <aside className={`obd-sidebar shrink-0 min-h-screen ${mobileOpen ? 'obd-open' : ''}`}>
+
+        {/* Logo + company */}
+        <div className="px-5 py-5 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-teal-700 flex items-center justify-center shrink-0">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M9.5 4.5 12 7l-2.5 2.5M12 7H5.5M5.5 2H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+                <path d="M2 3.5C2 2.67 2.67 2 3.5 2h7C11.33 2 12 2.67 12 3.5v2C12 6.33 11.33 7 10.5 7h-7C2.67 7 2 6.33 2 5.5v-2ZM2 9.5C2 8.67 2.67 8 3.5 8H7c.83 0 1.5.67 1.5 1.5S7.83 11 7 11H3.5C2.67 11 2 10.33 2 9.5Z" fill="white" />
+              </svg>
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-slate-900 truncate leading-tight">{companyName}</p>
+              <p className="text-[11px] text-slate-400 leading-tight mt-0.5">OnboardIQ</p>
+            </div>
+            <button onClick={() => setMobileOpen(false)} className="ml-auto text-slate-400 hover:text-slate-700 p-1" style={{display: mobileOpen ? 'block' : 'none'}}>
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-          </form>
+          </div>
         </div>
-      </div>
-    </aside>
+
+        {/* Navigation */}
+        <nav className="flex-1 px-3 py-4 space-y-0.5">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-teal-50 text-teal-800' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+              >
+                <span className={isActive ? 'text-teal-700' : 'text-slate-400'}>{item.icon}</span>
+                {item.label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Trial banner */}
+        {isOnTrial && (
+          <div className="mx-3 mb-3 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3.5">
+            <p className="text-xs font-semibold text-amber-800 mb-0.5">Free trial</p>
+            <p className="text-xs text-amber-700 leading-relaxed">
+              {trialRemaining > 0
+                ? `${trialRemaining} free onboarding${trialRemaining !== 1 ? 's' : ''} remaining`
+                : 'Trial complete — add billing to continue'}
+            </p>
+            {trialRemaining === 0 && (
+              <Link href="/settings/billing" className="mt-2 block text-xs font-semibold text-amber-800 underline hover:text-amber-900 transition">
+                Add payment method
+              </Link>
+            )}
+          </div>
+        )}
+
+        {/* User + logout */}
+        <div className="px-3 py-3 border-t border-slate-100">
+          <div className="flex items-center gap-2.5 px-2 py-2">
+            <div className="w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
+              <span className="text-xs font-semibold text-teal-800">{memberName.charAt(0).toUpperCase()}</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-medium text-slate-700 truncate">{memberName}</p>
+            </div>
+            <form action={logout}>
+              <button type="submit" title="Sign out" className="text-slate-400 hover:text-slate-700 transition p-1">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M9.5 4.5 12 7l-2.5 2.5M12 7H5.5M5.5 2H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </aside>
+    </>
   )
 }

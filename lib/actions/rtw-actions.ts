@@ -29,6 +29,32 @@ export async function submitRightToWork(
 
   if (!profile) return { success: false, error: 'Employee profile not found' }
 
+  // ==========================================================================
+  // SECURITY: verify ownership BEFORE any adminClient write.
+  // 1. The checklist item must belong to the onboarding the caller named.
+  // 2. That onboarding must belong to THIS employee.
+  // Without these checks any logged-in employee could mark any checklist
+  // item in the system as submitted and attach their own document to it.
+  // ==========================================================================
+  const { data: item } = await adminClient
+    .from('checklist_items')
+    .select('id, onboarding_id')
+    .eq('id', input.checklistItemId)
+    .eq('onboarding_id', input.onboardingId)
+    .maybeSingle()
+
+  if (!item) return { success: false, error: 'Checklist item not found' }
+
+  const { data: onboarding } = await adminClient
+    .from('onboarding_instances')
+    .select('id, employee_id')
+    .eq('id', input.onboardingId)
+    .maybeSingle()
+
+  if (!onboarding || onboarding.employee_id !== profile.id) {
+    return { success: false, error: 'Not authorised' }
+  }
+
   // Share codes are stored with a prefix convention instead of a storage path
   const storagePath = input.shareCode
     ? `share_code:${input.shareCode}`
@@ -60,7 +86,7 @@ export async function submitRightToWork(
     return { success: false, error: 'Failed to save document record' }
   }
 
-  // Mark the checklist item as submitted
+  // Mark the checklist item as submitted -- scoped to the verified onboarding
   const { error: checklistError } = await adminClient
     .from('checklist_items')
     .update({
@@ -68,6 +94,7 @@ export async function submitRightToWork(
       document_upload_id: docUpload.id,
     })
     .eq('id', input.checklistItemId)
+    .eq('onboarding_id', input.onboardingId)
 
   if (checklistError) {
     console.error('RTW checklist_items update error:', checklistError)
@@ -88,7 +115,7 @@ export async function submitRightToWork(
     .eq('id', profile.id)
 
   if (profileError) {
-    // Non-fatal — checklist item is already submitted, log and continue
+    // Non-fatal -- checklist item is already submitted, log and continue
     console.error('RTW employee_profiles update error:', profileError)
   }
 
