@@ -15,7 +15,7 @@ export default function EmployeeNav({ name, email }: EmployeeNavProps) {
 
   async function signOut() {
     await supabase.auth.signOut()
-    router.push('/auth/employee-login')
+    router.push('/employee-login')
   }
 
   // Initials for avatar
@@ -41,6 +41,12 @@ export default function EmployeeNav({ name, email }: EmployeeNavProps) {
 
         {/* User + sign out */}
         <div className="flex items-center gap-3">
+          <Link
+            href="/employee/consents"
+            className="hidden sm:block text-xs text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            Your consents
+          </Link>
           <div className="hidden sm:block text-right">
             <p className="text-xs font-medium text-slate-800 leading-tight">{name}</p>
             <p className="text-xs text-slate-400 leading-tight">{email}</p>

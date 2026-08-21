@@ -124,11 +124,11 @@ export default function SignUpPage() {
         {/* Legal small print */}
         <p className="mt-4 text-xs text-center text-slate-400 leading-relaxed">
           By creating an account you agree to our{' '}
-          <Link href="/terms" className="underline hover:text-slate-600 transition">
+          <Link href="/legal/terms" className="underline hover:text-slate-600 transition">
             Terms
           </Link>{' '}
           and{' '}
-          <Link href="/privacy" className="underline hover:text-slate-600 transition">
+          <Link href="/legal/privacy" className="underline hover:text-slate-600 transition">
             Privacy Policy
           </Link>
           .

@@ -286,7 +286,7 @@ export async function approveChecklistItem(checklistItemId: string, onboardingId
     })
     .eq('id', checklistItemId)
     .eq('onboarding_id', onboardingId)
-    .select('id')
+    .select('id, document_upload_id')
 
   if (error) {
     console.error('Approve error:', error)
@@ -294,6 +294,14 @@ export async function approveChecklistItem(checklistItemId: string, onboardingId
   }
   if (!updated || updated.length === 0) {
     return { error: 'Not authorised' }
+  }
+
+  const documentUploadId = updated[0].document_upload_id
+  if (documentUploadId) {
+    await adminClient
+      .from('document_uploads')
+      .update({ verification_status: 'verified' })
+      .eq('id', documentUploadId)
   }
 
   const supabase = await createClient()
@@ -321,6 +329,16 @@ export async function requestReupload(checklistItemId: string, onboardingId: str
 
   const adminClient = createAdminClient()
 
+  // Read the current document_upload_id BEFORE the update below clears it —
+  // the .select() on an UPDATE returns the post-update row, not the prior one.
+  const { data: before } = await adminClient
+    .from('checklist_items')
+    .select('document_upload_id')
+    .eq('id', checklistItemId)
+    .eq('onboarding_id', onboardingId)
+    .maybeSingle()
+  const previousDocumentUploadId = before?.document_upload_id ?? null
+
   const { data: updated, error } = await adminClient
     .from('checklist_items')
     .update({
@@ -336,6 +354,13 @@ export async function requestReupload(checklistItemId: string, onboardingId: str
   if (error) return { error: 'Failed to request re-upload' }
   if (!updated || updated.length === 0) {
     return { error: 'Not authorised' }
+  }
+
+  if (previousDocumentUploadId) {
+    await adminClient
+      .from('document_uploads')
+      .update({ verification_status: 'rejected' })
+      .eq('id', previousDocumentUploadId)
   }
 
   const supabase = await createClient()

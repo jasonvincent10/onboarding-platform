@@ -7,15 +7,20 @@ const PUBLIC_ROUTES = [
   '/sign-up',
   '/forgot-password',
   '/',
-  '/privacy',
-  '/terms',
+  '/legal',
   '/join',
   '/employee-login',
+  '/auth/callback',
+  '/reset-password',
 ]
 
 // Routes that authenticated users can access regardless of auth state
 // (i.e. don't redirect away from these even if logged in)
-const ALWAYS_ACCESSIBLE = ['/join', '/employee-login']
+// /auth/callback and /reset-password must stay reachable even for an
+// already-logged-in user, otherwise someone who clicks a password-reset
+// link while still signed in gets bounced to /dashboard before the recovery
+// code is exchanged, or before they can actually set the new password.
+const ALWAYS_ACCESSIBLE = ['/join', '/employee-login', '/auth/callback', '/reset-password']
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
@@ -75,6 +80,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|api/cron).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/cron|api/webhooks).*)',
   ],
 }

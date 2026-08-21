@@ -153,7 +153,17 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            <p className="text-red-700 text-sm leading-relaxed">{state.error}</p>
+            <div>
+              <p className="text-red-700 text-sm leading-relaxed">{state.error}</p>
+              {state.billingRequired && (
+                <Link
+                  href="/dashboard"
+                  className="mt-2 inline-block text-sm font-medium text-red-800 underline underline-offset-2"
+                >
+                  Go to dashboard to buy a credit →
+                </Link>
+              )}
+            </div>
           </div>
         )}
 

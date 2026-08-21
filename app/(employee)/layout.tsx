@@ -11,7 +11,7 @@ export default async function EmployeeLayout({
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/auth/employee-login')
+    redirect('/employee-login')
   }
 
   // Fetch employee profile for the nav

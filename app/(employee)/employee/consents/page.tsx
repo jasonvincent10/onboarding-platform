@@ -7,7 +7,7 @@ import ConsentList from './ConsentList'
 export default async function ConsentsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/employee-login')
+  if (!user) redirect('/employee-login')
 
   const admin = createAdminClient()
 

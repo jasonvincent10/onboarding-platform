@@ -121,7 +121,8 @@ export async function grantConsent(
   employeeId: string,
   employerId: string,
   category: DataCategory,
-  onboardingId: string | null
+  onboardingId: string | null,
+  actorUserId: string
 ): Promise<{ error: string | null }> {
   const admin = createAdminClient()
   const { error } = await admin.from('consent_records').insert({
@@ -134,7 +135,7 @@ export async function grantConsent(
   if (error) return { error: error.message }
 
   await admin.from('audit_log').insert({
-    actor_id: employeeId,
+    actor_id: actorUserId,
     actor_type: 'employee',
     action: 'consent_granted',
     resource_type: 'consent_record',
@@ -154,7 +155,8 @@ export async function grantConsent(
 export async function withdrawConsent(
   employeeId: string,
   employerId: string,
-  category: DataCategory
+  category: DataCategory,
+  actorUserId: string
 ): Promise<{ error: string | null }> {
   const admin = createAdminClient()
   const { error } = await admin.from('consent_records').insert({
@@ -167,7 +169,7 @@ export async function withdrawConsent(
   if (error) return { error: error.message }
 
   await admin.from('audit_log').insert({
-    actor_id: employeeId,
+    actor_id: actorUserId,
     actor_type: 'employee',
     action: 'consent_withdrawn',
     resource_type: 'consent_record',

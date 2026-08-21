@@ -11,7 +11,7 @@ export async function signUpEmployee(
   const fullName = formData.get('full_name') as string
   const token = formData.get('token') as string
 
-  if (!token) redirect('/auth/login?error=invalid_invite' as any)
+  if (!token) redirect('/login?error=invalid_invite')
 
   const supabase = await createClient()
 
@@ -40,7 +40,7 @@ export async function loginEmployee(
   const password = formData.get('password') as string
   const token = formData.get('token') as string
 
-  if (!token) redirect('/auth/login?error=invalid_invite' as any)
+  if (!token) redirect('/login?error=invalid_invite')
 
   const supabase = await createClient()
 

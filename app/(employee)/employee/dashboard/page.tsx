@@ -6,7 +6,7 @@ import { SarExportButton } from '@/components/ExportButtons'
 export default async function EmployeeDashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/employee-login')
+  if (!user) redirect('/employee-login')
 
   // Get employee profile
   const { data: profile } = await supabase

@@ -14,7 +14,7 @@ export default async function ChecklistPage({ params, searchParams }: ChecklistP
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/employee-login')
+  if (!user) redirect('/employee-login')
 
   const { data: onboarding, error } = await supabase
     .from('onboarding_instances')

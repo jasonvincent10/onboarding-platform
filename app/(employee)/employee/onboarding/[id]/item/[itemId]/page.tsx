@@ -23,7 +23,7 @@ export default async function ItemPage({ params }: Props) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect('/employee-login')
 
   const [item, onboarding] = await Promise.all([
     getChecklistItem(itemId, onboardingId),
@@ -31,6 +31,27 @@ export default async function ItemPage({ params }: Props) {
   ])
 
   if (!item || !onboarding) notFound()
+
+  // Consent guard: mirrors the check on the checklist page. A signed-in
+  // employee can otherwise navigate straight to an item URL and submit
+  // data for a category they have not (or no longer) consented to.
+  if (item.data_category) {
+    const { getConsentStatus } = await import('@/lib/consent')
+    const { data: profile } = await supabase
+      .from('employee_profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle()
+    if (profile) {
+      const status = await getConsentStatus(profile.id, onboarding.employer_id)
+      const granted = status.some(
+        (s) => s.data_category === item.data_category && s.latest_action === 'granted'
+      )
+      if (!granted) {
+        redirect(`/employee/onboarding/${onboardingId}/consent`)
+      }
+    }
+  }
 
   let signedUrl: string | null = null
   if (item.document_uploads?.file_path) {

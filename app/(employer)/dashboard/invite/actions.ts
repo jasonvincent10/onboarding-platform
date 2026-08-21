@@ -4,12 +4,14 @@ import { createClient } from '@/lib/supabase/server'
 import { Resend } from 'resend'
 import { revalidatePath } from 'next/cache'
 import { buildInviteEmailHtml } from '@/lib/email/invite-template'
+import { consumeOnboardingSlot } from '@/lib/billing'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export type InviteState = {
   success: boolean
   error?: string
+  billingRequired?: boolean
   instanceId?: string
   inviteeName?: string
   inviteeEmail?: string
@@ -104,10 +106,21 @@ export async function createInvitation(
     }
   }
 
-  // --- 6. Generate secure invitation token ---
+  // --- 6. Billing gate — consume a free/paid slot before creating anything ---
+  const slotConsumed = await consumeOnboardingSlot(employerId)
+  if (!slotConsumed) {
+    return {
+      success: false,
+      error:
+        "You've used all your free onboardings and have no paid credits left. Buy a credit from your dashboard to invite another new starter.",
+      billingRequired: true,
+    }
+  }
+
+  // --- 7. Generate secure invitation token ---
   const invitationToken = crypto.randomUUID()
 
-  // --- 7. Create the onboarding instance ---
+  // --- 8. Create the onboarding instance ---
   const { data: instance, error: instanceError } = await supabase
     .from('onboarding_instances')
     .insert({
@@ -131,7 +144,7 @@ export async function createInvitation(
     }
   }
 
-  // --- 8. Copy template_items → checklist_items with calculated deadlines ---
+  // --- 9. Copy template_items → checklist_items with calculated deadlines ---
   const { data: templateItems, error: itemsError } = await supabase
     .from('template_items')
     .select('*')
@@ -176,7 +189,7 @@ export async function createInvitation(
     }
   }
 
-  // --- 9. Send invitation email via Resend ---
+  // --- 10. Send invitation email via Resend ---
   const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/join?token=${invitationToken}`
 
   const { error: emailError } = await resend.emails.send({
@@ -204,7 +217,7 @@ export async function createInvitation(
     }
   }
 
-  // --- 10. Write audit log entry ---
+  // --- 11. Write audit log entry ---
   await supabase.from('audit_log').insert({
     actor_id: user.id,
     actor_type: 'employer',

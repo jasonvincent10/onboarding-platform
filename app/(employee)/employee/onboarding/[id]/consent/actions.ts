@@ -49,7 +49,7 @@ export async function grantConsentsForOnboarding(
   // than in a single insert so a downstream failure on row N still leaves
   // rows 1..N-1 recorded — the audit trail is the source of truth.
   for (const category of categories) {
-    const result = await grantConsent(profile.id, onboarding.employer_id, category, onboardingId)
+    const result = await grantConsent(profile.id, onboarding.employer_id, category, onboardingId, user.id)
     if (result.error) return { error: result.error }
   }
 
@@ -79,7 +79,7 @@ export async function withdrawConsentForEmployer(
     .single()
   if (!profile) return { error: 'no_profile' }
 
-  const result = await withdrawConsent(profile.id, employerId, category)
+  const result = await withdrawConsent(profile.id, employerId, category, user.id)
   if (result.error) return { error: result.error }
 
   revalidatePath('/employee/consents')
