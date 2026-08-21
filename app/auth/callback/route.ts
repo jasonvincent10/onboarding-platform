@@ -9,7 +9,12 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/login'
+  // Password recovery is the only flow that lands here today, so that's the
+  // default. A `next` override still works if it's ever needed, but note
+  // Supabase's Redirect URLs allow-list here has no wildcard, so the
+  // redirectTo passed to Supabase must never carry a query string -- see the
+  // comment in app/(auth)/forgot-password/actions.ts.
+  const next = searchParams.get('next') ?? '/reset-password'
 
   if (code) {
     const supabase = await createClient()

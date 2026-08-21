@@ -31,8 +31,16 @@ export async function requestPasswordReset(
   // Supabase does not error on an unknown email for this call (by design,
   // to avoid leaking which addresses have accounts), so we always report
   // success regardless of outcome.
+  //
+  // IMPORTANT: no query string on this redirectTo. Supabase's Redirect URLs
+  // allow-list entries here are exact strings (no wildcard), and GoTrue
+  // rejects anything that isn't an identical match -- appending ?next=...
+  // silently fails validation and falls back to Site URL instead of erroring,
+  // which is a very confusing failure mode to debug from the outside. The
+  // callback route defaults to /reset-password on its own, so no query
+  // string is needed here.
   await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/reset-password`,
+    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
   })
 
   return { success: true }
