@@ -45,6 +45,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
   // Viewing state
   const [viewingItem, setViewingItem] = useState<string | null>(null)
   const [documentUrl, setDocumentUrl] = useState<string | null>(null)
+  const [shareCode, setShareCode] = useState<string | null>(null)
   const [formData, setFormData] = useState<Record<string, string> | null>(null)
   const [viewLoading, setViewLoading] = useState(false)
   const [viewError, setViewError] = useState('')
@@ -69,6 +70,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
   function handleCloseView() {
     setViewingItem(null)
     setDocumentUrl(null)
+    setShareCode(null)
     setFormData(null)
     setViewError('')
   }
@@ -76,6 +78,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
   async function handleViewItem(item: ChecklistItem) {
     setViewingItem(item.id)
     setDocumentUrl(null)
+    setShareCode(null)
     setFormData(null)
     setViewError('')
     setViewLoading(true)
@@ -85,6 +88,8 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
         const result = await getSignedDocumentUrl(item.document_upload_id, onboardingId)
         if ('error' in result) {
           setViewError(result.error ?? '')
+        } else if ('shareCode' in result) {
+          setShareCode(result.shareCode ?? null)
         } else {
           setDocumentUrl(result.url ?? null)
         }
@@ -229,6 +234,27 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
 
                   {viewError && !viewLoading && (
                     <p className="text-sm text-red-600 py-2">{viewError}</p>
+                  )}
+
+                  {/* GOV.UK share code — not a real file, verify online */}
+                  {shareCode && !viewLoading && (
+                    <div className="mb-4 rounded-lg border border-gray-200 bg-white p-3">
+                      <p className="text-xs text-gray-500">GOV.UK share code</p>
+                      <p className="mt-1 font-mono text-sm tracking-widest text-gray-900">
+                        {shareCode}
+                      </p>
+                      <a
+                        href="https://www.gov.uk/view-right-to-work"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-block text-sm font-medium text-indigo-600 hover:text-indigo-800 underline underline-offset-2"
+                      >
+                        Verify at gov.uk/view-right-to-work
+                      </a>
+                      <p className="mt-1 text-xs text-gray-400">
+                        You&apos;ll need the employee&apos;s date of birth to complete the check.
+                      </p>
+                    </div>
                   )}
 
                   {/* Document link */}

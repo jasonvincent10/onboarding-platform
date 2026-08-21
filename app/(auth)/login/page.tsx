@@ -101,6 +101,14 @@ export default function LoginPage() {
           Create an account
         </Link>
       </p>
+
+      {/* Wrong login for employees */}
+      <p className="mt-2 text-center text-xs text-slate-400">
+        Completing your own onboarding?{' '}
+        <Link href="/employee-login" className="font-medium text-teal-700 hover:text-teal-800 transition">
+          Sign in here instead
+        </Link>
+      </p>
     </div>
   )
 }

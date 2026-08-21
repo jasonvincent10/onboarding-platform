@@ -166,6 +166,29 @@ export async function getSignedDocumentUrl(documentUploadId: string, onboardingI
     return { error: 'The employee has not granted (or has withdrawn) consent for this document category' }
   }
 
+  const supabase = await createClient()
+
+  // GOV.UK share codes are stored as `share_code:XXXXXXXXX` in file_path --
+  // there is no real object in storage to sign a URL for. Return the code
+  // directly instead of calling createSignedUrl, which would always fail
+  // with a confusing "document not found" style error.
+  if (doc.file_path.startsWith('share_code:')) {
+    const shareCode = doc.file_path.replace('share_code:', '')
+
+    await supabase.from('audit_log').insert({
+      actor_id: ctx.userId,
+      actor_type: 'employer',
+      action: 'document_viewed',
+      resource_type: 'document_upload',
+      resource_id: documentUploadId,
+      employer_id: ctx.employerId,
+      employee_id: ctx.employeeId,
+      metadata: { onboarding_id: onboardingId, data_category: doc.data_category, is_share_code: true },
+    })
+
+    return { shareCode }
+  }
+
   const { data: signed, error: signedError } = await adminClient.storage
     .from('employee-documents')
     .createSignedUrl(doc.file_path, 3600)
@@ -175,7 +198,6 @@ export async function getSignedDocumentUrl(documentUploadId: string, onboardingI
     return { error: 'Could not generate document link' }
   }
 
-  const supabase = await createClient()
   await supabase.from('audit_log').insert({
     actor_id: ctx.userId,
     actor_type: 'employer',

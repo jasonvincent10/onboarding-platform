@@ -40,8 +40,11 @@ export async function loginEmployee(
   const password = formData.get('password') as string
   const token = formData.get('token') as string
 
-  if (!token) redirect('/login?error=invalid_invite')
-
+  // Unlike signUpEmployee, a token is NOT required here -- a returning
+  // employee visiting /employee-login directly (no invite link) should be
+  // able to sign in and land on their dashboard, not be forced through an
+  // invite flow. Signup stays invite-gated since there's nothing for a
+  // brand-new account to attach to without one.
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -50,5 +53,5 @@ export async function loginEmployee(
     return { error: 'Incorrect email or password.' }
   }
 
-  redirect(`/join?token=${token}`)
+  redirect(token ? `/join?token=${token}` : '/employee/dashboard')
 }

@@ -8,7 +8,10 @@ function EmployeeLoginForm() {
   const searchParams = useSearchParams()
   const token = searchParams.get('token') ?? ''
 
-  const [mode, setMode] = useState<'login' | 'signup'>('signup')
+  // With an invite token, default to signup (new starter). Without one,
+  // this is a returning employee visiting directly to check on an existing
+  // onboarding, so default to login.
+  const [mode, setMode] = useState<'login' | 'signup'>(token ? 'signup' : 'login')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -40,7 +43,9 @@ function EmployeeLoginForm() {
         <p className="text-[15px] text-slate-500">
           {mode === 'signup'
             ? 'Set up your secure profile to complete your onboarding.'
-            : 'Sign in to continue your onboarding.'}
+            : token
+              ? 'Sign in to continue your onboarding.'
+              : 'Sign in to view your onboardings.'}
         </p>
       </div>
 
@@ -128,18 +133,28 @@ function EmployeeLoginForm() {
         </form>
       </div>
 
-      <p className="mt-5 text-center text-sm text-slate-500">
-        {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}{' '}
-        <button
-          onClick={() => {
-            setMode(mode === 'signup' ? 'login' : 'signup')
-            setError(null)
-          }}
-          className="font-medium text-teal-700 transition hover:text-teal-800"
-        >
-          {mode === 'signup' ? 'Sign in instead' : 'Create one'}
-        </button>
-      </p>
+      {token ? (
+        <p className="mt-5 text-center text-sm text-slate-500">
+          {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}{' '}
+          <button
+            onClick={() => {
+              setMode(mode === 'signup' ? 'login' : 'signup')
+              setError(null)
+            }}
+            className="font-medium text-teal-700 transition hover:text-teal-800"
+          >
+            {mode === 'signup' ? 'Sign in instead' : 'Create one'}
+          </button>
+        </p>
+      ) : (
+        // No token means signup can't succeed (there's nothing to attach a
+        // new account to), so don't offer a toggle that dead-ends in a
+        // confusing redirect -- point them at the actual next step instead.
+        <p className="mt-5 text-center text-sm text-slate-500">
+          New here? You&apos;ll need an invitation from your employer to create an
+          account.
+        </p>
+      )}
     </div>
   )
 }
