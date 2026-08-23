@@ -104,10 +104,14 @@ export async function POST(request: Request) {
     // the client with no way to tell what was actually wrong.
     console.error("Stripe checkout session creation failed:", err);
     const message = err instanceof Error ? err.message : "Could not create checkout session.";
-    // Stripe SDK errors carry a `param` naming exactly which request field
-    // was rejected -- include it so this is diagnosable from the client
-    // response alone instead of needing Vercel's function logs.
-    const param = err && typeof err === "object" && "param" in err ? (err as { param?: string }).param : undefined;
-    return Response.json({ error: param ? `${message} (param: ${param})` : message }, { status: 502 });
+    // Dump every enumerable property the error carries (Stripe SDK errors
+    // often nest the useful detail under type/code/param/detail/raw, and
+    // which of those is populated varies by error) rather than guessing
+    // field-by-field -- this is temporary diagnostic verbosity, not meant
+    // to stay this detailed once the real cause is found.
+    const debug = err && typeof err === "object" ? Object.fromEntries(
+      Object.entries(err as Record<string, unknown>).filter(([, v]) => typeof v !== "function")
+    ) : undefined;
+    return Response.json({ error: message, debug }, { status: 502 });
   }
 }
