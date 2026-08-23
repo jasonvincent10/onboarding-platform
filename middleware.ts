@@ -12,6 +12,7 @@ const PUBLIC_ROUTES = [
   '/employee-login',
   '/auth/callback',
   '/reset-password',
+  '/team-invite',
 ]
 
 // Routes that authenticated users can access regardless of auth state
@@ -20,7 +21,7 @@ const PUBLIC_ROUTES = [
 // already-logged-in user, otherwise someone who clicks a password-reset
 // link while still signed in gets bounced to /dashboard before the recovery
 // code is exchanged, or before they can actually set the new password.
-const ALWAYS_ACCESSIBLE = ['/join', '/employee-login', '/auth/callback', '/reset-password']
+const ALWAYS_ACCESSIBLE = ['/join', '/employee-login', '/auth/callback', '/reset-password', '/team-invite']
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
