@@ -76,6 +76,11 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       customer: customerId,
+      // The customer record we create above only has email/name/metadata,
+      // no address -- automatic_tax needs one to calculate VAT from. This
+      // has Checkout collect the billing address during the flow and save
+      // it back to the customer, rather than requiring it to exist upfront.
+      customer_update: { address: "auto" },
       line_items: [
         {
           quantity,
