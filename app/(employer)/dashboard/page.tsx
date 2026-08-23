@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { EmployerExportButton } from "@/components/ExportButtons";
+import { BillingUsage } from "@/components/BillingUsage";
+import { getBillingState } from "@/lib/billing";
 
 interface OnboardingInstance {
   id: string
@@ -148,6 +150,8 @@ export default async function DashboardPage() {
   const needsAttention = active.filter((o) => o.readiness_pct < 50 || o.status === 'submitted').length
   const complete = active.filter((o) => o.status === 'complete').length
 
+  const billing = employerId ? await getBillingState(employerId) : null
+
   return (
     <div>
       <div className="flex items-start justify-between mb-8 gap-4">
@@ -171,6 +175,8 @@ export default async function DashboardPage() {
           Invite new starter
         </Link>
       </div>
+
+      {billing && <div className="mb-6"><BillingUsage state={billing} /></div>}
 
       {total > 0 && <EmployerExportButton />}
 
