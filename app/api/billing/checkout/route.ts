@@ -112,6 +112,17 @@ export async function POST(request: Request) {
     const debug = err && typeof err === "object" ? Object.fromEntries(
       Object.entries(err as Record<string, unknown>).filter(([, v]) => typeof v !== "function")
     ) : undefined;
-    return Response.json({ error: message, debug }, { status: 502 });
+    return Response.json({
+      error: message,
+      debug,
+      // See exactly what was computed at request time, in case the env var
+      // resolves differently at runtime than what Vercel's dashboard shows.
+      computed: {
+        rawEnv: process.env.NEXT_PUBLIC_APP_URL ?? null,
+        appUrl,
+        success_url: appUrl + "/dashboard?billing=success",
+        cancel_url: appUrl + "/dashboard?billing=cancelled",
+      },
+    }, { status: 502 });
   }
 }
