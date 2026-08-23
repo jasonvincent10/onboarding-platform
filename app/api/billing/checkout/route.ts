@@ -77,9 +77,12 @@ export async function POST(request: Request) {
       mode: "payment",
       customer: customerId,
       // The customer record we create above only has email/name/metadata,
-      // no address -- automatic_tax needs one to calculate VAT from. This
-      // has Checkout collect the billing address during the flow and save
-      // it back to the customer, rather than requiring it to exist upfront.
+      // no address -- automatic_tax needs one to calculate VAT from.
+      // billing_address_collection forces Checkout to actually prompt for
+      // it during the session; customer_update.address then saves whatever
+      // gets entered back onto the customer. Both are needed together --
+      // customer_update alone doesn't force collection to happen.
+      billing_address_collection: "required",
       customer_update: { address: "auto" },
       line_items: [
         {
