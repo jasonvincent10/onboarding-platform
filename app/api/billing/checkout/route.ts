@@ -49,10 +49,11 @@ export async function POST(request: Request) {
     // no body -> default quantity 1
   }
 
-  const stripe = getStripe();
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   try {
+    const stripe = getStripe();
+
     // Reuse or create the Stripe customer
     let customerId = employer.stripe_customer_id as string | null;
     if (!customerId) {
