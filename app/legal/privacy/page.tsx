@@ -93,12 +93,18 @@ export default function PrivacyPolicyPage() {
 
       <H2>8. How long we keep it</H2>
       <P>
-        Employer access to your onboarding documents is time-limited and ends
-        after the onboarding relationship ends. Your portable profile persists
-        under your control until you delete your account. Employers are
-        responsible for their own statutory retention obligations for records
-        they export. Audit logs are kept for [PERIOD] for security and
-        compliance.
+        Employer access to your onboarding documents continues for as long as
+        you have granted consent for that data category to that employer,
+        regardless of whether the onboarding itself is marked complete —
+        access is controlled by your consent, not by onboarding status. You
+        can withdraw consent for any category at any time from your account,
+        which ends the employer&apos;s ability to view that data going
+        forward. Your portable profile persists under your control until you
+        delete your account. Employers are responsible for their own
+        statutory retention obligations for records they have already
+        exported. Audit logs are kept for [PERIOD — suggest 6 years, aligned
+        with standard UK employment record-keeping periods; confirm] for
+        security and compliance.
       </P>
 
       <H2>9. Your rights</H2>
@@ -110,7 +116,15 @@ export default function PrivacyPolicyPage() {
         contact [EMAIL]. You may complain to the ICO at ico.org.uk.
       </P>
 
-      <H2>10. Changes</H2>
+      <H2>10. Cookies</H2>
+      <P>
+        We use only essential cookies required to keep you signed in securely
+        (set by our authentication provider, Supabase). We do not use
+        advertising or tracking cookies, and do not run third-party analytics
+        that track you across other sites.
+      </P>
+
+      <H2>11. Changes</H2>
       <P>
         We will notify registered users of material changes to this policy by
         email and in-product notice.

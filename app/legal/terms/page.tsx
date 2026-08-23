@@ -33,6 +33,15 @@ export default function TermsPage() {
         Employer accounts confirm they are authorised to act for the named
         company. Employee accounts belong to the individual, not any employer.
       </P>
+      <P>
+        [LAWYER INPUT NEEDED: eligibility/age wording. UK employment law
+        permits 16–17 year olds to work in many roles and hold an NI number,
+        so a blanket &quot;18+&quot; restriction may be inappropriate for an
+        employee-onboarding product — but processing a minor&apos;s data has
+        its own UK GDPR considerations (Article 8, parental consent contexts).
+        Please advise the correct age/eligibility position for this specific
+        service before this goes live.]
+      </P>
 
       <H2>3. Employer responsibilities</H2>
       <P>
