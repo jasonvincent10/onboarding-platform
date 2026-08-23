@@ -49,7 +49,11 @@ export async function POST(request: Request) {
     // no body -> default quantity 1
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  // .trim() guards against a stray leading/trailing space in the env var
+  // value silently producing an invalid success_url/cancel_url (Stripe
+  // rejects a URL with leading whitespace with a generic "not a valid URL"
+  // error that gives no hint it's a whitespace issue).
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").trim();
 
   try {
     const stripe = getStripe();
@@ -104,25 +108,10 @@ export async function POST(request: Request) {
     // the client with no way to tell what was actually wrong.
     console.error("Stripe checkout session creation failed:", err);
     const message = err instanceof Error ? err.message : "Could not create checkout session.";
-    // Dump every enumerable property the error carries (Stripe SDK errors
-    // often nest the useful detail under type/code/param/detail/raw, and
-    // which of those is populated varies by error) rather than guessing
-    // field-by-field -- this is temporary diagnostic verbosity, not meant
-    // to stay this detailed once the real cause is found.
-    const debug = err && typeof err === "object" ? Object.fromEntries(
-      Object.entries(err as Record<string, unknown>).filter(([, v]) => typeof v !== "function")
-    ) : undefined;
-    return Response.json({
-      error: message,
-      debug,
-      // See exactly what was computed at request time, in case the env var
-      // resolves differently at runtime than what Vercel's dashboard shows.
-      computed: {
-        rawEnv: process.env.NEXT_PUBLIC_APP_URL ?? null,
-        appUrl,
-        success_url: appUrl + "/dashboard?billing=success",
-        cancel_url: appUrl + "/dashboard?billing=cancelled",
-      },
-    }, { status: 502 });
+    // Stripe SDK errors carry a `param` naming exactly which request field
+    // was rejected, when available -- worth keeping in the response since
+    // it's cheap and meaningfully narrows down future failures here.
+    const param = err && typeof err === "object" && "param" in err ? (err as { param?: string }).param : undefined;
+    return Response.json({ error: param ? `${message} (param: ${param})` : message }, { status: 502 });
   }
 }
