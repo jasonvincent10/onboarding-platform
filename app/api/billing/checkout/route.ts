@@ -50,50 +50,59 @@ export async function POST(request: Request) {
   }
 
   const stripe = getStripe();
-
-  // Reuse or create the Stripe customer
-  let customerId = employer.stripe_customer_id as string | null;
-  if (!customerId) {
-    const customer = await stripe.customers.create({
-      email: membership.email || user.email || undefined,
-      name: employer.company_name,
-      metadata: { employer_id: employer.id },
-    });
-    customerId = customer.id;
-    await adminClient
-      .from("employer_accounts")
-      .update({ stripe_customer_id: customerId })
-      .eq("id", employer.id);
-  }
-
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    customer: customerId,
-    line_items: [
-      {
-        quantity,
-        price_data: {
-          currency: "gbp",
-          unit_amount: getHirePricePence(),
-          product_data: {
-            name: "Onboarding credit",
-            description: "One new starter onboarding on Onboarder",
-          },
-          tax_behavior: "exclusive",
-        },
-      },
-    ],
-    automatic_tax: { enabled: true },
-    invoice_creation: { enabled: true },
-    metadata: {
-      employer_id: employer.id,
-      credits: String(quantity),
-    },
-    success_url: appUrl + "/dashboard?billing=success",
-    cancel_url: appUrl + "/dashboard?billing=cancelled",
-  });
+  try {
+    // Reuse or create the Stripe customer
+    let customerId = employer.stripe_customer_id as string | null;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: membership.email || user.email || undefined,
+        name: employer.company_name,
+        metadata: { employer_id: employer.id },
+      });
+      customerId = customer.id;
+      await adminClient
+        .from("employer_accounts")
+        .update({ stripe_customer_id: customerId })
+        .eq("id", employer.id);
+    }
 
-  return Response.json({ url: session.url });
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      customer: customerId,
+      line_items: [
+        {
+          quantity,
+          price_data: {
+            currency: "gbp",
+            unit_amount: getHirePricePence(),
+            product_data: {
+              name: "Onboarding credit",
+              description: "One new starter onboarding on Onboarder",
+            },
+            tax_behavior: "exclusive",
+          },
+        },
+      ],
+      automatic_tax: { enabled: true },
+      invoice_creation: { enabled: true },
+      metadata: {
+        employer_id: employer.id,
+        credits: String(quantity),
+      },
+      success_url: appUrl + "/dashboard?billing=success",
+      cancel_url: appUrl + "/dashboard?billing=cancelled",
+    });
+
+    return Response.json({ url: session.url });
+  } catch (err) {
+    // Surface the real Stripe error instead of letting an unhandled
+    // exception crash the route into a non-JSON 500 -- that made every
+    // failure here look like a generic "check your connection" error on
+    // the client with no way to tell what was actually wrong.
+    console.error("Stripe checkout session creation failed:", err);
+    const message = err instanceof Error ? err.message : "Could not create checkout session.";
+    return Response.json({ error: message }, { status: 502 });
+  }
 }
