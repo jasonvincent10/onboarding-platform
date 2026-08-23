@@ -161,6 +161,7 @@ SENTRY_AUTH_TOKEN=     # needed in Vercel for production source maps — add via
 - **Chrome DevTools device toolbar can fail to trigger real resize/media-query re-evaluation** — test with an actual browser window resize before assuming the code is broken.
 - **Duplicate JSX bug pattern (pre-existing):** BankDetailsForm.tsx, EmergencyContactsForm.tsx, and onboarding item/checklist pages had dead code appended after the closing return statement — a second copy of the JSX using inline styles. This caused Turbopack production build failures. Fixed in Jul 2026 session. Watch for this pattern if adding to these files.
 - **CSP `unsafe-eval` in dev:** next.config.js injects `unsafe-eval` into script-src only when `NODE_ENV === 'development'` — React dev tools need it. Not present in production builds.
+- **A stray leading/trailing space pasted into a Vercel env var value is invisible in the dashboard UI but breaks anything that concatenates it into a URL.** Found via `NEXT_PUBLIC_APP_URL` having a leading space, making Stripe Checkout's `success_url` start with a space — Stripe rejected it with a generic `url_invalid` "Not a valid URL" error that gave zero indication it was whitespace. `app/api/billing/checkout/route.ts` now `.trim()`s this env var defensively, but if a similarly opaque failure shows up elsewhere, suspect this pattern — retype the env var value from scratch in Vercel rather than trying to spot/delete the invisible character.
 
 ---
 
