@@ -76,14 +76,6 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       customer: customerId,
-      // The customer record we create above only has email/name/metadata,
-      // no address -- automatic_tax needs one to calculate VAT from.
-      // billing_address_collection forces Checkout to actually prompt for
-      // it during the session; customer_update.address then saves whatever
-      // gets entered back onto the customer. Both are needed together --
-      // customer_update alone doesn't force collection to happen.
-      billing_address_collection: "required",
-      customer_update: { address: "auto" },
       line_items: [
         {
           quantity,
@@ -94,11 +86,15 @@ export async function POST(request: Request) {
               name: "Onboarding credit",
               description: "One new starter onboarding on Onboarder",
             },
-            tax_behavior: "exclusive",
           },
         },
       ],
-      automatic_tax: { enabled: true },
+      // Automatic tax calculation is deliberately disabled for now -- it
+      // requires a saved address on the Customer object (ours has none,
+      // since we don't collect one anywhere), and whether/how to charge
+      // VAT at all is a business decision to make properly, not configure
+      // under time pressure while debugging a checkout flow. Revisit this
+      // intentionally later, not as a side effect of a bug fix.
       invoice_creation: { enabled: true },
       metadata: {
         employer_id: employer.id,
