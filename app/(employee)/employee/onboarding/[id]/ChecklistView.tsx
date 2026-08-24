@@ -173,19 +173,19 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
 
       {/* Welcome banner */}
       {showWelcomeBanner && (
-        <div className="bg-indigo-600 text-white rounded-xl px-4 py-3 flex items-start gap-3">
+        <div className="bg-violet-600 text-white rounded-xl px-4 py-3 flex items-start gap-3">
           <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
           <div className="min-w-0">
             <p className="text-sm font-semibold">Invitation accepted</p>
-            <p className="text-xs text-indigo-200 mt-0.5">
+            <p className="text-xs text-violet-200 mt-0.5">
               Welcome to {onboarding.companyName}! Complete the steps below before your start date.
             </p>
           </div>
           <button
             onClick={() => setShowWelcomeBanner(false)}
-            className="shrink-0 text-indigo-300 hover:text-white ml-auto"
+            className="shrink-0 text-violet-300 hover:text-white ml-auto"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -199,7 +199,7 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
         {/* Company + role */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
-            <p className="text-xs font-medium text-indigo-600 uppercase tracking-wide">
+            <p className="text-xs font-medium text-violet-600 uppercase tracking-wide">
               {onboarding.companyName}
             </p>
             <h1 className="text-lg font-semibold text-slate-900 mt-0.5">
@@ -233,7 +233,7 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
             <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-700 ${
-                  pct === 100 ? 'bg-emerald-500' : pct >= 60 ? 'bg-indigo-500' : 'bg-amber-400'
+                  pct === 100 ? 'bg-emerald-500' : pct >= 60 ? 'bg-violet-500' : 'bg-amber-400'
                 }`}
                 style={{ width: `${pct}%` }}
               />
@@ -265,11 +265,11 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
 
       {/* Portable profile notice */}
       {items.some(i => i.was_pre_populated) && (
-        <div className="flex items-start gap-2.5 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-3">
-          <svg className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="flex items-start gap-2.5 bg-violet-50 border border-violet-200 rounded-xl px-4 py-3">
+          <svg className="w-4 h-4 text-violet-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-          <p className="text-xs text-indigo-700">
+          <p className="text-xs text-violet-700">
             <span className="font-semibold">Some items pre-filled from your profile</span> — review them to confirm they're still correct.
           </p>
         </div>
@@ -312,7 +312,6 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
   const deadline = formatDeadline(item.deadline)
 
   const isActionable = item.status === 'not_started' || item.status === 'in_progress' || item.status === 'overdue'
-  console.log(item.item_name, '| type:', item.item_type, '| status:', item.status, '| isActionable:', isActionable)
   const isApproved = item.status === 'approved'
 
   return (
@@ -359,7 +358,7 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
                 {item.was_pre_populated && (
                   <>
                     <span className="text-slate-200">·</span>
-                    <span className="text-xs text-indigo-500 font-medium">From profile</span>
+                    <span className="text-xs text-violet-500 font-medium">From profile</span>
                   </>
                 )}
               </div>
@@ -421,17 +420,16 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
           {/* CTA for actionable items — onboardingId threaded in from parent */}
           {isActionable && (
             <Link
-            href={`/employee/onboarding/${onboardingId}/item/${item.id}`}
-            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg transition-colors text-sm font-medium"
-            style={{ backgroundColor: '#4f46e5', color: '#ffffff' }}
-          >
-            {item.item_type === 'document_upload' && 'Upload document'}
-            {item.item_type === 'form' && 'Fill in details'}
-            {item.item_type === 'acknowledgement' && 'Read & acknowledge'}
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link> 
+              href={`/employee/onboarding/${onboardingId}/item/${item.id}`}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg transition-colors text-sm font-medium bg-violet-600 text-white hover:bg-violet-700"
+            >
+              {item.item_type === 'document_upload' && 'Upload document'}
+              {item.item_type === 'form' && 'Fill in details'}
+              {item.item_type === 'acknowledgement' && 'Read & acknowledge'}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           )}
 
           {/* Deadline detail */}

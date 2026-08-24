@@ -180,7 +180,7 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
               onClick={() => set('item_type', opt.value)}
               className={`flex flex-col items-center gap-1.5 px-2 py-3 rounded-lg border text-center transition-all ${
                 values.item_type === opt.value
-                  ? 'border-slate-900 bg-slate-900 text-white'
+                  ? 'border-violet-700 bg-violet-700 text-white'
                   : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
               }`}
             >
@@ -251,7 +251,7 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center gap-1.5 bg-slate-900 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-800 disabled:opacity-60 transition-colors"
+          className="inline-flex items-center gap-1.5 bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-violet-800 disabled:opacity-60 transition-colors"
         >
           {isPending ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -472,7 +472,7 @@ function TemplateNameEditor({ template }: { template: Template }) {
           <button
             onClick={handleSave}
             disabled={isPending}
-            className="inline-flex items-center gap-1 text-sm font-medium text-white bg-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-800 disabled:opacity-60 transition-colors"
+            className="inline-flex items-center gap-1 text-sm font-medium text-white bg-violet-700 px-3 py-1.5 rounded-lg hover:bg-violet-800 disabled:opacity-60 transition-colors"
           >
             {isPending ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />

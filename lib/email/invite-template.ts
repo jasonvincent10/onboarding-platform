@@ -45,8 +45,8 @@ export function buildInviteEmailHtml({
 
           <!-- Logo / header bar -->
           <tr>
-            <td style="background-color:#0f172a;padding:24px 32px;border-radius:12px 12px 0 0;">
-              <p style="margin:0;color:#64748b;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">
+            <td style="background-color:#7c3aed;padding:24px 32px;border-radius:12px 12px 0 0;">
+              <p style="margin:0;color:#ddd6fe;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">
                 New Starter Onboarding
               </p>
               <p style="margin:6px 0 0;color:#f8fafc;font-size:20px;font-weight:700;letter-spacing:-0.01em;">
@@ -66,7 +66,7 @@ export function buildInviteEmailHtml({
                 Welcome to the team.<br/>Let&#39;s get your paperwork sorted.
               </h1>
               <p style="margin:0 0 28px;color:#475569;font-size:15px;line-height:1.65;">
-                ${safe(companyName)} uses Onboarder to collect new starter documents securely online.
+                ${safe(companyName)} uses Vopria to collect new starter documents securely online.
                 It takes around 10 minutes and everything is encrypted and belongs to you — not your employer.
               </p>
 
@@ -104,7 +104,7 @@ export function buildInviteEmailHtml({
                 <tr>
                   <td align="center">
                     <a href="${inviteUrl}"
-                      style="display:inline-block;background-color:#0f172a;color:#f8fafc;text-decoration:none;
+                      style="display:inline-block;background-color:#7c3aed;color:#f8fafc;text-decoration:none;
                              font-size:15px;font-weight:600;padding:15px 36px;border-radius:8px;
                              letter-spacing:0.01em;">
                       Complete your onboarding &rarr;
@@ -129,7 +129,7 @@ export function buildInviteEmailHtml({
               <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6;">
                 This link is unique to you and remains active until your start date.
                 If you weren&#39;t expecting this email, you can safely ignore it.<br/><br/>
-                Sent via <strong style="color:#64748b;">Onboarder</strong> on behalf of
+                Sent via <strong style="color:#64748b;">Vopria</strong> on behalf of
                 ${safe(companyName)}. Your data is encrypted and belongs to you.
               </p>
             </td>

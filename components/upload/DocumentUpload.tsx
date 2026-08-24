@@ -262,8 +262,8 @@ export default function DocumentUpload({
         className={[
           'relative cursor-pointer rounded-xl border-2 border-dashed transition-all duration-200',
           isDragOver
-            ? 'border-indigo-400 bg-indigo-50'
-            : 'border-slate-200 bg-slate-50 hover:border-indigo-300 hover:bg-indigo-50/40',
+            ? 'border-violet-400 bg-violet-50'
+            : 'border-slate-200 bg-slate-50 hover:border-violet-300 hover:bg-violet-50/40',
           selectedFile ? 'cursor-default' : '',
         ].join(' ')}
       >
@@ -312,7 +312,7 @@ export default function DocumentUpload({
                   <div className="mt-3">
                     <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                       <div
-                        className="h-full rounded-full bg-indigo-500 transition-all duration-300"
+                        className="h-full rounded-full bg-violet-500 transition-all duration-300"
                         style={{
                           width:
                             stage === 'recording' ? '90%' : `${progress}%`,
@@ -347,13 +347,13 @@ export default function DocumentUpload({
             <div
               className={[
                 'flex h-14 w-14 items-center justify-center rounded-full transition-colors',
-                isDragOver ? 'bg-indigo-100' : 'bg-white shadow-sm',
+                isDragOver ? 'bg-violet-100' : 'bg-white shadow-sm',
               ].join(' ')}
             >
               <UploadIcon
                 className={[
                   'h-6 w-6 transition-colors',
-                  isDragOver ? 'text-indigo-600' : 'text-slate-400',
+                  isDragOver ? 'text-violet-600' : 'text-slate-400',
                 ].join(' ')}
               />
             </div>
@@ -396,7 +396,7 @@ export default function DocumentUpload({
               setExpiryError(null)
             }}
             min={new Date().toISOString().split('T')[0]}
-            className="block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            className="block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
           />
           {expiryError && (
             <p className="text-xs text-red-600">{expiryError}</p>
@@ -408,7 +408,7 @@ export default function DocumentUpload({
       {selectedFile && !isUploading && (stage as string) !== 'done' && (
         <button
           onClick={handleSubmit}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50 sm:w-auto"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-violet-700 active:scale-[0.98] disabled:opacity-50 sm:w-auto"
         >
           <UploadIcon className="h-4 w-4" />
           Submit document
@@ -418,7 +418,7 @@ export default function DocumentUpload({
       {isUploading && (
         <button
           disabled
-          className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-indigo-400 px-5 py-3 text-sm font-semibold text-white sm:w-auto"
+          className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-violet-400 px-5 py-3 text-sm font-semibold text-white sm:w-auto"
         >
           <SpinnerIcon className="h-4 w-4 animate-spin" />
           {stage === 'recording' ? 'Saving...' : 'Uploading...'}

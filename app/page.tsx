@@ -30,12 +30,12 @@ export default async function RootPage() {
       {/* Nav */}
       <header className="border-b border-slate-100">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <span className="text-lg font-bold tracking-tight text-slate-900">Onboarder</span>
+          <span className="text-2xl font-extrabold tracking-tight text-violet-700">Vopria</span>
           <nav className="flex items-center gap-6 text-sm">
             <a href="#how" className="hidden text-slate-600 hover:text-slate-900 sm:inline">How it works</a>
             <a href="#pricing" className="hidden text-slate-600 hover:text-slate-900 sm:inline">Pricing</a>
             <Link href="/login" className="text-slate-600 hover:text-slate-900">Log in</Link>
-            <Link href="/sign-up" className="rounded-md bg-slate-900 px-4 py-2 font-medium text-white hover:bg-slate-800">
+            <Link href="/sign-up" className="rounded-md bg-violet-700 px-4 py-2 font-medium text-white hover:bg-violet-800">
               Start free
             </Link>
           </nav>
@@ -45,7 +45,7 @@ export default async function RootPage() {
       {/* Hero */}
       <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:py-24">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-emerald-700">
+          <p className="text-xs font-semibold uppercase tracking-widest text-violet-700">
             For UK SMEs hiring 5 to 200 people a year
           </p>
           <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
@@ -53,11 +53,11 @@ export default async function RootPage() {
           </h1>
           <p className="mt-5 text-lg leading-7 text-slate-600">
             Getting a right to work check wrong can cost up to 60,000 pounds per worker.
-            Onboarder replaces the email chase with one guided checklist: documents, bank
+            Vopria replaces the email chase with one guided checklist: documents, bank
             details, NI number and policy sign-offs, collected, reviewed and logged.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link href="/sign-up" className="rounded-md bg-emerald-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-emerald-700">
+            <Link href="/sign-up" className="rounded-md bg-violet-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-violet-700">
               Onboard your first 3 hires free
             </Link>
             <span className="text-sm text-slate-500">No card required. Set up in minutes.</span>
@@ -124,21 +124,21 @@ export default async function RootPage() {
         <h2 className="text-2xl font-bold tracking-tight">How it works</h2>
         <ol className="mt-8 grid gap-8 sm:grid-cols-3">
           <li className="rounded-lg border border-slate-200 p-6">
-            <p className="text-xs font-semibold uppercase tracking-widest text-emerald-700">Step 1</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-violet-700">Step 1</p>
             <h3 className="mt-2 font-semibold text-slate-900">Invite your new starter</h3>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               Enter their name, email and start date. They get a branded invitation from your company.
             </p>
           </li>
           <li className="rounded-lg border border-slate-200 p-6">
-            <p className="text-xs font-semibold uppercase tracking-widest text-emerald-700">Step 2</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-violet-700">Step 2</p>
             <h3 className="mt-2 font-semibold text-slate-900">They complete a guided checklist</h3>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               Uploads, forms and policy sign-offs on any device, with clear guidance on what is acceptable.
             </p>
           </li>
           <li className="rounded-lg border border-slate-200 p-6">
-            <p className="text-xs font-semibold uppercase tracking-widest text-emerald-700">Step 3</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-violet-700">Step 3</p>
             <h3 className="mt-2 font-semibold text-slate-900">You review and approve</h3>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               One-click approval or a re-upload request with a note. Export everything as CSV for payroll.
@@ -156,12 +156,12 @@ export default async function RootPage() {
               25 GBP <span className="text-base font-normal text-slate-500">per hire</span>
             </p>
             <ul className="mt-6 space-y-3 text-sm text-slate-700">
-              <li className="flex gap-2"><span className="text-emerald-600">-</span> First 3 onboardings free, no card required</li>
-              <li className="flex gap-2"><span className="text-emerald-600">-</span> Unlimited templates and reviewers</li>
-              <li className="flex gap-2"><span className="text-emerald-600">-</span> Automated reminders and escalations</li>
-              <li className="flex gap-2"><span className="text-emerald-600">-</span> Audit trail and CSV export included</li>
+              <li className="flex gap-2"><span className="text-violet-600">-</span> First 3 onboardings free, no card required</li>
+              <li className="flex gap-2"><span className="text-violet-600">-</span> Unlimited templates and reviewers</li>
+              <li className="flex gap-2"><span className="text-violet-600">-</span> Automated reminders and escalations</li>
+              <li className="flex gap-2"><span className="text-violet-600">-</span> Audit trail and CSV export included</li>
             </ul>
-            <Link href="/sign-up" className="mt-8 block rounded-md bg-slate-900 px-6 py-3 text-center text-base font-semibold text-white hover:bg-slate-800">
+            <Link href="/sign-up" className="mt-8 block rounded-md bg-violet-700 px-6 py-3 text-center text-base font-semibold text-white hover:bg-violet-800">
               Start free
             </Link>
           </div>
@@ -178,7 +178,7 @@ export default async function RootPage() {
             Your onboarding profile belongs to you
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-            If your new employer uses Onboarder, you will receive an invitation by email.
+            If your new employer uses Vopria, you will receive an invitation by email.
             Complete your checklist once and your details are saved to your own profile.
             Next time you change jobs, most of it is already done, and you choose exactly
             what each employer can see.
@@ -189,7 +189,7 @@ export default async function RootPage() {
       {/* Footer */}
       <footer className="border-t border-slate-100">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm text-slate-500">
-          <span>Onboarder. Made for UK employers.</span>
+          <span>Vopria. Made for UK employers.</span>
           <nav className="flex gap-6">
             <Link href="/legal/terms" className="hover:text-slate-900">Terms</Link>
             <Link href="/legal/privacy" className="hover:text-slate-900">Privacy</Link>

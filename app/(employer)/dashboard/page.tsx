@@ -13,7 +13,7 @@ function getTimeOfDay() {
 }
 
 function StatCard({ label, value, accent }: { label: string; value: number; accent?: 'amber' | 'teal' }) {
-  const valueColor = accent === 'amber' ? 'text-amber-600' : accent === 'teal' ? 'text-teal-700' : 'text-slate-900'
+  const valueColor = accent === 'amber' ? 'text-amber-600' : accent === 'teal' ? 'text-violet-700' : 'text-slate-900'
   return (
     <div className="bg-white rounded-xl border border-slate-200 px-5 py-4">
       <p className="text-xs font-medium text-slate-500 mb-1">{label}</p>
@@ -25,10 +25,10 @@ function StatCard({ label, value, accent }: { label: string; value: number; acce
 function EmptyState() {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
-      <div className="h-1.5 rounded-t-2xl bg-gradient-to-r from-teal-400 via-teal-600 to-teal-800" />
+      <div className="h-1.5 rounded-t-2xl bg-gradient-to-r from-violet-400 via-violet-600 to-violet-800" />
       <div className="px-8 py-16 flex flex-col items-center text-center max-w-md mx-auto">
-        <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center mb-6">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="text-teal-600">
+        <div className="w-16 h-16 rounded-2xl bg-violet-50 border border-violet-100 flex items-center justify-center mb-6">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="text-violet-600">
             <path d="M14 4C8.477 4 4 8.477 4 14s4.477 10 10 10 10-4.477 10-10S19.523 4 14 4Z" stroke="currentColor" strokeWidth="1.5" />
             <path d="M14 9v5l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -44,7 +44,7 @@ function EmptyState() {
             { n: '3', title: 'You review and approve', body: 'One-click approval. Everything logged for compliance.' },
           ].map((step) => (
             <div key={step.n} className="flex gap-3.5 items-start">
-              <div className="w-6 h-6 rounded-full bg-teal-700 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+              <div className="w-6 h-6 rounded-full bg-violet-700 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                 {step.n}
               </div>
               <div>
@@ -56,7 +56,7 @@ function EmptyState() {
         </div>
         <Link
           href="/dashboard/invite"
-          className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 transition"
+          className="inline-flex items-center gap-2 rounded-lg bg-violet-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 transition"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M7 2v10M2 7h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
@@ -119,7 +119,7 @@ export default async function DashboardPage() {
         </div>
         <Link
           href="/dashboard/invite"
-          className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 transition"
+          className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 transition"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M7 2v10M2 7h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
@@ -147,7 +147,7 @@ export default async function DashboardPage() {
           <OnboardingsList items={active} />
           {total === 20 && (
             <p className="mt-4 text-center">
-              <Link href="/onboardings" className="text-sm font-medium text-teal-700 hover:text-teal-800 transition">
+              <Link href="/onboardings" className="text-sm font-medium text-violet-700 hover:text-violet-800 transition">
                 View all onboardings →
               </Link>
             </p>

@@ -23,7 +23,7 @@ export default function SettingsTabs() {
               href={tab.href}
               className={`pb-3 text-sm font-medium border-b-2 transition-colors ${
                 isActive
-                  ? 'border-teal-700 text-teal-800'
+                  ? 'border-violet-700 text-violet-800'
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >

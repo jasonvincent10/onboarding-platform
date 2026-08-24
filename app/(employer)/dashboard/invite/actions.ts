@@ -194,8 +194,8 @@ export async function createInvitation(
 
   const { error: emailError } = await resend.emails.send({
     // TODO before launch: replace with your verified Resend domain
-    // e.g. 'Onboarder <noreply@yourdomain.co.uk>'
-    from: 'Onboarder <onboarding@resend.dev>',
+    // e.g. 'Vopria <noreply@yourdomain.co.uk>'
+    from: 'Vopria <onboarding@resend.dev>',
     to: inviteeEmail,
     subject: `${companyName} — Complete your new starter onboarding`,
     html: buildInviteEmailHtml({

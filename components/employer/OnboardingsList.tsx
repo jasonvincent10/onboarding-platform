@@ -15,7 +15,7 @@ function statusBadge(status: string) {
     invited: { label: 'Invited', className: 'bg-slate-100 text-slate-600' },
     in_progress: { label: 'In progress', className: 'bg-blue-50 text-blue-700' },
     submitted: { label: 'Submitted', className: 'bg-amber-50 text-amber-700' },
-    complete: { label: 'Complete', className: 'bg-teal-50 text-teal-700' },
+    complete: { label: 'Complete', className: 'bg-violet-50 text-violet-700' },
   }
   const s = map[status] ?? { label: status, className: 'bg-slate-100 text-slate-600' }
   return (
@@ -26,7 +26,7 @@ function statusBadge(status: string) {
 }
 
 function ReadinessBar({ pct }: { pct: number }) {
-  const color = pct === 100 ? 'bg-teal-500' : pct >= 50 ? 'bg-amber-400' : 'bg-red-400'
+  const color = pct === 100 ? 'bg-violet-500' : pct >= 50 ? 'bg-amber-400' : 'bg-red-400'
   return (
     <div className="flex items-center gap-2.5 min-w-0">
       <div className="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden">
@@ -60,7 +60,7 @@ export default function OnboardingsList({ items }: { items: OnboardingInstance[]
         <span />
       </div>
       {items.map((o) => (
-        <Link key={o.id} href={`/dashboard/onboarding/${o.id}`} className="block bg-white rounded-xl border border-slate-200 px-4 py-4 hover:border-teal-300 hover:shadow-sm transition-all sm:rounded-none sm:border-0 sm:border-b sm:border-slate-100 sm:last:border-0 sm:px-6 sm:hover:bg-stone-50 sm:hover:shadow-none sm:hover:border-slate-100">
+        <Link key={o.id} href={`/dashboard/onboarding/${o.id}`} className="block bg-white rounded-xl border border-slate-200 px-4 py-4 hover:border-violet-300 hover:shadow-sm transition-all sm:rounded-none sm:border-0 sm:border-b sm:border-slate-100 sm:last:border-0 sm:px-6 sm:hover:bg-stone-50 sm:hover:shadow-none sm:hover:border-slate-100">
           <div className="flex items-start justify-between gap-3 sm:contents">
             <div className="min-w-0 flex-1 sm:contents">
               <div className="min-w-0 hidden sm:block">
@@ -81,7 +81,7 @@ export default function OnboardingsList({ items }: { items: OnboardingInstance[]
             </div>
             <div className="hidden sm:block"><ReadinessBar pct={o.readiness_pct ?? 0} /></div>
             <div className="hidden sm:flex sm:justify-end">
-              <span className="text-xs font-medium text-teal-700">Review</span>
+              <span className="text-xs font-medium text-violet-700">Review</span>
             </div>
           </div>
           <div className="mt-3 sm:hidden">

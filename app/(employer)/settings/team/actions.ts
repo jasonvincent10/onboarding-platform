@@ -87,9 +87,9 @@ export async function inviteTeamMember(
   const inviterName = member.full_name || user.email || 'A teammate'
 
   const { error: emailError } = await resend.emails.send({
-    from: 'Onboarder <onboarding@resend.dev>',
+    from: 'Vopria <onboarding@resend.dev>',
     to: email,
-    subject: `${inviterName} invited you to join ${companyName} on Onboarder`,
+    subject: `${inviterName} invited you to join ${companyName} on Vopria`,
     html: buildTeamInviteEmailHtml({ companyName, inviterName, inviteUrl }),
   })
 

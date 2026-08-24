@@ -3,7 +3,7 @@
 // Replace [PLACEHOLDERS] before publishing.
 
 export const metadata = {
-  title: "Privacy Policy - Onboarder",
+  title: "Privacy Policy - Vopria",
 };
 
 function H2({ children }: { children: React.ReactNode }) {
@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
 
       <H2>1. Who we are</H2>
       <P>
-        Onboarder ([LEGAL ENTITY NAME], company number [NUMBER], registered at
+        Vopria ([LEGAL ENTITY NAME], company number [NUMBER], registered at
         [ADDRESS]) provides an employee onboarding platform for UK employers and
         their new starters. We are registered with the Information
         Commissioner&apos;s Office (ICO) under registration number [ICO NUMBER].
@@ -34,13 +34,13 @@ export default function PrivacyPolicyPage() {
         For employee onboarding data collected on behalf of an employer (such as
         your P45, bank details, National Insurance number and right to work
         documents submitted for a specific onboarding), the employer is the data
-        controller and Onboarder acts as a data processor under a Data
+        controller and Vopria acts as a data processor under a Data
         Processing Agreement.
       </P>
       <P>
         For your portable employee profile (the account and data you keep after
         an onboarding completes, which you may re-use with future employers),
-        and for employer account data, Onboarder is the data controller.
+        and for employer account data, Vopria is the data controller.
       </P>
 
       <H2>3. What we collect</H2>

@@ -52,7 +52,7 @@ export default function CompanyProfileForm({ companyName, companyNumber }: Props
             type="text"
             required
             defaultValue={companyName}
-            className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-600/10 focus:border-teal-600"
+            className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-600/10 focus:border-violet-600"
           />
         </div>
 
@@ -67,14 +67,14 @@ export default function CompanyProfileForm({ companyName, companyNumber }: Props
             type="text"
             defaultValue={companyNumber}
             placeholder="e.g. 12345678"
-            className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600/10 focus:border-teal-600"
+            className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-600/10 focus:border-violet-600"
           />
         </div>
 
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
+          className="rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
         >
           {isPending ? 'Saving…' : 'Save changes'}
         </button>

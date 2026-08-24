@@ -26,7 +26,7 @@ export default function InviteTeamMemberForm() {
       <button
         type="button"
         onClick={() => { setOpen(true); setState(null) }}
-        className="rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 transition"
+        className="rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 transition"
       >
         Invite team member
       </button>
@@ -46,12 +46,12 @@ export default function InviteTeamMemberForm() {
           name="email"
           required
           placeholder="colleague@company.co.uk"
-          className="flex-1 rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600/10 focus:border-teal-600"
+          className="flex-1 rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-600/10 focus:border-violet-600"
         />
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
+          className="rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
         >
           {isPending ? 'Sending…' : 'Send invite'}
         </button>

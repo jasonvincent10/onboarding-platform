@@ -128,7 +128,7 @@ export default function BankDetailsForm({
           onChange={handleHolderNameChange}
           placeholder="As shown on your bank account"
           autoComplete="off"
-          className={`block w-full rounded-lg border px-3 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${holderNameError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+          className={`block w-full rounded-lg border px-3 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${holderNameError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
         />
         {holderNameError && (
           <p className="mt-1 text-xs text-red-600">{holderNameError}</p>
@@ -148,7 +148,7 @@ export default function BankDetailsForm({
           maxLength={8}
           autoComplete="off"
           inputMode="numeric"
-          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${sortCodeError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${sortCodeError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
         />
         {sortCodeError && (
           <p className="mt-1 text-xs text-red-600">{sortCodeError}</p>
@@ -168,7 +168,7 @@ export default function BankDetailsForm({
           maxLength={8}
           autoComplete="off"
           inputMode="numeric"
-          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${accountNumberError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${accountNumberError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
         />
         {accountNumberError && (
           <p className="mt-1 text-xs text-red-600">{accountNumberError}</p>
@@ -188,7 +188,7 @@ export default function BankDetailsForm({
       <button
         onClick={handleSubmit}
         disabled={!formValid || submitting}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {submitting ? (
           <>

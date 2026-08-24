@@ -9,7 +9,7 @@ const jakarta = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'OnboardIQ — UK Employee Onboarding',
+  title: 'Vopria — UK Employee Onboarding',
   description:
     'Compliant, paperless employee onboarding for UK SMEs. P45, right to work, bank details — all in one place.',
 }

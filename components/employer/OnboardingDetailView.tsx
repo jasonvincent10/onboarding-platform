@@ -216,7 +216,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                   {canReview && (
                     <button
                       onClick={() => isViewing ? handleCloseView() : handleViewItem(item)}
-                      className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                      className="text-sm text-violet-600 hover:text-violet-800 font-medium"
                     >
                       {isViewing ? 'Close' : 'Review →'}
                     </button>
@@ -247,7 +247,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                         href="https://www.gov.uk/view-right-to-work"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-2 inline-block text-sm font-medium text-indigo-600 hover:text-indigo-800 underline underline-offset-2"
+                        className="mt-2 inline-block text-sm font-medium text-violet-600 hover:text-violet-800 underline underline-offset-2"
                       >
                         Verify at gov.uk/view-right-to-work
                       </a>
@@ -264,7 +264,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                         href={documentUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                        className="inline-flex items-center gap-2 text-sm text-violet-600 hover:text-violet-800 font-medium"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -341,7 +341,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
               onChange={e => { setReuploadNote(e.target.value); setReuploadError('') }}
               placeholder="e.g. The document is blurry and the expiry date cannot be read. Please re-upload a clear photo or scan."
               rows={4}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
               autoFocus
             />
 

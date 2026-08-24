@@ -66,9 +66,9 @@ export function buildEmployeeReminderEmail(data: EmployeeReminderData): {
       <table width="100%" style="max-width:560px;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
         
         <tr>
-          <td style="background:#4f46e5;padding:24px 32px;">
+          <td style="background:#7c3aed;padding:24px 32px;">
             <p style="margin:0;color:#ffffff;font-size:18px;font-weight:600;">${safe(companyName)}</p>
-            <p style="margin:4px 0 0;color:#c7d2fe;font-size:13px;">Onboarding reminder</p>
+            <p style="margin:4px 0 0;color:#ddd6fe;font-size:13px;">Onboarding reminder</p>
           </td>
         </tr>
 
@@ -87,7 +87,7 @@ export function buildEmployeeReminderEmail(data: EmployeeReminderData): {
 
             <div style="margin-top:28px;text-align:center;">
               <a href="${safe(appUrl)}/employee/onboarding/${safe(onboardingId)}"
-                 style="display:inline-block;background:#4f46e5;color:#ffffff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;">
+                 style="display:inline-block;background:#7c3aed;color:#ffffff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;">
                 Complete your onboarding
               </a>
             </div>
@@ -153,7 +153,7 @@ export function buildEmployerEscalationEmail(data: EmployerEscalationData): {
           </ul>
           <div style="margin-top:12px;">
             <a href="${safe(appUrl)}/dashboard/onboarding/${safe(entry.onboardingId)}"
-               style="font-size:13px;color:#4f46e5;text-decoration:none;font-weight:600;">
+               style="font-size:13px;color:#7c3aed;text-decoration:none;font-weight:600;">
               Review onboarding →
             </a>
           </div>

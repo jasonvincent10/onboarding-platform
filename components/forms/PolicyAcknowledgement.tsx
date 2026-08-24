@@ -80,12 +80,12 @@ export default function PolicyAcknowledgement({
         </div>
       )}
 
-      <label className={`mb-5 flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-4 transition-colors ${checked ? 'border-indigo-300 bg-indigo-50' : 'border-gray-200 bg-white'}`}>
+      <label className={`mb-5 flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-4 transition-colors ${checked ? 'border-violet-300 bg-violet-50' : 'border-gray-200 bg-white'}`}>
         <input
           type="checkbox"
           checked={checked}
           onChange={(e) => setChecked(e.target.checked)}
-          className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-indigo-600"
+          className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-violet-600"
         />
         <span className="text-sm leading-relaxed text-gray-700">
           I confirm that I have read and understood the <strong>{itemName}</strong> and agree to its terms.
@@ -101,7 +101,7 @@ export default function PolicyAcknowledgement({
       <button
         onClick={handleAcknowledge}
         disabled={!checked || loading}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? (
           <>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'OnboardIQ — UK Employee Onboarding',
+  title: 'Vopria — UK Employee Onboarding',
 }
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Top bar */}
       <header className="px-6 py-5 flex items-center">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 rounded-lg bg-teal-700 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-violet-700 flex items-center justify-center">
             <svg
               width="14"
               height="14"
@@ -25,8 +25,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               />
             </svg>
           </div>
-          <span className="font-semibold text-slate-900 text-[15px] tracking-tight">
-            OnboardIQ
+          <span className="font-extrabold text-violet-700 text-xl tracking-tight">
+            Vopria
           </span>
         </Link>
       </header>

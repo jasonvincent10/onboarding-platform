@@ -84,7 +84,7 @@ export async function POST(request: Request) {
             unit_amount: getHirePricePence(),
             product_data: {
               name: "Onboarding credit",
-              description: "One new starter onboarding on Onboarder",
+              description: "One new starter onboarding on Vopria",
             },
           },
         },

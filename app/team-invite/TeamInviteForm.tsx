@@ -90,7 +90,7 @@ export default function TeamInviteForm({ token, inviteeEmail, companyName, alrea
                   required
                   autoComplete="name"
                   placeholder="Jane Smith"
-                  className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10"
+                  className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
                 />
               </div>
             )}
@@ -107,7 +107,7 @@ export default function TeamInviteForm({ token, inviteeEmail, companyName, alrea
                 minLength={mode === 'signup' ? 8 : undefined}
                 autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                 placeholder="••••••••"
-                className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10"
+                className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
               />
               {mode === 'signup' && (
                 <p className="mt-1 text-xs text-gray-400">Minimum 8 characters.</p>
@@ -117,7 +117,7 @@ export default function TeamInviteForm({ token, inviteeEmail, companyName, alrea
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-2 w-full rounded-lg bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading
                 ? mode === 'signup' ? 'Creating account…' : 'Signing in…'
@@ -130,7 +130,7 @@ export default function TeamInviteForm({ token, inviteeEmail, companyName, alrea
           {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}{' '}
           <button
             onClick={() => { setMode(mode === 'signup' ? 'login' : 'signup'); setError(null) }}
-            className="font-medium text-indigo-600 transition hover:text-indigo-800"
+            className="font-medium text-violet-600 transition hover:text-violet-800"
           >
             {mode === 'signup' ? 'Sign in instead' : 'Create one'}
           </button>

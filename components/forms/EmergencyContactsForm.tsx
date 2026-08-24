@@ -115,7 +115,7 @@ export default function EmergencyContactsForm({
               value={contact.name}
               onChange={(e) => updateContact(index, 'name', e.target.value)}
               placeholder="e.g. Jane Smith"
-              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${errors[index]?.name ? 'border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${errors[index]?.name ? 'border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
             />
             {errors[index]?.name && (
               <p className="mt-1 text-xs text-red-600">{errors[index].name}</p>
@@ -127,7 +127,7 @@ export default function EmergencyContactsForm({
             <select
               value={contact.relationship}
               onChange={(e) => updateContact(index, 'relationship', e.target.value)}
-              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${errors[index]?.relationship ? 'border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${errors[index]?.relationship ? 'border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
             >
               <option value="">Select relationship</option>
               {RELATIONSHIP_OPTIONS.map((rel) => (
@@ -147,7 +147,7 @@ export default function EmergencyContactsForm({
               onChange={(e) => updateContact(index, 'phone', e.target.value)}
               placeholder="e.g. 07700 900000"
               inputMode="tel"
-              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${errors[index]?.phone ? 'border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${errors[index]?.phone ? 'border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
             />
             {errors[index]?.phone && (
               <p className="mt-1 text-xs text-red-600">{errors[index].phone}</p>
@@ -163,7 +163,7 @@ export default function EmergencyContactsForm({
               value={contact.email ?? ''}
               onChange={(e) => updateContact(index, 'email', e.target.value)}
               placeholder="e.g. jane@example.com"
-              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 ${errors[index]?.email ? 'border-red-400' : 'border-gray-300 focus:border-indigo-400'}`}
+              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${errors[index]?.email ? 'border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
             />
             {errors[index]?.email && (
               <p className="mt-1 text-xs text-red-600">{errors[index].email}</p>
@@ -175,7 +175,7 @@ export default function EmergencyContactsForm({
       {contacts.length < 3 && (
         <button
           onClick={addContact}
-          className="mb-6 w-full rounded-lg border border-dashed border-gray-300 px-4 py-3 text-sm text-gray-500 hover:border-indigo-300 hover:text-indigo-600 transition-colors"
+          className="mb-6 w-full rounded-lg border border-dashed border-gray-300 px-4 py-3 text-sm text-gray-500 hover:border-violet-300 hover:text-violet-600 transition-colors"
         >
           + Add another contact ({3 - contacts.length} remaining)
         </button>
@@ -190,7 +190,7 @@ export default function EmergencyContactsForm({
       <button
         onClick={handleSubmit}
         disabled={submitting}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {submitting ? (
           <>

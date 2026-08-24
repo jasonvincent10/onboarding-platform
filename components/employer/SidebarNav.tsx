@@ -103,7 +103,7 @@ export default function SidebarNav({
       {/* Mobile top bar */}
       <div className="obd-topbar fixed top-0 left-0 right-0 z-30 items-center justify-between bg-white border-b border-slate-200 px-4 h-14">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-teal-700 flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-violet-700 flex items-center justify-center shrink-0">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M2 3.5C2 2.67 2.67 2 3.5 2h7C11.33 2 12 2.67 12 3.5v2C12 6.33 11.33 7 10.5 7h-7C2.67 7 2 6.33 2 5.5v-2ZM2 9.5C2 8.67 2.67 8 3.5 8H7c.83 0 1.5.67 1.5 1.5S7.83 11 7 11H3.5C2.67 11 2 10.33 2 9.5Z" fill="white" />
             </svg>
@@ -128,14 +128,14 @@ export default function SidebarNav({
         {/* Logo + company */}
         <div className="px-5 py-5 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-teal-700 flex items-center justify-center shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-violet-700 flex items-center justify-center shrink-0">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M2 3.5C2 2.67 2.67 2 3.5 2h7C11.33 2 12 2.67 12 3.5v2C12 6.33 11.33 7 10.5 7h-7C2.67 7 2 6.33 2 5.5v-2ZM2 9.5C2 8.67 2.67 8 3.5 8H7c.83 0 1.5.67 1.5 1.5S7.83 11 7 11H3.5C2.67 11 2 10.33 2 9.5Z" fill="white" />
               </svg>
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-slate-900 truncate leading-tight">{companyName}</p>
-              <p className="text-[11px] text-slate-400 leading-tight mt-0.5">OnboardIQ</p>
+              <p className="text-[11px] text-slate-400 leading-tight mt-0.5">Vopria</p>
             </div>
             <button onClick={() => setMobileOpen(false)} className="ml-auto text-slate-400 hover:text-slate-700 p-1" style={{display: mobileOpen ? 'block' : 'none'}}>
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -154,9 +154,9 @@ export default function SidebarNav({
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-teal-50 text-teal-800' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-violet-50 text-violet-800' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
               >
-                <span className={isActive ? 'text-teal-700' : 'text-slate-400'}>{item.icon}</span>
+                <span className={isActive ? 'text-violet-700' : 'text-slate-400'}>{item.icon}</span>
                 {item.label}
               </Link>
             )
@@ -183,8 +183,8 @@ export default function SidebarNav({
         {/* User + logout */}
         <div className="px-3 py-3 border-t border-slate-100">
           <div className="flex items-center gap-2.5 px-2 py-2">
-            <div className="w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
-              <span className="text-xs font-semibold text-teal-800">{memberName.charAt(0).toUpperCase()}</span>
+            <div className="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center shrink-0">
+              <span className="text-xs font-semibold text-violet-800">{memberName.charAt(0).toUpperCase()}</span>
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-xs font-medium text-slate-700 truncate">{memberName}</p>

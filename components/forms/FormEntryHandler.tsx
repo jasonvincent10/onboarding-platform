@@ -53,13 +53,13 @@ export default function FormEntryHandler({
     const isApproved = status === 'approved'
     return (
       <div className="py-8 text-center">
-        <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full ${isApproved ? 'bg-emerald-100' : 'bg-indigo-50'}`}>
+        <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full ${isApproved ? 'bg-emerald-100' : 'bg-violet-50'}`}>
           {isApproved ? (
             <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
           ) : (
-            <svg className="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="h-6 w-6 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
           )}
@@ -74,7 +74,7 @@ export default function FormEntryHandler({
         </p>
         <button
           onClick={() => router.push(`/employee/onboarding/${onboardingId}`)}
-          className="mt-6 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors"
+          className="mt-6 rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-violet-700 transition-colors"
         >
           Back to checklist
         </button>
@@ -101,7 +101,7 @@ export default function FormEntryHandler({
   if (loading) {
     return (
       <div className="flex items-center gap-3 py-8 text-sm text-gray-500">
-        <svg className="h-4 w-4 animate-spin text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg className="h-4 w-4 animate-spin text-violet-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
         </svg>

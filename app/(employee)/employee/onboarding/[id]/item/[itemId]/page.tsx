@@ -146,7 +146,7 @@ export default async function ItemPage({ params }: Props) {
           )}
 
           {item.was_pre_populated && (
-            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700">
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-medium text-violet-700">
               <SparkleIcon className="h-3.5 w-3.5" />
               From your portable profile
             </div>
@@ -298,7 +298,7 @@ function ExistingFileReadOnly({
             <p className="mt-0.5 font-mono text-sm text-slate-600 tracking-widest">
               {shareCodeValue}
             </p>
-            <a href="https://www.gov.uk/view-right-to-work" target="_blank" rel="noopener noreferrer" className="mt-1.5 inline-block text-xs font-medium text-indigo-600 underline underline-offset-2">
+            <a href="https://www.gov.uk/view-right-to-work" target="_blank" rel="noopener noreferrer" className="mt-1.5 inline-block text-xs font-medium text-violet-600 underline underline-offset-2">
               Verify at gov.uk/view-right-to-work
             </a>
           </div>

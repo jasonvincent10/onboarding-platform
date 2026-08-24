@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import InviteForm from './InviteForm'
 
 export const metadata = {
-  title: 'Invite New Starter — Onboarder',
+  title: 'Invite New Starter — Vopria',
 }
 
 export default async function InvitePage() {

@@ -18,7 +18,7 @@ export default async function SettingsLayout({ children }: { children: React.Rea
     return (
       <div className="bg-white rounded-2xl border border-slate-200 px-8 py-10 text-center">
         <p className="text-sm font-medium text-slate-700">Your employer account isn&apos;t fully set up yet.</p>
-        <Link href="/dashboard" className="mt-3 inline-block text-sm font-medium text-teal-700 hover:text-teal-800">
+        <Link href="/dashboard" className="mt-3 inline-block text-sm font-medium text-violet-700 hover:text-violet-800">
           Back to dashboard
         </Link>
       </div>

@@ -77,7 +77,7 @@ export default async function TeamInvitePage({ searchParams }: Props) {
     },
     already_on_another_team: {
       title: "You're already on a different team",
-      body: `Your account is already part of another company's team on Onboarder. One account can only belong to one employer team at a time.`,
+      body: `Your account is already part of another company's team on Vopria. One account can only belong to one employer team at a time.`,
     },
     already_accepted: {
       title: 'Already accepted',

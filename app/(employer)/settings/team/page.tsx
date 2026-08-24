@@ -62,8 +62,8 @@ export default async function TeamSettingsPage() {
         <div className="divide-y divide-slate-100">
           {team.map((m) => (
             <div key={m.id} className="px-6 py-4 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
-                <span className="text-xs font-semibold text-teal-800">
+              <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center shrink-0">
+                <span className="text-xs font-semibold text-violet-800">
                   {(m.full_name || m.email).charAt(0).toUpperCase()}
                 </span>
               </div>

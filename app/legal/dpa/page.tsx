@@ -3,7 +3,7 @@
 // A solicitor MUST review before launch.
 
 export const metadata = {
-  title: "Data Processing Agreement - Onboarder",
+  title: "Data Processing Agreement - Vopria",
 };
 
 function H2({ children }: { children: React.ReactNode }) {
@@ -20,7 +20,7 @@ export default function DpaPage() {
       <h1 className="text-3xl font-bold text-gray-900">Data Processing Agreement</h1>
       <P>
         Last updated: [DATE]. Draft pending legal review. This DPA forms part
-        of the Terms of Service between Onboarder (the Processor) and the
+        of the Terms of Service between Vopria (the Processor) and the
         employer customer (the Controller) and applies to onboarding personal
         data processed on the Controller&apos;s behalf.
       </P>

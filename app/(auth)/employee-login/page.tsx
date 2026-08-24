@@ -72,7 +72,7 @@ function EmployeeLoginForm() {
                 required
                 autoComplete="name"
                 placeholder="Jane Smith"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
               />
             </div>
           )}
@@ -91,7 +91,7 @@ function EmployeeLoginForm() {
               required
               autoComplete="email"
               placeholder="jane@example.com"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
             />
           </div>
 
@@ -110,7 +110,7 @@ function EmployeeLoginForm() {
               autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
               placeholder="••••••••"
               minLength={8}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
             />
             {mode === 'signup' && (
               <p className="mt-1 text-xs text-slate-400">Minimum 8 characters.</p>
@@ -120,7 +120,7 @@ function EmployeeLoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 w-full rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-2 w-full rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading
               ? mode === 'signup'
@@ -141,7 +141,7 @@ function EmployeeLoginForm() {
               setMode(mode === 'signup' ? 'login' : 'signup')
               setError(null)
             }}
-            className="font-medium text-teal-700 transition hover:text-teal-800"
+            className="font-medium text-violet-700 transition hover:text-violet-800"
           >
             {mode === 'signup' ? 'Sign in instead' : 'Create one'}
           </button>

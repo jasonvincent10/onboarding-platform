@@ -32,7 +32,7 @@ export default function ResetPasswordForm() {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
           <Link
             href="/login"
-            className="block w-full text-center rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-800"
+            className="block w-full text-center rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800"
           >
             Continue to sign in
           </Link>
@@ -70,7 +70,7 @@ export default function ResetPasswordForm() {
               required
               minLength={8}
               placeholder="••••••••"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
             />
           </div>
 
@@ -89,14 +89,14 @@ export default function ResetPasswordForm() {
               required
               minLength={8}
               placeholder="••••••••"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
             />
           </div>
 
           <button
             type="submit"
             disabled={isPending}
-            className="w-full mt-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full mt-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isPending ? 'Updating…' : 'Update password'}
           </button>

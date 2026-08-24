@@ -129,7 +129,7 @@ function OnboardingCard({ onboarding: o }: { onboarding: Onboarding }) {
   return (
     <Link
       href={`/employee/onboarding/${o.id}`}
-      className="block bg-white rounded-xl border border-slate-200 p-4 hover:border-indigo-300 hover:shadow-sm transition-all"
+      className="block bg-white rounded-xl border border-slate-200 p-4 hover:border-violet-300 hover:shadow-sm transition-all"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -144,7 +144,7 @@ function OnboardingCard({ onboarding: o }: { onboarding: Onboarding }) {
             Complete
           </span>
         ) : (
-          <span className="shrink-0 text-xs font-semibold text-indigo-600">{pct}%</span>
+          <span className="shrink-0 text-xs font-semibold text-violet-600">{pct}%</span>
         )}
       </div>
 
@@ -153,7 +153,7 @@ function OnboardingCard({ onboarding: o }: { onboarding: Onboarding }) {
         <div className="mt-3">
           <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-indigo-500 rounded-full transition-all"
+              className="h-full bg-violet-500 rounded-full transition-all"
               style={{ width: `${pct}%` }}
             />
           </div>

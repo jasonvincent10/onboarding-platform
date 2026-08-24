@@ -226,7 +226,7 @@ export default function RightToWorkUpload({
         <select
           value={selectedDocType}
           onChange={(e) => handleDocTypeChange(e.target.value)}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-violet-500"
         >
           <option value="">Select a document type...</option>
           {RTW_DOCUMENT_TYPES.map((d) => (
@@ -271,7 +271,7 @@ export default function RightToWorkUpload({
                 onChange={(e) => setShareCode(e.target.value.toUpperCase())}
                 placeholder="e.g. W4G-12K-88K"
                 maxLength={11}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm uppercase tracking-widest focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm uppercase tracking-widest focus:border-transparent focus:outline-none focus:ring-2 focus:ring-violet-500"
               />
               <p className="mt-1 text-xs text-gray-500">
                 9 characters. Letters and numbers only. Dashes are optional.
@@ -295,11 +295,11 @@ export default function RightToWorkUpload({
               />
               <label
                 htmlFor="rtw-file-input"
-                className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-4 py-8 text-center transition-colors hover:border-indigo-400 hover:bg-indigo-50"
+                className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-4 py-8 text-center transition-colors hover:border-violet-400 hover:bg-violet-50"
               >
                 {selectedFile ? (
                   <>
-                    <p className="text-sm font-medium text-indigo-700">{selectedFile.name}</p>
+                    <p className="text-sm font-medium text-violet-700">{selectedFile.name}</p>
                     <p className="mt-1 text-xs text-gray-500">Click to change</p>
                   </>
                 ) : (
@@ -323,7 +323,7 @@ export default function RightToWorkUpload({
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-violet-500"
               />
               <p className="mt-1 text-xs text-gray-500">
                 Must be a future date. Your employer will be reminded before it expires.
@@ -342,7 +342,7 @@ export default function RightToWorkUpload({
                 type="date"
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
-                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-violet-500"
               />
             </div>
           )}
@@ -358,7 +358,7 @@ export default function RightToWorkUpload({
           <button
             onClick={handleSubmit}
             disabled={uploading}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {uploading ? (
               <>

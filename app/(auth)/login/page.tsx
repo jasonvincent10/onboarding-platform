@@ -55,7 +55,7 @@ export default function LoginPage() {
               autoComplete="email"
               required
               placeholder="sarah@acme.co.uk"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
             />
           </div>
 
@@ -66,7 +66,7 @@ export default function LoginPage() {
                 Password
                 <Link
                   href="/forgot-password"
-                  className="text-xs font-normal text-teal-700 hover:text-teal-800 transition"
+                  className="text-xs font-normal text-violet-700 hover:text-violet-800 transition"
                 >
                   Forgot password?
                 </Link>
@@ -79,7 +79,7 @@ export default function LoginPage() {
               autoComplete="current-password"
               required
               placeholder="••••••••"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
             />
           </div>
 
@@ -87,7 +87,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full mt-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
@@ -96,8 +96,8 @@ export default function LoginPage() {
 
       {/* Sign up link */}
       <p className="mt-5 text-center text-sm text-slate-500">
-        New to OnboardIQ?{' '}
-        <Link href="/sign-up" className="font-medium text-teal-700 hover:text-teal-800 transition">
+        New to Vopria?{' '}
+        <Link href="/sign-up" className="font-medium text-violet-700 hover:text-violet-800 transition">
           Create an account
         </Link>
       </p>
@@ -105,7 +105,7 @@ export default function LoginPage() {
       {/* Wrong login for employees */}
       <p className="mt-2 text-center text-xs text-slate-400">
         Completing your own onboarding?{' '}
-        <Link href="/employee-login" className="font-medium text-teal-700 hover:text-teal-800 transition">
+        <Link href="/employee-login" className="font-medium text-violet-700 hover:text-violet-800 transition">
           Sign in here instead
         </Link>
       </p>

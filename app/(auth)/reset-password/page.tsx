@@ -28,7 +28,7 @@ export default async function ResetPasswordPage() {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
           <Link
             href="/forgot-password"
-            className="block w-full text-center rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-800"
+            className="block w-full text-center rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800"
           >
             Request a new link
           </Link>

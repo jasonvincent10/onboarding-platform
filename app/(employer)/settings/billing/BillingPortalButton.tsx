@@ -30,7 +30,7 @@ export default function BillingPortalButton() {
         type="button"
         onClick={openPortal}
         disabled={busy}
-        className="rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
+        className="rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
       >
         {busy ? 'Opening…' : 'Manage billing'}
       </button>

@@ -2,7 +2,7 @@
 // Task 4.3: DRAFT terms of service. A solicitor MUST review before launch.
 
 export const metadata = {
-  title: "Terms of Service - Onboarder",
+  title: "Terms of Service - Vopria",
 };
 
 function H2({ children }: { children: React.ReactNode }) {
@@ -21,7 +21,7 @@ export default function TermsPage() {
 
       <H2>1. The service</H2>
       <P>
-        Onboarder provides software for UK employers to collect onboarding
+        Vopria provides software for UK employers to collect onboarding
         information and documents from new starters, and for employees to
         maintain a portable onboarding profile. These terms govern use of the
         platform by both employer and employee users.
@@ -48,7 +48,7 @@ export default function TermsPage() {
         Employers remain the data controller for onboarding data they collect
         and are responsible for their legal obligations as an employer,
         including right to work checks under the Immigration, Asylum and
-        Nationality Act 2006. Onboarder provides guidance and a structured
+        Nationality Act 2006. Vopria provides guidance and a structured
         workflow but does not perform right to work verification and does not
         provide a statutory excuse. Employers must review original documents or
         GOV.UK share codes in line with Home Office guidance.
