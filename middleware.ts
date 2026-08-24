@@ -68,10 +68,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(dashboardUrl)
   }
 
-  // If user is not logged in and hits a protected route, send to login
+  // If user is not logged in and hits a protected route, send to login.
+  // Employee routes have their own login page -- sending them to the
+  // employer /login instead would land them on the wrong sign-in form.
   if (!user && !isPublic) {
     const loginUrl = request.nextUrl.clone()
-    loginUrl.pathname = '/login'
+    loginUrl.pathname = pathname.startsWith('/employee') ? '/employee-login' : '/login'
     loginUrl.searchParams.set('redirectedFrom', pathname)
     return NextResponse.redirect(loginUrl)
   }

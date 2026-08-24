@@ -42,6 +42,12 @@ export default function EmployeeNav({ name, email }: EmployeeNavProps) {
         {/* User + sign out */}
         <div className="flex items-center gap-3">
           <Link
+            href="/employee/documents"
+            className="hidden sm:block text-xs font-medium text-violet-700 hover:text-violet-800 transition-colors"
+          >
+            My documents
+          </Link>
+          <Link
             href="/employee/consents"
             className="hidden sm:block text-xs text-slate-400 hover:text-slate-600 transition-colors"
           >

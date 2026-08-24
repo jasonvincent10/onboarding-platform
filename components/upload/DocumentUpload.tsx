@@ -180,7 +180,7 @@ export default function DocumentUpload({
 
   // ─── Already submitted / approved ───────────────────────────────────────────
   if (existingUpload && stage !== 'done') {
-    const isApproved = existingUpload.verificationStatus === 'approved'
+    const isApproved = existingUpload.verificationStatus === 'verified'
     const needsReupload =
       existingUpload.verificationStatus === 'rejected' || reviewerNote
 
@@ -495,9 +495,13 @@ function StatusBadge({ status }: { status: string }) {
       label: 'With employer',
       className: 'bg-amber-100 text-amber-700',
     },
-    approved: {
+    verified: {
       label: 'Approved',
       className: 'bg-emerald-100 text-emerald-700',
+    },
+    expired: {
+      label: 'Expired',
+      className: 'bg-red-100 text-red-700',
     },
     rejected: {
       label: 'Re-upload needed',
