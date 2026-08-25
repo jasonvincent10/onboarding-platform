@@ -180,7 +180,7 @@ export default async function RootPage() {
                 <li className="flex gap-2"><span className="text-fg-accent">-</span> Unlimited new-starter onboardings, no per-hire charge</li>
                 <li className="flex gap-2"><span className="text-fg-accent">-</span> Everything in pay-as-you-go</li>
                 <li className="flex gap-2"><span className="text-fg-accent">-</span> Priority support for your team</li>
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> A plan built around how you actually hire</li>
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> A checklist template built for your sector, tailored to what you tell us you need</li>
               </ul>
               <a
                 href="mailto:jason@vopria.com?subject=Vopria%20Unlimited%20plan"
@@ -200,13 +200,14 @@ export default async function RootPage() {
             Starting a new job?
           </p>
           <h2 className="mt-2 text-xl font-semibold text-fg">
-            Your onboarding profile belongs to you
+            You control exactly what your employer can see
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-[1.6] text-fg-body">
             If your new employer uses Vopria, you will receive an invitation by email.
-            Complete your checklist once and your details are saved to your own profile.
-            Next time you change jobs, most of it is already done, and you choose exactly
-            what each employer can see.
+            You grant access category by category, so you decide exactly what your employer
+            can see. And if it doesn&apos;t work out, your documents and personal data are
+            automatically deleted within 7 days of that outcome — nothing lingers on our
+            servers longer than it needs to.
           </p>
         </div>
       </section>
