@@ -17,7 +17,7 @@ export default function TermsPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="text-3xl font-bold text-fg">Terms of Service</h1>
-      <P>Last updated: [DATE]. This is a draft pending legal review.</P>
+      <P>Last updated: 25 August 2026. This is a draft pending legal review.</P>
 
       <H2>1. The service</H2>
       <P>
@@ -65,11 +65,13 @@ export default function TermsPage() {
 
       <H2>5. Fees</H2>
       <P>
-        Employers receive [3] free onboardings, after which each new onboarding
+        Employers receive 3 free onboardings, after which each new onboarding
         requires a paid credit at the price shown at checkout, plus VAT where
         applicable. Payments are processed by Stripe. Credits are
         non-refundable once the corresponding onboarding has been initiated.
-        Employee accounts are free.
+        Employee accounts are free. Employers with higher hiring volumes may
+        instead agree a custom unlimited plan with us in writing, at a price
+        and term agreed separately from the pay-per-hire pricing above.
       </P>
 
       <H2>6. Acceptable use</H2>
@@ -84,7 +86,7 @@ export default function TermsPage() {
       <P>
         The service is provided on a reasonable-endeavours basis without an
         uptime guarantee during the early access period. Support is provided by
-        email at [EMAIL].
+        email at jason@vopria.com.
       </P>
 
       <H2>8. Liability</H2>

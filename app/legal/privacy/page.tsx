@@ -18,15 +18,13 @@ export default function PrivacyPolicyPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="text-3xl font-bold text-fg">Privacy Policy</h1>
-      <P>Last updated: [DATE]. This is a draft pending legal review.</P>
+      <P>Last updated: 25 August 2026. This is a draft pending legal review.</P>
 
       <H2>1. Who we are</H2>
       <P>
-        Vopria ([LEGAL ENTITY NAME], company number [NUMBER], registered at
-        [ADDRESS]) provides an employee onboarding platform for UK employers and
-        their new starters. We are registered with the Information
-        Commissioner&apos;s Office (ICO) under registration number [ICO NUMBER].
-        Contact: [EMAIL].
+        Vopria (Vopria Ltd, registered at [ADDRESS]) provides an employee
+        onboarding platform for UK employers and their new starters.
+        Contact: jason@vopria.com.
       </P>
 
       <H2>2. Controller and processor roles</H2>
@@ -113,7 +111,7 @@ export default function PrivacyPolicyPage() {
         copy of your data from your profile at any time), rectification,
         erasure, restriction, portability and objection, and the right to
         withdraw consent. To exercise any right, use the in-product tools or
-        contact [EMAIL]. You may complain to the ICO at ico.org.uk.
+        contact jason@vopria.com. You may complain to the ICO at ico.org.uk.
       </P>
 
       <H2>10. Cookies</H2>

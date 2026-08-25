@@ -19,7 +19,7 @@ export default function DpaPage() {
     <main className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="text-3xl font-bold text-fg">Data Processing Agreement</h1>
       <P>
-        Last updated: [DATE]. Draft pending legal review. This DPA forms part
+        Last updated: 25 August 2026. Draft pending legal review. This DPA forms part
         of the Terms of Service between Vopria (the Processor) and the
         employer customer (the Controller) and applies to onboarding personal
         data processed on the Controller&apos;s behalf.
