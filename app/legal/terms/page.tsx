@@ -90,7 +90,7 @@ export default function TermsPage() {
       <P>
         The service is provided on a reasonable-endeavours basis without an
         uptime guarantee during the early access period. Support is provided by
-        email at jason@vopria.com.
+        email at info@vopria.com.
       </P>
 
       <H2>8. Liability</H2>

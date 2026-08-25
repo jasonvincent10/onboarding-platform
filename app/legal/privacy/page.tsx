@@ -24,7 +24,7 @@ export default function PrivacyPolicyPage() {
       <P>
         Vopria (Vopria Ltd, registered at [ADDRESS]) provides an employee
         onboarding platform for UK employers and their new starters.
-        Contact: jason@vopria.com.
+        Contact: info@vopria.com.
       </P>
 
       <H2>2. Controller and processor roles</H2>
@@ -123,7 +123,7 @@ export default function PrivacyPolicyPage() {
         copy of your data from your profile at any time), rectification,
         erasure, restriction, portability and objection, and the right to
         withdraw consent. To exercise any right, use the in-product tools or
-        contact jason@vopria.com. You may complain to the ICO at ico.org.uk.
+        contact info@vopria.com. You may complain to the ICO at ico.org.uk.
       </P>
 
       <H2>10. Cookies</H2>
