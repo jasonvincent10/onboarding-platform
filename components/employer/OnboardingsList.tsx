@@ -15,7 +15,8 @@ function statusBadge(status: string) {
     invited: { label: 'Invited', className: 'bg-status-inactive/15 text-status-inactive' },
     in_progress: { label: 'In progress', className: 'bg-status-inactive/15 text-status-inactive' },
     submitted: { label: 'Submitted', className: 'bg-status-pending/15 text-status-pending' },
-    complete: { label: 'Complete', className: 'bg-status-approved/15 text-status-approved' },
+    complete: { label: 'Confirmed', className: 'bg-status-approved/15 text-status-approved' },
+    rejected: { label: 'Rejected', className: 'bg-status-rejected/15 text-status-rejected' },
   }
   const s = map[status] ?? { label: status, className: 'bg-ink-inset text-fg-body' }
   return (
@@ -60,7 +61,7 @@ export default function OnboardingsList({ items }: { items: OnboardingInstance[]
         <span />
       </div>
       {items.map((o) => (
-        <Link key={o.id} href={`/dashboard/onboarding/${o.id}`} className="block bg-ink-raised rounded-xl border border-line px-4 py-4 hover:border-brand/40 hover:shadow-sm transition-all sm:rounded-none sm:border-0 sm:border-b sm:border-line sm:last:border-0 sm:px-6 sm:hover:bg-stone-50 sm:hover:shadow-none sm:hover:border-line">
+        <Link key={o.id} href={`/dashboard/onboarding/${o.id}`} className="block bg-ink-raised rounded-xl border border-line px-4 py-4 hover:border-brand/40 hover:shadow-sm transition-all sm:rounded-none sm:border-0 sm:border-b sm:border-line sm:last:border-0 sm:px-6 sm:hover:bg-ink-raised-hover sm:hover:shadow-none sm:hover:border-line">
           <div className="flex items-start justify-between gap-3 sm:contents">
             <div className="min-w-0 flex-1 sm:contents">
               <div className="min-w-0 hidden sm:block">

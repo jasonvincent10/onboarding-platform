@@ -94,6 +94,7 @@ export default async function DashboardPage() {
     .from('onboarding_instances')
     .select('id, invitee_name, role_title, start_date, status, readiness_pct, invitee_email')
     .eq('employer_id', employerId)
+    .is('data_purged_at', null)
     .order('start_date', { ascending: true })
     .limit(20)
 

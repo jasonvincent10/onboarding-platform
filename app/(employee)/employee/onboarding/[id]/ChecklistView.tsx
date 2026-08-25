@@ -146,7 +146,7 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
   }, [welcomed])
 
   const pct = onboarding.readinessPct
-  const isComplete = onboarding.status === 'completed'
+  const isComplete = onboarding.status === 'complete'
 
   // Status breakdown
   const counts = items.reduce(
@@ -167,6 +167,27 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
   const sorted = [...items].sort(
     (a, b) => (sortOrder[a.status] ?? 5) - (sortOrder[b.status] ?? 5)
   )
+
+  if (onboarding.status === 'rejected') {
+    return (
+      <div className="space-y-5">
+        <div className="bg-ink-raised rounded-2xl border border-line p-5">
+          <p className="text-xs font-medium text-fg-accent uppercase tracking-wide">
+            {onboarding.companyName}
+          </p>
+          <h1 className="text-lg font-semibold text-fg mt-0.5">{onboarding.roleTitle}</h1>
+        </div>
+        <div className="bg-status-rejected/10 border border-status-rejected/30 rounded-xl p-5">
+          <p className="text-sm font-semibold text-status-rejected">This application wasn&apos;t successful</p>
+          <p className="text-sm text-fg-body mt-1">
+            {onboarding.companyName} has let us know this application won&apos;t be moving forward.
+            Your documents and personal data for this application will be automatically
+            removed within 7 days — there&apos;s nothing further for you to do.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-5">

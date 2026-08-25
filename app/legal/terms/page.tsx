@@ -23,8 +23,8 @@ export default function TermsPage() {
       <P>
         Vopria provides software for UK employers to collect onboarding
         information and documents from new starters, and for employees to
-        maintain a portable onboarding profile. These terms govern use of the
-        platform by both employer and employee users.
+        track and complete their onboarding checklist. These terms govern use
+        of the platform by both employer and employee users.
       </P>
 
       <H2>2. Accounts</H2>
@@ -60,7 +60,11 @@ export default function TermsPage() {
         with an employer requires the employee&apos;s explicit consent per data
         category, which may be withdrawn at any time. Withdrawal does not
         affect data an employer has already lawfully exported for its own
-        records.
+        records. If an employer indicates an applicant is not proceeding, that
+        applicant&apos;s documents and sensitive profile data are automatically
+        deleted 7 days later — see the Privacy Policy for full detail. This
+        does not apply once an applicant is confirmed as a hire, whose data is
+        retained per the employer&apos;s statutory obligations.
       </P>
 
       <H2>5. Fees</H2>

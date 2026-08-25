@@ -2,7 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { hasPortableData } from '@/lib/actions/portability-actions'
 
 // ============================================================================
 // SECURITY MODEL
@@ -117,24 +116,10 @@ export async function acceptInvitation(
     return { error: 'update_failed' }
   }
 
-  // Decide where to send the employee next.
-  // - Returning employee with portable data -> /review (consent + confirm in one)
-  // - Everyone else (new profile, or returning with no usable data) -> /consent gate
-  // The checklist itself also enforces a consent guard as a safety net.
-  let redirectTo = `/employee/onboarding/${onboardingId}/consent`
-
-  if (!isNewProfile) {
-    try {
-      const hasData = await hasPortableData(user.id)
-      if (hasData) {
-        redirectTo = `/employee/onboarding/${onboardingId}/review`
-      }
-    } catch (err) {
-      // If the portability check fails, fall back to the consent gate.
-      // Safer to re-ask for consent than to skip it on a transient error.
-      console.error('hasPortableData check failed:', err)
-    }
-  }
+  // Every employee goes to the consent gate before their checklist -- no
+  // data is carried forward from a previous employer's onboarding. The
+  // checklist itself also enforces a consent guard as a safety net.
+  const redirectTo = `/employee/onboarding/${onboardingId}/consent`
 
   // Log the invitation acceptance event
   await adminClient.from('audit_log').insert({

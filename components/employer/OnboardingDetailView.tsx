@@ -4,6 +4,7 @@ import { useState } from 'react'
 import {
   approveChecklistItem,
   requestReupload,
+  rejectCandidate,
   getSignedDocumentUrl,
   getDecryptedFormData,
 } from '@/app/(employer)/dashboard/onboarding/[id]/actions'
@@ -27,6 +28,8 @@ interface Props {
   onboardingId: string
   items: ChecklistItem[]
   employeeName: string
+  status: string
+  rejectedAt: string | null
 }
 
 const STATUS_CONFIG: Record<string, { label: string; colour: string; dot: string }> = {
@@ -39,8 +42,13 @@ const STATUS_CONFIG: Record<string, { label: string; colour: string; dot: string
 
 const SORT_ORDER = ['submitted', 'overdue', 'in_progress', 'not_started', 'approved']
 
-export default function OnboardingDetailView({ onboardingId, items: initialItems, employeeName }: Props) {
+export default function OnboardingDetailView({ onboardingId, items: initialItems, employeeName, status, rejectedAt }: Props) {
   const [items] = useState(initialItems)
+
+  // Reject state
+  const [confirmingReject, setConfirmingReject] = useState(false)
+  const [rejecting, setRejecting] = useState(false)
+  const [rejectError, setRejectError] = useState('')
 
   // Viewing state
   const [viewingItem, setViewingItem] = useState<string | null>(null)
@@ -123,6 +131,18 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
     }
   }
 
+  async function handleReject() {
+    setRejecting(true)
+    setRejectError('')
+    const result = await rejectCandidate(onboardingId)
+    setRejecting(false)
+    if (result.error) {
+      setRejectError(result.error)
+    } else {
+      window.location.reload()
+    }
+  }
+
   function openReuploadModal(item: ChecklistItem) {
     setReuploadModal({ itemId: item.id, itemName: item.item_name })
     setReuploadNote('')
@@ -148,8 +168,59 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
     }
   }
 
+  if (status === 'rejected') {
+    const purgeDate = rejectedAt
+      ? new Date(new Date(rejectedAt).getTime() + 7 * 24 * 60 * 60 * 1000)
+      : null
+    return (
+      <div className="bg-status-rejected/10 border border-status-rejected/30 rounded-xl p-5">
+        <p className="text-sm font-semibold text-status-rejected">Candidate rejected</p>
+        <p className="text-sm text-fg-body mt-1">
+          {employeeName}&apos;s documents and personal data will be automatically removed
+          {purgeDate
+            ? ` on ${purgeDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
+            : ' 7 days after rejection'}.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div>
+      {/* Reject candidate */}
+      {status !== 'complete' && (
+        <div className="mb-6 flex items-center justify-end gap-3">
+          {confirmingReject ? (
+            <span className="flex items-center gap-2 text-sm">
+              <span className="text-fg-muted">
+                Reject {employeeName}? Their data will be removed automatically 7 days later.
+              </span>
+              <button
+                onClick={handleReject}
+                disabled={rejecting}
+                className="font-medium text-status-rejected hover:opacity-80 disabled:opacity-50"
+              >
+                {rejecting ? 'Rejecting…' : 'Yes, reject'}
+              </button>
+              <button
+                onClick={() => setConfirmingReject(false)}
+                className="font-medium text-fg-muted hover:text-fg-body"
+              >
+                Cancel
+              </button>
+            </span>
+          ) : (
+            <button
+              onClick={() => setConfirmingReject(true)}
+              className="text-sm font-medium text-fg-muted hover:text-status-rejected"
+            >
+              Reject candidate
+            </button>
+          )}
+        </div>
+      )}
+      {rejectError && <p className="mb-3 text-sm text-status-rejected text-right">{rejectError}</p>}
+
       {/* Progress summary card */}
       <div className="bg-ink-raised rounded-xl border border-line p-5 mb-6">
         <div className="flex items-center justify-between mb-3">

@@ -36,9 +36,8 @@ export default function PrivacyPolicyPage() {
         Processing Agreement.
       </P>
       <P>
-        For your portable employee profile (the account and data you keep after
-        an onboarding completes, which you may re-use with future employers),
-        and for employer account data, Vopria is the data controller.
+        For your basic account details (login credentials, name, email) and for
+        employer account data, Vopria is the data controller.
       </P>
 
       <H2>3. What we collect</H2>
@@ -55,12 +54,12 @@ export default function PrivacyPolicyPage() {
       <H2>4. Why we process it (lawful bases)</H2>
       <P>
         Performance of a contract: providing the onboarding service to
-        employers and the profile service to employees. Legal obligation:
+        employers and the account service to employees. Legal obligation:
         employers use the platform to meet right to work and payroll
-        obligations. Consent: sharing data from your portable profile with a
-        new employer only happens with your explicit, granular, recorded
-        consent, which you can withdraw at any time. Legitimate interests:
-        service security, fraud prevention and product improvement.
+        obligations. Consent: an employer only gains access to a data category
+        with your explicit, granular, recorded consent, which you can withdraw
+        at any time. Legitimate interests: service security, fraud prevention
+        and product improvement.
       </P>
 
       <H2>5. How we protect it</H2>
@@ -91,18 +90,31 @@ export default function PrivacyPolicyPage() {
 
       <H2>8. How long we keep it</H2>
       <P>
-        Employer access to your onboarding documents continues for as long as
-        you have granted consent for that data category to that employer,
-        regardless of whether the onboarding itself is marked complete —
-        access is controlled by your consent, not by onboarding status. You
-        can withdraw consent for any category at any time from your account,
-        which ends the employer&apos;s ability to view that data going
-        forward. Your portable profile persists under your control until you
-        delete your account. Employers are responsible for their own
-        statutory retention obligations for records they have already
-        exported. Audit logs are kept for [PERIOD — suggest 6 years, aligned
-        with standard UK employment record-keeping periods; confirm] for
-        security and compliance.
+        <strong>If you are not confirmed as a hire</strong> (your application is
+        withdrawn or the employer indicates it is not proceeding), your
+        uploaded documents and sensitive profile data (National Insurance
+        number, bank details, address, date of birth, right to work status,
+        emergency contacts) are automatically and permanently deleted 7 days
+        later. This happens automatically — you do not need to request it.
+      </P>
+      <P>
+        <strong>If you are confirmed as a hire</strong>, your data is not
+        subject to the 7-day deletion above. Right to work evidence in
+        particular must be retained by the employer for the duration of your
+        employment plus 2 years afterwards, under UK Home Office rules — we
+        keep this data available to the employer for that period. Employer
+        access to any category continues only for as long as you have granted
+        consent for it; withdrawing consent ends the employer&apos;s ability to
+        view that data going forward, but does not itself trigger deletion,
+        since the employer may have a separate statutory obligation to retain
+        it in their own records.
+      </P>
+      <P>
+        Employers are responsible for their own statutory retention
+        obligations for records they have already exported. Audit logs
+        (a record that an action took place, not the underlying personal
+        data) are retained for compliance purposes even after the data they
+        relate to has been deleted.
       </P>
 
       <H2>9. Your rights</H2>

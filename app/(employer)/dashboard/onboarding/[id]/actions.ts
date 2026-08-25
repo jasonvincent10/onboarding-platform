@@ -113,7 +113,7 @@ export async function getOnboardingForReview(onboardingId: string) {
 
   const { data: instance, error: instanceError } = await supabase
     .from('onboarding_instances')
-    .select('id, invitee_name, invitee_email, role_title, start_date, status, readiness_pct, employee_id')
+    .select('id, invitee_name, invitee_email, role_title, start_date, status, readiness_pct, employee_id, rejected_at')
     .eq('id', onboardingId)
     .eq('employer_id', member.employer_id)
     .single()
@@ -338,6 +338,57 @@ export async function approveChecklistItem(checklistItemId: string, onboardingId
   })
 
   revalidatePath(`/dashboard/onboarding/${onboardingId}`)
+  return { success: true }
+}
+
+// --- Reject a candidate (whole onboarding) -------------------------------------
+//
+// Rejecting stops the onboarding in its tracks -- the employee sees a clear
+// "not successful" state and can no longer submit anything. 7 days later, a
+// scheduled job purges their documents and sensitive profile fields (see
+// app/api/cron/check-overdue/route.ts). Confirmed/complete onboardings can't
+// be rejected retroactively -- that path is for candidates still in progress.
+
+export async function rejectCandidate(onboardingId: string) {
+  const ctx = await getVerifiedEmployerContext(onboardingId)
+  if (!ctx) return { error: 'Not authorised' }
+
+  const adminClient = createAdminClient()
+
+  const { data: updated, error } = await adminClient
+    .from('onboarding_instances')
+    .update({
+      status: 'rejected',
+      rejected_at: new Date().toISOString(),
+    })
+    .eq('id', onboardingId)
+    .eq('employer_id', ctx.employerId)
+    .not('status', 'in', '("complete","rejected")')
+    .select('id')
+
+  if (error) {
+    console.error('Reject candidate error:', error)
+    return { error: error.message }
+  }
+  if (!updated || updated.length === 0) {
+    return { error: 'This candidate cannot be rejected — they may already be confirmed or rejected.' }
+  }
+
+  const supabase = await createClient()
+  await supabase.from('audit_log').insert({
+    actor_id: ctx.userId,
+    actor_type: 'employer',
+    action: 'candidate_rejected',
+    resource_type: 'onboarding_instance',
+    resource_id: onboardingId,
+    employer_id: ctx.employerId,
+    employee_id: ctx.employeeId,
+    onboarding_id: onboardingId,
+  })
+
+  revalidatePath(`/dashboard/onboarding/${onboardingId}`)
+  revalidatePath('/dashboard')
+  revalidatePath('/onboardings')
   return { success: true }
 }
 

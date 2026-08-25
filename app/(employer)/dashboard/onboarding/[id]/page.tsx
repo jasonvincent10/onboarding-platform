@@ -49,6 +49,8 @@ export default async function OnboardingDetailPage({ params }: Props) {
           onboardingId={id}
           items={result.items}
           employeeName={result.instance.invitee_name}
+          status={result.instance.status}
+          rejectedAt={result.instance.rejected_at}
         />
 
       </div>

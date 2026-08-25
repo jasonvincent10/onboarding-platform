@@ -148,7 +148,7 @@ export default async function ItemPage({ params }: Props) {
           {item.was_pre_populated && (
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-brand/30 bg-brand/10 px-3 py-1 text-xs font-medium text-fg-accent">
               <SparkleIcon className="h-3.5 w-3.5" />
-              From your portable profile
+              Pre-filled from your profile
             </div>
           )}
         </div>

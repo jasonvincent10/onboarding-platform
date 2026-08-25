@@ -44,8 +44,10 @@ export default function DpaPage() {
         and with obligations under UK GDPR Articles 32 to 36; notify the
         Controller without undue delay after becoming aware of a personal data
         breach; and at the end of the relationship delete or return the
-        personal data as described in the Privacy Policy, subject to the
-        employee&apos;s independent rights over their own portable profile.
+        personal data as described in the Privacy Policy. Where an applicant
+        is not confirmed as a hire, the Processor deletes the relevant
+        personal data automatically 7 days after the Controller records that
+        outcome, independent of any other instruction from the Controller.
       </P>
 
       <H2>3. Sub-processors</H2>
