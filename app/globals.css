@@ -5,6 +5,33 @@
 @layer base {
   :root {
     --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+    /* Vopria ink-navy palette. Mirrors the colours in tailwind.config.ts —
+       utility classes (bg-ink, text-fg-body, etc.) are the primary way
+       these get used; the custom properties exist for the one non-utility
+       case (the hero radial wash) and as the source of truth for the table. */
+    --bg-base: #0F1836;
+    --bg-raised: #1A2447;
+    --bg-raised-hover: #212D57;
+    --bg-inset: #0B1229;
+
+    --border: #2C3862;
+    --border-strong: #3B4977;
+
+    --text-primary: #F5F3FF;
+    --text-body: #B6BDD4;
+    --text-muted: #7E86A3;
+    --text-accent: #A78BFA;
+
+    --accent: #8B5CF6;
+    --accent-hover: #7C4DEF;
+    --accent-deep: #6D28D9;
+    --on-accent: #FFFFFF;
+
+    --status-approved: #5DCAA5;
+    --status-pending: #FAC775;
+    --status-inactive: #7E86A3;
+    --status-rejected: #F0828E;
   }
 
   html {
@@ -12,9 +39,14 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  body {
+    background-color: var(--bg-base);
+    color: var(--text-body);
+  }
+
   /* Smooth focus rings everywhere */
   *:focus-visible {
-    outline: 2px solid #7c3aed;
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
@@ -28,5 +60,15 @@
   /* Tabular numbers for stats and readiness percentages */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Single radial wash for hero sections only — per rebrand spec, no mesh,
+     no second blob, no animation. */
+  .hero-wash {
+    background-image: radial-gradient(
+      ellipse 80% 70% at 15% 0%,
+      rgba(109, 40, 217, 0.34) 0%,
+      transparent 60%
+    );
   }
 }

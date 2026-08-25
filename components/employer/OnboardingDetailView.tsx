@@ -30,11 +30,11 @@ interface Props {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; colour: string; dot: string }> = {
-  approved:    { label: 'Approved',        colour: 'bg-green-100 text-green-800',   dot: 'bg-green-500' },
-  submitted:   { label: 'Awaiting review', colour: 'bg-blue-100 text-blue-800',     dot: 'bg-blue-500' },
-  in_progress: { label: 'In progress',     colour: 'bg-yellow-100 text-yellow-800', dot: 'bg-yellow-500' },
-  not_started: { label: 'Not started',     colour: 'bg-gray-100 text-gray-600',     dot: 'bg-gray-400' },
-  overdue:     { label: 'Overdue',         colour: 'bg-red-100 text-red-800',       dot: 'bg-red-500' },
+  approved:    { label: 'Approved',        colour: 'bg-status-approved/15 text-status-approved',   dot: 'bg-status-approved' },
+  submitted:   { label: 'Awaiting review', colour: 'bg-status-pending/15 text-status-pending',     dot: 'bg-status-pending' },
+  in_progress: { label: 'In progress',     colour: 'bg-status-inactive/15 text-status-inactive', dot: 'bg-status-inactive' },
+  not_started: { label: 'Not started',     colour: 'bg-status-inactive/15 text-status-inactive',     dot: 'bg-status-inactive' },
+  overdue:     { label: 'Overdue',         colour: 'bg-status-rejected/15 text-status-rejected',       dot: 'bg-status-rejected' },
 }
 
 const SORT_ORDER = ['submitted', 'overdue', 'in_progress', 'not_started', 'approved']
@@ -151,27 +151,27 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
   return (
     <div>
       {/* Progress summary card */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <div className="bg-ink-raised rounded-xl border border-line p-5 mb-6">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-medium text-gray-700">Day-one readiness</span>
-          <span className="text-xl font-bold text-gray-900 tabular-nums">{readinessPct}%</span>
+          <span className="text-sm font-medium text-fg-body">Day-one readiness</span>
+          <span className="text-xl font-bold text-fg tabular-nums">{readinessPct}%</span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-2.5">
+        <div className="w-full bg-ink-inset rounded-full h-2.5">
           <div
             className="h-2.5 rounded-full transition-all duration-500"
             style={{
               width: `${readinessPct}%`,
               backgroundColor:
-                readinessPct === 100 ? '#22c55e'
-                : readinessPct >= 60 ? '#f59e0b'
-                : '#6366f1',
+                readinessPct === 100 ? 'var(--status-approved)'
+                : readinessPct >= 60 ? 'var(--status-pending)'
+                : 'var(--accent)',
             }}
           />
         </div>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-fg-muted mt-2">
           {approvedCount} of {items.length} items approved
           {submittedCount > 0 && (
-            <span className="ml-2 text-blue-600 font-medium">
+            <span className="ml-2 text-status-pending font-medium">
               · {submittedCount} awaiting your review
             </span>
           )}
@@ -188,21 +188,21 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
           return (
             <div
               key={item.id}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden"
+              className="bg-ink-raised rounded-xl border border-line overflow-hidden"
             >
               {/* Item header row */}
               <div className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-3 min-w-0">
                   <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${cfg.dot}`} />
                   <div className="min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{item.item_name}</p>
+                    <p className="font-medium text-fg truncate">{item.item_name}</p>
                     {item.deadline && (
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-fg-muted mt-0.5">
                         Due {new Date(item.deadline).toLocaleDateString('en-GB')}
                       </p>
                     )}
                     {item.reviewer_notes && item.status === 'not_started' && (
-                      <p className="text-xs text-amber-600 mt-1">
+                      <p className="text-xs text-status-pending mt-1">
                         Re-upload requested: {item.reviewer_notes}
                       </p>
                     )}
@@ -216,7 +216,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                   {canReview && (
                     <button
                       onClick={() => isViewing ? handleCloseView() : handleViewItem(item)}
-                      className="text-sm text-violet-600 hover:text-violet-800 font-medium"
+                      className="text-sm text-fg-accent hover:text-fg font-medium"
                     >
                       {isViewing ? 'Close' : 'Review →'}
                     </button>
@@ -226,32 +226,32 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
 
               {/* Expanded review panel */}
               {isViewing && (
-                <div className="border-t border-gray-100 bg-gray-50 p-4">
+                <div className="border-t border-line bg-ink-inset p-4">
 
                   {viewLoading && (
-                    <p className="text-sm text-gray-500 py-2">Loading submission...</p>
+                    <p className="text-sm text-fg-muted py-2">Loading submission...</p>
                   )}
 
                   {viewError && !viewLoading && (
-                    <p className="text-sm text-red-600 py-2">{viewError}</p>
+                    <p className="text-sm text-status-rejected py-2">{viewError}</p>
                   )}
 
                   {/* GOV.UK share code — not a real file, verify online */}
                   {shareCode && !viewLoading && (
-                    <div className="mb-4 rounded-lg border border-gray-200 bg-white p-3">
-                      <p className="text-xs text-gray-500">GOV.UK share code</p>
-                      <p className="mt-1 font-mono text-sm tracking-widest text-gray-900">
+                    <div className="mb-4 rounded-lg border border-line bg-ink-raised p-3">
+                      <p className="text-xs text-fg-muted">GOV.UK share code</p>
+                      <p className="mt-1 font-mono text-sm tracking-widest text-fg">
                         {shareCode}
                       </p>
                       <a
                         href="https://www.gov.uk/view-right-to-work"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-2 inline-block text-sm font-medium text-violet-600 hover:text-violet-800 underline underline-offset-2"
+                        className="mt-2 inline-block text-sm font-medium text-fg-accent hover:text-fg underline underline-offset-2"
                       >
                         Verify at gov.uk/view-right-to-work
                       </a>
-                      <p className="mt-1 text-xs text-gray-400">
+                      <p className="mt-1 text-xs text-fg-muted">
                         You&apos;ll need the employee&apos;s date of birth to complete the check.
                       </p>
                     </div>
@@ -264,7 +264,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                         href={documentUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm text-violet-600 hover:text-violet-800 font-medium"
+                        className="inline-flex items-center gap-2 text-sm text-fg-accent hover:text-fg font-medium"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -272,17 +272,17 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                         </svg>
                         Open document in new tab
                       </a>
-                      <p className="text-xs text-gray-400 mt-1">Link expires in 60 minutes</p>
+                      <p className="text-xs text-fg-muted mt-1">Link expires in 60 minutes</p>
                     </div>
                   )}
 
                   {/* Form / acknowledgement data */}
                   {formData && !viewLoading && (
-                    <div className="mb-4 bg-white rounded-lg border border-gray-200 p-3 space-y-2">
+                    <div className="mb-4 bg-ink-raised rounded-lg border border-line p-3 space-y-2">
                       {Object.entries(formData).map(([label, value]) => (
                         <div key={label} className="flex gap-3 text-sm">
-                          <span className="text-gray-500 w-36 flex-shrink-0">{label}</span>
-                          <span className="text-gray-900 font-mono">{value}</span>
+                          <span className="text-fg-muted w-36 flex-shrink-0">{label}</span>
+                          <span className="text-fg font-mono">{value}</span>
                         </div>
                       ))}
                     </div>
@@ -294,7 +294,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                       <button
                         onClick={() => handleApprove(item.id)}
                         disabled={approvingId === item.id}
-                        className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600 disabled:opacity-50 transition-colors"
+                        className="inline-flex items-center gap-2 rounded-lg bg-status-approved px-4 py-2 text-sm font-medium text-white hover:bg-status-approved disabled:opacity-50 transition-colors"
                       >
                         {approvingId === item.id ? (
                           <>
@@ -308,7 +308,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
                       </button>
                       <button
                         onClick={() => openReuploadModal(item)}
-                        className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600 transition-colors"
+                        className="rounded-lg bg-status-pending px-4 py-2 text-sm font-medium text-white hover:bg-status-pending transition-colors"
                       >
                         Request re-upload
                       </button>
@@ -327,11 +327,11 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={e => { if (e.target === e.currentTarget) setReuploadModal(null) }}
         >
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">
+          <div className="bg-ink-raised rounded-2xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold text-fg mb-1">
               Request re-upload
             </h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-fg-muted mb-4">
               Tell <strong>{employeeName}</strong> what needs to be corrected for{' '}
               <strong>{reuploadModal.itemName}</strong>.
             </p>
@@ -341,15 +341,15 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
               onChange={e => { setReuploadNote(e.target.value); setReuploadError('') }}
               placeholder="e.g. The document is blurry and the expiry date cannot be read. Please re-upload a clear photo or scan."
               rows={4}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
+              className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand resize-none"
               autoFocus
             />
 
             {reuploadError && (
-              <p className="text-xs text-red-600 mt-1">{reuploadError}</p>
+              <p className="text-xs text-status-rejected mt-1">{reuploadError}</p>
             )}
 
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-fg-muted mt-2">
               The employee will see this note and can then re-submit.
             </p>
 
@@ -357,7 +357,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
               <button
                 onClick={handleReuploadSubmit}
                 disabled={reuploadLoading}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-amber-500 py-2 text-sm font-medium text-white hover:bg-amber-600 disabled:opacity-50 transition-colors"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-status-pending py-2 text-sm font-medium text-white hover:bg-status-pending disabled:opacity-50 transition-colors"
               >
                 {reuploadLoading ? (
                   <>
@@ -371,7 +371,7 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
               </button>
               <button
                 onClick={() => setReuploadModal(null)}
-                className="flex-1 py-2 rounded-lg text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-50"
+                className="flex-1 py-2 rounded-lg text-sm font-medium border border-line-strong text-fg-body hover:bg-ink-inset"
               >
                 Cancel
               </button>

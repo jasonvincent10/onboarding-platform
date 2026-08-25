@@ -25,22 +25,22 @@ function ForgotPasswordForm() {
     return (
       <div>
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mb-1.5">
+          <h1 className="text-2xl font-semibold text-fg tracking-tight mb-1.5">
             Check your email
           </h1>
-          <p className="text-[15px] text-slate-500">
+          <p className="text-[15px] text-fg-muted">
             If an account exists for that address, we&apos;ve sent a link to reset your
             password.
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
-          <p className="text-sm text-slate-600 leading-relaxed">
+        <div className="bg-ink-raised rounded-2xl border border-line shadow-sm p-7">
+          <p className="text-sm text-fg-body leading-relaxed">
             The link expires in 1 hour and works best opened in the same browser you
             requested it from. Didn&apos;t get it? Check your spam folder, or{' '}
             <button
               onClick={() => setState(null)}
-              className="font-medium text-violet-700 hover:text-violet-800 transition"
+              className="font-medium text-fg-accent hover:text-fg transition"
             >
               try again
             </button>
@@ -48,8 +48,8 @@ function ForgotPasswordForm() {
           </p>
         </div>
 
-        <p className="mt-5 text-center text-sm text-slate-500">
-          <Link href="/login" className="font-medium text-violet-700 hover:text-violet-800 transition">
+        <p className="mt-5 text-center text-sm text-fg-muted">
+          <Link href="/login" className="font-medium text-fg-accent hover:text-fg transition">
             Back to sign in
           </Link>
         </p>
@@ -60,32 +60,32 @@ function ForgotPasswordForm() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mb-1.5">
+        <h1 className="text-2xl font-semibold text-fg tracking-tight mb-1.5">
           Reset your password
         </h1>
-        <p className="text-[15px] text-slate-500">
+        <p className="text-[15px] text-fg-muted">
           Enter your email and we&apos;ll send you a link to reset it.
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+      <div className="bg-ink-raised rounded-2xl border border-line shadow-sm p-7">
         <form onSubmit={handleSubmit} className="space-y-4">
           {linkExpired && !state?.error && (
-            <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3">
-              <p className="text-sm text-amber-700">
+            <div className="rounded-lg bg-status-pending/10 border border-status-pending/30 px-4 py-3">
+              <p className="text-sm text-status-pending">
                 That reset link is invalid or has expired. Request a new one below.
               </p>
             </div>
           )}
 
           {state?.error && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3">
-              <p className="text-sm text-red-700">{state.error}</p>
+            <div className="rounded-lg bg-status-rejected/10 border border-status-rejected/30 px-4 py-3">
+              <p className="text-sm text-status-rejected">{state.error}</p>
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label htmlFor="email" className="block text-sm font-medium text-fg-body mb-1.5">
               Email address
             </label>
             <input
@@ -95,22 +95,22 @@ function ForgotPasswordForm() {
               autoComplete="email"
               required
               placeholder="sarah@acme.co.uk"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
           </div>
 
           <button
             type="submit"
             disabled={isPending}
-            className="w-full mt-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full mt-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-ink disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isPending ? 'Sending…' : 'Send reset link'}
           </button>
         </form>
       </div>
 
-      <p className="mt-5 text-center text-sm text-slate-500">
-        <Link href="/login" className="font-medium text-violet-700 hover:text-violet-800 transition">
+      <p className="mt-5 text-center text-sm text-fg-muted">
+        <Link href="/login" className="font-medium text-fg-accent hover:text-fg transition">
           Back to sign in
         </Link>
       </p>
@@ -120,7 +120,7 @@ function ForgotPasswordForm() {
 
 export default function ForgotPasswordPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-slate-500">Loading…</div>}>
+    <Suspense fallback={<div className="p-8 text-fg-muted">Loading…</div>}>
       <ForgotPasswordForm />
     </Suspense>
   )

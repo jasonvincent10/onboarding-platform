@@ -27,28 +27,28 @@ export default function SignUpPage() {
     <div>
       {/* Heading */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mb-1.5">
+        <h1 className="text-2xl font-semibold text-fg tracking-tight mb-1.5">
           Set up your account
         </h1>
-        <p className="text-[15px] text-slate-500">
+        <p className="text-[15px] text-fg-muted">
           Start onboarding your team the right way.{' '}
-          <span className="text-slate-700 font-medium">First 3 hires are free.</span>
+          <span className="text-fg-body font-medium">First 3 hires are free.</span>
         </p>
       </div>
 
       {/* Form card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+      <div className="bg-ink-raised rounded-2xl border border-line shadow-sm p-7">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Error banner */}
           {error && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3">
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="rounded-lg bg-status-rejected/10 border border-status-rejected/30 px-4 py-3">
+              <p className="text-sm text-status-rejected">{error}</p>
             </div>
           )}
 
           {/* Full name */}
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label htmlFor="fullName" className="block text-sm font-medium text-fg-body mb-1.5">
               Your name
             </label>
             <input
@@ -58,13 +58,13 @@ export default function SignUpPage() {
               autoComplete="name"
               required
               placeholder="Sarah Johnson"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
           </div>
 
           {/* Company name */}
           <div>
-            <label htmlFor="companyName" className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label htmlFor="companyName" className="block text-sm font-medium text-fg-body mb-1.5">
               Company name
             </label>
             <input
@@ -74,13 +74,13 @@ export default function SignUpPage() {
               autoComplete="organization"
               required
               placeholder="Acme Ltd"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label htmlFor="email" className="block text-sm font-medium text-fg-body mb-1.5">
               Work email
             </label>
             <input
@@ -90,13 +90,13 @@ export default function SignUpPage() {
               autoComplete="email"
               required
               placeholder="sarah@acme.co.uk"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label htmlFor="password" className="block text-sm font-medium text-fg-body mb-1.5">
               Password
             </label>
             <input
@@ -107,7 +107,7 @@ export default function SignUpPage() {
               required
               minLength={8}
               placeholder="At least 8 characters"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
           </div>
 
@@ -115,20 +115,20 @@ export default function SignUpPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full mt-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-ink disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? 'Creating account…' : 'Create account'}
           </button>
         </form>
 
         {/* Legal small print */}
-        <p className="mt-4 text-xs text-center text-slate-400 leading-relaxed">
+        <p className="mt-4 text-xs text-center text-fg-muted leading-relaxed">
           By creating an account you agree to our{' '}
-          <Link href="/legal/terms" className="underline hover:text-slate-600 transition">
+          <Link href="/legal/terms" className="underline hover:text-fg-body transition">
             Terms
           </Link>{' '}
           and{' '}
-          <Link href="/legal/privacy" className="underline hover:text-slate-600 transition">
+          <Link href="/legal/privacy" className="underline hover:text-fg-body transition">
             Privacy Policy
           </Link>
           .
@@ -136,9 +136,9 @@ export default function SignUpPage() {
       </div>
 
       {/* Sign in link */}
-      <p className="mt-5 text-center text-sm text-slate-500">
+      <p className="mt-5 text-center text-sm text-fg-muted">
         Already have an account?{' '}
-        <Link href="/login" className="font-medium text-violet-700 hover:text-violet-800 transition">
+        <Link href="/login" className="font-medium text-fg-accent hover:text-fg transition">
           Sign in
         </Link>
       </p>

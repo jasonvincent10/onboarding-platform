@@ -7,17 +7,17 @@ export const metadata = {
 };
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="mt-8 text-xl font-semibold text-gray-900">{children}</h2>;
+  return <h2 className="mt-8 text-xl font-semibold text-fg">{children}</h2>;
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mt-3 text-sm leading-6 text-gray-700">{children}</p>;
+  return <p className="mt-3 text-sm leading-6 text-fg-body">{children}</p>;
 }
 
 export default function PrivacyPolicyPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="text-3xl font-bold text-gray-900">Privacy Policy</h1>
+      <h1 className="text-3xl font-bold text-fg">Privacy Policy</h1>
       <P>Last updated: [DATE]. This is a draft pending legal review.</P>
 
       <H2>1. Who we are</H2>

@@ -51,10 +51,10 @@ export default function ConsentGateForm({ onboardingId, categories }: Props) {
           <li
             key={c.key}
             style={{
-              border: '1px solid #e5e7eb',
+              border: '1px solid var(--border)',
               borderRadius: '8px',
               padding: '16px',
-              backgroundColor: '#ffffff',
+              backgroundColor: 'var(--bg-raised)',
             }}
           >
             <label className="flex items-start gap-3 cursor-pointer">
@@ -65,10 +65,10 @@ export default function ConsentGateForm({ onboardingId, categories }: Props) {
                 style={{ marginTop: '4px', width: '18px', height: '18px' }}
               />
               <span>
-                <span style={{ display: 'block', fontWeight: 600, color: '#111827' }}>
+                <span style={{ display: 'block', fontWeight: 600, color: 'var(--text-primary)' }}>
                   {c.label}
                 </span>
-                <span style={{ display: 'block', fontSize: '14px', color: '#4b5563', marginTop: '2px' }}>
+                <span style={{ display: 'block', fontSize: '14px', color: 'var(--text-body)', marginTop: '2px' }}>
                   {c.description}
                 </span>
               </span>
@@ -78,7 +78,7 @@ export default function ConsentGateForm({ onboardingId, categories }: Props) {
       </ul>
 
       {error && (
-        <p className="mt-4 text-sm text-red-600">
+        <p className="mt-4 text-sm text-status-rejected">
           Something went wrong: {error}. Please try again.
         </p>
       )}
@@ -93,8 +93,8 @@ export default function ConsentGateForm({ onboardingId, categories }: Props) {
           padding: '12px 16px',
           borderRadius: '8px',
           fontWeight: 600,
-          color: '#ffffff',
-          backgroundColor: !allChecked || isPending ? '#9ca3af' : '#111827',
+          color: 'var(--on-accent)',
+          backgroundColor: !allChecked || isPending ? 'var(--border-strong)' : 'var(--accent)',
           cursor: !allChecked || isPending ? 'not-allowed' : 'pointer',
           border: 'none',
         }}
@@ -102,7 +102,7 @@ export default function ConsentGateForm({ onboardingId, categories }: Props) {
         {isPending ? 'Saving…' : 'Grant consent and continue'}
       </button>
 
-      <p className="mt-3 text-xs text-gray-500">
+      <p className="mt-3 text-xs text-fg-muted">
         You must consent to all of the above to continue. If you&apos;re not
         comfortable sharing any of this information, please contact your
         employer directly.

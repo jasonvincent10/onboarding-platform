@@ -46,15 +46,15 @@ export function BillingUsage({ state }: { state: BillingUsageState }) {
   const inTrial = state.freeRemaining > 0;
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4">
+    <div className="rounded-lg border border-line bg-ink-raised p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-medium text-gray-900">
+          <p className="text-sm font-medium text-fg">
             {inTrial
               ? "Free trial: " + state.freeRemaining + " of " + state.freeLimit + " free onboardings remaining"
               : "Free trial used"}
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-fg-muted">
             {state.paidCredits > 0
               ? state.paidCredits + " paid onboarding credit" + (state.paidCredits === 1 ? "" : "s") + " available"
               : inTrial
@@ -67,18 +67,18 @@ export function BillingUsage({ state }: { state: BillingUsageState }) {
             type="button"
             onClick={buyCredit}
             disabled={busy}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50"
+            className="rounded-md bg-brand px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-hover disabled:opacity-50"
           >
             {busy ? "Opening checkout..." : "Buy onboarding credit"}
           </button>
         ) : null}
       </div>
       {!state.canStart ? (
-        <p className="mt-2 text-sm text-amber-700">
+        <p className="mt-2 text-sm text-status-pending">
           You have used all free onboardings. Buy a credit to invite your next new starter.
         </p>
       ) : null}
-      {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="mt-2 text-sm text-status-rejected">{error}</p> : null}
     </div>
   );
 }

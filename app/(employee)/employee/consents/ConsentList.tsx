@@ -45,9 +45,9 @@ export default function ConsentList({ employers }: { employers: EmployerRow[] })
       {employers.map((emp) => (
         <div
           key={emp.employerId}
-          style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '20px', backgroundColor: '#ffffff' }}
+          style={{ border: '1px solid var(--border)', borderRadius: '8px', padding: '20px', backgroundColor: 'var(--bg-raised)' }}
         >
-          <h2 className="text-lg font-semibold text-gray-900">{emp.companyName}</h2>
+          <h2 className="text-lg font-semibold text-fg">{emp.companyName}</h2>
           <ul className="mt-4 space-y-2">
             {emp.categories.map((c) => {
               const key = `${emp.employerId}:${c.key}`
@@ -55,11 +55,11 @@ export default function ConsentList({ employers }: { employers: EmployerRow[] })
               return (
                 <li
                   key={c.key}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderTop: '1px solid #f3f4f6' }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderTop: '1px solid var(--border)' }}
                 >
                   <div>
-                    <div style={{ fontWeight: 500, color: '#111827' }}>{c.label}</div>
-                    <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                    <div style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{c.label}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                       {c.action === 'granted' ? 'Granted' : 'Withdrawn'} on{' '}
                       {new Date(c.changedAt).toLocaleDateString('en-GB')}
                     </div>
@@ -73,16 +73,16 @@ export default function ConsentList({ employers }: { employers: EmployerRow[] })
                         padding: '6px 12px',
                         borderRadius: '6px',
                         fontSize: '14px',
-                        color: '#b91c1c',
-                        backgroundColor: '#ffffff',
-                        border: '1px solid #fecaca',
+                        color: 'var(--status-rejected)',
+                        backgroundColor: 'var(--bg-raised)',
+                        border: '1px solid var(--status-rejected)',
                         cursor: busy ? 'not-allowed' : 'pointer',
                       }}
                     >
                       {busy ? 'Withdrawing…' : 'Withdraw'}
                     </button>
                   ) : (
-                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>No access</span>
+                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>No access</span>
                   )}
                 </li>
               )

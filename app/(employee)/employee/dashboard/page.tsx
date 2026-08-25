@@ -47,16 +47,16 @@ export default async function EmployeeDashboardPage() {
     <div className="space-y-6">
       {/* Welcome */}
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">
+        <h1 className="text-xl font-semibold text-fg">
           {profile?.full_name ? `Hello, ${profile.full_name.split(' ')[0]}` : 'Your onboardings'}
         </h1>
-        <p className="text-sm text-slate-500 mt-0.5">Complete your onboarding tasks below.</p>
+        <p className="text-sm text-fg-muted mt-0.5">Complete your onboarding tasks below.</p>
       </div>
 
       {/* Active onboardings */}
       {active.length > 0 && (
         <section>
-          <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+          <h2 className="text-xs font-semibold text-fg-muted uppercase tracking-wider mb-3">
             In progress
           </h2>
           <div className="space-y-3">
@@ -70,7 +70,7 @@ export default async function EmployeeDashboardPage() {
       {/* Completed */}
       {completed.length > 0 && (
         <section>
-          <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+          <h2 className="text-xs font-semibold text-fg-muted uppercase tracking-wider mb-3">
             Completed
           </h2>
           <div className="space-y-3">
@@ -82,8 +82,8 @@ export default async function EmployeeDashboardPage() {
       )}
       {/* Your data */}
             {profile && (
-              <section className="pt-2 border-t border-slate-100">
-                <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+              <section className="pt-2 border-t border-line">
+                <h2 className="text-xs font-semibold text-fg-muted uppercase tracking-wider mb-3">
                   Your data
                 </h2>
                 <SarExportButton />
@@ -91,14 +91,14 @@ export default async function EmployeeDashboardPage() {
             )}
       {/* Empty state */}
       {(!onboardings || onboardings.length === 0) && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center">
-          <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-ink-raised rounded-2xl border border-line p-10 text-center">
+          <div className="w-12 h-12 bg-ink-inset rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-6 h-6 text-fg-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
-          <p className="text-sm font-medium text-slate-700">No onboardings yet</p>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-sm font-medium text-fg-body">No onboardings yet</p>
+          <p className="text-xs text-fg-muted mt-1">
             When your employer sends you an invitation, it will appear here.
           </p>
         </div>
@@ -129,31 +129,31 @@ function OnboardingCard({ onboarding: o }: { onboarding: Onboarding }) {
   return (
     <Link
       href={`/employee/onboarding/${o.id}`}
-      className="block bg-white rounded-xl border border-slate-200 p-4 hover:border-violet-300 hover:shadow-sm transition-all"
+      className="block bg-ink-raised rounded-xl border border-line p-4 hover:border-brand/40 hover:shadow-sm transition-all"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-slate-900 truncate">
+          <p className="text-sm font-semibold text-fg truncate">
             {o.company_name}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">{o.role_title} · Starts {startLabel}</p>
+          <p className="text-xs text-fg-muted mt-0.5">{o.role_title} · Starts {startLabel}</p>
         </div>
         {isComplete ? (
-          <span className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5">
-            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+          <span className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-status-approved bg-status-approved/10 border border-status-approved/30 rounded-full px-2 py-0.5">
+            <span className="w-1.5 h-1.5 bg-status-approved rounded-full" />
             Complete
           </span>
         ) : (
-          <span className="shrink-0 text-xs font-semibold text-violet-600">{pct}%</span>
+          <span className="shrink-0 text-xs font-semibold text-fg-accent">{pct}%</span>
         )}
       </div>
 
       {/* Progress bar */}
       {!isComplete && (
         <div className="mt-3">
-          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-ink-inset rounded-full overflow-hidden">
             <div
-              className="h-full bg-violet-500 rounded-full transition-all"
+              className="h-full bg-brand rounded-full transition-all"
               style={{ width: `${pct}%` }}
             />
           </div>

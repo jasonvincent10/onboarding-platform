@@ -36,7 +36,7 @@ export default async function EmployerLayout({ children }: { children: React.Rea
   const subscriptionStatus = employerAccount?.subscription_status ?? 'trial'
 
   return (
-    <div className="min-h-screen bg-stone-50 lg:flex">
+    <div className="min-h-screen bg-ink lg:flex">
       <SidebarNav
         companyName={companyName}
         memberName={memberName}

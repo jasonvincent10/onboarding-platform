@@ -22,7 +22,7 @@ export default async function EmployeeLayout({
     .single()
 
   return (
-    <div className="min-h-screen bg-[#F7F6F3]">
+    <div className="min-h-screen bg-ink">
       <EmployeeNav
         name={profile?.full_name ?? profile?.email ?? 'Employee'}
         email={profile?.email ?? user.email ?? ''}

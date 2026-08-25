@@ -28,23 +28,23 @@ const CATEGORY_LABELS: Record<string, string> = {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
-  pending: { label: 'With employer', className: 'bg-amber-100 text-amber-700' },
-  verified: { label: 'Approved', className: 'bg-emerald-100 text-emerald-700' },
-  expired: { label: 'Expired', className: 'bg-red-100 text-red-700' },
-  rejected: { label: 'Re-upload needed', className: 'bg-red-100 text-red-700' },
+  pending: { label: 'With employer', className: 'bg-status-pending/15 text-status-pending' },
+  verified: { label: 'Approved', className: 'bg-status-approved/15 text-status-approved' },
+  expired: { label: 'Expired', className: 'bg-status-rejected/15 text-status-rejected' },
+  rejected: { label: 'Re-upload needed', className: 'bg-status-rejected/15 text-status-rejected' },
 }
 
 export default function DocumentsList({ documents }: { documents: DocumentRow[] }) {
   if (documents.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center">
-        <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="bg-ink-raised rounded-2xl border border-line p-10 text-center">
+        <div className="w-12 h-12 bg-ink-inset rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-6 h-6 text-fg-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <p className="text-sm font-medium text-slate-700">No documents yet</p>
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="text-sm font-medium text-fg-body">No documents yet</p>
+        <p className="text-xs text-fg-muted mt-1">
           Documents you upload during onboarding will appear here, and carry forward to future employers.
         </p>
       </div>
@@ -68,7 +68,7 @@ function DocumentCard({ doc }: { doc: DocumentRow }) {
 
   const status = STATUS_CONFIG[doc.verificationStatus] ?? {
     label: doc.verificationStatus,
-    className: 'bg-slate-100 text-slate-600',
+    className: 'bg-ink-inset text-fg-body',
   }
   const categoryLabel = CATEGORY_LABELS[doc.dataCategory] ?? doc.dataCategory
 
@@ -88,21 +88,21 @@ function DocumentCard({ doc }: { doc: DocumentRow }) {
   if (removed) return null
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-4">
+    <div className="bg-ink-raised rounded-xl border border-line p-4">
       <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-line bg-ink-inset">
           {doc.isShareCode ? (
-            <span className="text-lg font-bold text-slate-400">#</span>
+            <span className="text-lg font-bold text-fg-muted">#</span>
           ) : (
-            <PdfIcon className="h-5 w-5 text-red-400" />
+            <PdfIcon className="h-5 w-5 text-fg-muted" />
           )}
         </div>
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-slate-900">{doc.documentName}</p>
-              <p className="text-xs text-slate-500 mt-0.5">{categoryLabel}</p>
+              <p className="truncate text-sm font-medium text-fg">{doc.documentName}</p>
+              <p className="text-xs text-fg-muted mt-0.5">{categoryLabel}</p>
             </div>
             <span className={`shrink-0 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${status.className}`}>
               {status.label}
@@ -110,10 +110,10 @@ function DocumentCard({ doc }: { doc: DocumentRow }) {
           </div>
 
           {doc.isShareCode && (
-            <p className="mt-2 font-mono text-sm tracking-widest text-slate-600">{doc.shareCode}</p>
+            <p className="mt-2 font-mono text-sm tracking-widest text-fg-body">{doc.shareCode}</p>
           )}
 
-          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-400">
+          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-fg-muted">
             <span>
               Uploaded {new Date(doc.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
             </span>
@@ -124,7 +124,7 @@ function DocumentCard({ doc }: { doc: DocumentRow }) {
             )}
           </div>
 
-          {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+          {error && <p className="mt-2 text-xs text-status-rejected">{error}</p>}
 
           <div className="mt-3 flex items-center gap-3">
             {doc.signedUrl && (
@@ -132,7 +132,7 @@ function DocumentCard({ doc }: { doc: DocumentRow }) {
                 href={doc.signedUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-medium text-violet-700 hover:text-violet-800"
+                className="text-xs font-medium text-fg-accent hover:text-fg"
               >
                 View
               </a>
@@ -141,17 +141,17 @@ function DocumentCard({ doc }: { doc: DocumentRow }) {
             {doc.canDelete ? (
               confirming ? (
                 <span className="flex items-center gap-2">
-                  <span className="text-xs text-slate-500">Delete permanently?</span>
+                  <span className="text-xs text-fg-muted">Delete permanently?</span>
                   <button
                     onClick={handleDelete}
                     disabled={isPending}
-                    className="text-xs font-medium text-red-600 hover:text-red-700 disabled:opacity-60"
+                    className="text-xs font-medium text-status-rejected hover:text-status-rejected disabled:opacity-60"
                   >
                     {isPending ? 'Deleting…' : 'Yes, delete'}
                   </button>
                   <button
                     onClick={() => setConfirming(false)}
-                    className="text-xs font-medium text-slate-500 hover:text-slate-700"
+                    className="text-xs font-medium text-fg-muted hover:text-fg"
                   >
                     Cancel
                   </button>
@@ -159,13 +159,13 @@ function DocumentCard({ doc }: { doc: DocumentRow }) {
               ) : (
                 <button
                   onClick={() => setConfirming(true)}
-                  className="text-xs font-medium text-slate-500 hover:text-red-600"
+                  className="text-xs font-medium text-fg-muted hover:text-status-rejected"
                 >
                   Delete
                 </button>
               )
             ) : (
-              <span className="text-xs text-slate-400" title="This document is still linked to a checklist item your employer relies on, so it can't be deleted.">
+              <span className="text-xs text-fg-muted" title="This document is still linked to a checklist item your employer relies on, so it can't be deleted.">
                 Linked to an onboarding — can&apos;t be deleted
               </span>
             )}

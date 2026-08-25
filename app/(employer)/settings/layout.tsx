@@ -16,9 +16,9 @@ export default async function SettingsLayout({ children }: { children: React.Rea
 
   if (!member) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 px-8 py-10 text-center">
-        <p className="text-sm font-medium text-slate-700">Your employer account isn&apos;t fully set up yet.</p>
-        <Link href="/dashboard" className="mt-3 inline-block text-sm font-medium text-violet-700 hover:text-violet-800">
+      <div className="bg-ink-raised rounded-2xl border border-line px-8 py-10 text-center">
+        <p className="text-sm font-medium text-fg-body">Your employer account isn&apos;t fully set up yet.</p>
+        <Link href="/dashboard" className="mt-3 inline-block text-sm font-medium text-fg-accent hover:text-fg">
           Back to dashboard
         </Link>
       </div>
@@ -27,8 +27,8 @@ export default async function SettingsLayout({ children }: { children: React.Rea
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mb-1">Settings</h1>
-      <p className="text-slate-500 text-[15px] mb-6">Manage your company profile, team, and billing.</p>
+      <h1 className="text-2xl font-semibold text-fg tracking-tight mb-1">Settings</h1>
+      <p className="text-fg-muted text-[15px] mb-6">Manage your company profile, team, and billing.</p>
       <SettingsTabs />
       <div className="mt-6">{children}</div>
     </div>

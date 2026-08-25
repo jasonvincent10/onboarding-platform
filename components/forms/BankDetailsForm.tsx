@@ -110,15 +110,15 @@ export default function BankDetailsForm({
 
   return (
     <div className="max-w-lg">
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">Bank Details</h2>
-      <p className="text-sm text-gray-500 mb-6">
+      <h2 className="text-lg font-semibold text-fg mb-1">Bank Details</h2>
+      <p className="text-sm text-fg-muted mb-6">
         Your employer needs these to set up your salary payments. You can find
         your sort code and account number on your bank card, a bank statement,
         or in your banking app.
       </p>
 
       <div className="mb-4">
-        <label htmlFor="holder-name" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="holder-name" className="block text-sm font-medium text-fg-body mb-1">
           Account holder name
         </label>
         <input
@@ -128,15 +128,15 @@ export default function BankDetailsForm({
           onChange={handleHolderNameChange}
           placeholder="As shown on your bank account"
           autoComplete="off"
-          className={`block w-full rounded-lg border px-3 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${holderNameError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
+          className={`block w-full rounded-lg border px-3 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 ${holderNameError ? 'border-status-rejected focus:border-status-rejected' : 'border-line-strong focus:border-brand'}`}
         />
         {holderNameError && (
-          <p className="mt-1 text-xs text-red-600">{holderNameError}</p>
+          <p className="mt-1 text-xs text-status-rejected">{holderNameError}</p>
         )}
       </div>
 
       <div className="mb-4">
-        <label htmlFor="sort-code" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="sort-code" className="block text-sm font-medium text-fg-body mb-1">
           Sort code
         </label>
         <input
@@ -148,15 +148,15 @@ export default function BankDetailsForm({
           maxLength={8}
           autoComplete="off"
           inputMode="numeric"
-          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${sortCodeError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
+          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 ${sortCodeError ? 'border-status-rejected focus:border-status-rejected' : 'border-line-strong focus:border-brand'}`}
         />
         {sortCodeError && (
-          <p className="mt-1 text-xs text-red-600">{sortCodeError}</p>
+          <p className="mt-1 text-xs text-status-rejected">{sortCodeError}</p>
         )}
       </div>
 
       <div className="mb-4">
-        <label htmlFor="account-number" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="account-number" className="block text-sm font-medium text-fg-body mb-1">
           Account number
         </label>
         <input
@@ -168,27 +168,27 @@ export default function BankDetailsForm({
           maxLength={8}
           autoComplete="off"
           inputMode="numeric"
-          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${accountNumberError ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
+          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 ${accountNumberError ? 'border-status-rejected focus:border-status-rejected' : 'border-line-strong focus:border-brand'}`}
         />
         {accountNumberError && (
-          <p className="mt-1 text-xs text-red-600">{accountNumberError}</p>
+          <p className="mt-1 text-xs text-status-rejected">{accountNumberError}</p>
         )}
       </div>
 
       {serverError && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 rounded-lg border border-status-rejected/30 bg-status-rejected/10 px-4 py-3 text-sm text-status-rejected">
           {serverError}
         </div>
       )}
 
-      <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs text-emerald-800">
+      <div className="mb-6 rounded-lg border border-status-approved/30 bg-status-approved/10 px-4 py-3 text-xs text-status-approved">
         Your sort code and account number are encrypted before being stored. Your employer will only see them with your explicit consent.
       </div>
 
       <button
         onClick={handleSubmit}
         disabled={!formValid || submitting}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         {submitting ? (
           <>

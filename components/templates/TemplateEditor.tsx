@@ -76,9 +76,9 @@ const ITEM_TYPE_LABELS: Record<ItemType, string> = {
 }
 
 const ITEM_TYPE_COLOURS: Record<ItemType, string> = {
-  document_upload: 'bg-blue-50 text-blue-700 border-blue-200',
-  form: 'bg-violet-50 text-violet-700 border-violet-200',
-  acknowledgement: 'bg-amber-50 text-amber-700 border-amber-200',
+  document_upload: 'bg-brand/10 text-fg-accent border-brand/30',
+  form: 'bg-brand/10 text-fg-accent border-brand/30',
+  acknowledgement: 'bg-status-pending/10 text-status-pending border-status-pending/30',
 }
 
 // ─── Item Form ────────────────────────────────────────────────────────────────
@@ -138,8 +138,8 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Item name */}
       <div>
-        <label className="block text-xs font-medium text-slate-600 mb-1.5">
-          Item name <span className="text-red-500">*</span>
+        <label className="block text-xs font-medium text-fg-body mb-1.5">
+          Item name <span className="text-status-rejected">*</span>
         </label>
         <input
           type="text"
@@ -147,29 +147,29 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
           value={values.item_name}
           onChange={(e) => set('item_name', e.target.value)}
           placeholder="e.g. Upload your P45"
-          className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent placeholder:text-slate-400"
+          className="w-full px-3 py-2 text-sm border border-line-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent placeholder:text-fg-muted"
           autoFocus
         />
       </div>
 
       {/* Description */}
       <div>
-        <label className="block text-xs font-medium text-slate-600 mb-1.5">
+        <label className="block text-xs font-medium text-fg-body mb-1.5">
           Description{' '}
-          <span className="text-slate-400 font-normal">(shown to employee)</span>
+          <span className="text-fg-muted font-normal">(shown to employee)</span>
         </label>
         <textarea
           value={values.description}
           onChange={(e) => set('description', e.target.value)}
           placeholder="Explain what this is and why it's needed…"
           rows={2}
-          className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent placeholder:text-slate-400 resize-none"
+          className="w-full px-3 py-2 text-sm border border-line-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent placeholder:text-fg-muted resize-none"
         />
       </div>
 
       {/* Item type */}
       <div>
-        <label className="block text-xs font-medium text-slate-600 mb-1.5">
+        <label className="block text-xs font-medium text-fg-body mb-1.5">
           Type
         </label>
         <div className="grid grid-cols-3 gap-2">
@@ -180,8 +180,8 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
               onClick={() => set('item_type', opt.value)}
               className={`flex flex-col items-center gap-1.5 px-2 py-3 rounded-lg border text-center transition-all ${
                 values.item_type === opt.value
-                  ? 'border-violet-700 bg-violet-700 text-white'
-                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                  ? 'border-brand bg-brand text-white'
+                  : 'border-line bg-ink-raised text-fg-body hover:border-line-strong'
               }`}
             >
               {opt.icon}
@@ -189,7 +189,7 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
             </button>
           ))}
         </div>
-        <p className="mt-1.5 text-xs text-slate-400">
+        <p className="mt-1.5 text-xs text-fg-muted">
           {ITEM_TYPE_OPTIONS.find((o) => o.value === values.item_type)?.description}
         </p>
       </div>
@@ -197,13 +197,13 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
       {/* Data category + deadline in a row */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1.5">
+          <label className="block text-xs font-medium text-fg-body mb-1.5">
             Data category
           </label>
           <select
             value={values.data_category}
             onChange={(e) => set('data_category', e.target.value as DataCategory)}
-            className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
+            className="w-full px-3 py-2 text-sm border border-line-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-brand bg-ink-raised"
           >
             {DATA_CATEGORY_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -213,7 +213,7 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1.5">
+          <label className="block text-xs font-medium text-fg-body mb-1.5">
             Deadline
           </label>
           <div className="relative">
@@ -225,9 +225,9 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
               onChange={(e) =>
                 set('deadline_days_before_start', parseInt(e.target.value, 10) || 0)
               }
-              className="w-full pl-3 pr-16 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full pl-3 pr-16 py-2 text-sm border border-line-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-fg-muted pointer-events-none">
               days before
             </span>
           </div>
@@ -235,7 +235,7 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
       </div>
 
       {error && (
-        <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+        <p className="text-xs text-status-rejected bg-status-rejected/10 border border-status-rejected/30 rounded-lg px-3 py-2">
           {error}
         </p>
       )}
@@ -244,14 +244,14 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
         <button
           type="button"
           onClick={onCancel}
-          className="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+          className="px-3.5 py-2 text-sm font-medium text-fg-body hover:text-fg transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center gap-1.5 bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-violet-800 disabled:opacity-60 transition-colors"
+          className="inline-flex items-center gap-1.5 bg-brand text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-brand-hover disabled:opacity-60 transition-colors"
         >
           {isPending ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -305,8 +305,8 @@ function ItemRow({
 
   if (editing) {
     return (
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">
+      <div className="bg-ink-inset border border-line rounded-xl p-4">
+        <p className="text-xs font-semibold text-fg-muted uppercase tracking-wide mb-3">
           Editing item
         </p>
         <ItemForm
@@ -330,14 +330,14 @@ function ItemRow({
 
   return (
     <div
-      className={`group flex items-start gap-3 bg-white border rounded-xl px-4 py-3.5 transition-all ${
-        isDeleting ? 'opacity-40 pointer-events-none' : 'border-slate-200 hover:border-slate-300'
+      className={`group flex items-start gap-3 bg-ink-raised border rounded-xl px-4 py-3.5 transition-all ${
+        isDeleting ? 'opacity-40 pointer-events-none' : 'border-line hover:border-line-strong'
       }`}
     >
       {/* Drag handle / number */}
       <div className="flex flex-col items-center gap-0.5 pt-0.5 shrink-0">
-        <GripVertical className="w-4 h-4 text-slate-300 group-hover:text-slate-400 transition-colors" />
-        <span className="text-[10px] font-medium text-slate-400 tabular-nums">
+        <GripVertical className="w-4 h-4 text-fg-muted group-hover:text-fg-muted transition-colors" />
+        <span className="text-[10px] font-medium text-fg-muted tabular-nums">
           {String(index + 1).padStart(2, '0')}
         </span>
       </div>
@@ -345,7 +345,7 @@ function ItemRow({
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-medium text-slate-900">
+          <span className="text-sm font-medium text-fg">
             {item.item_name}
           </span>
           <span
@@ -359,15 +359,15 @@ function ItemRow({
         </div>
 
         {item.description && (
-          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+          <p className="text-xs text-fg-muted mt-1 leading-relaxed">
             {item.description}
           </p>
         )}
 
         <div className="flex items-center gap-3 mt-2">
-          <span className="text-[11px] text-slate-400">{categoryLabel}</span>
-          <span className="text-[11px] text-slate-300">·</span>
-          <span className="text-[11px] text-slate-400">
+          <span className="text-[11px] text-fg-muted">{categoryLabel}</span>
+          <span className="text-[11px] text-fg-muted">·</span>
+          <span className="text-[11px] text-fg-muted">
             Due {item.deadline_days_before_start} day
             {item.deadline_days_before_start !== 1 ? 's' : ''} before start
           </span>
@@ -380,7 +380,7 @@ function ItemRow({
           onClick={() => onMoveUp(item.id)}
           disabled={index === 0}
           title="Move up"
-          className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+          className="p-1.5 text-fg-muted hover:text-fg hover:bg-ink-inset rounded-lg transition-all disabled:opacity-20 disabled:cursor-not-allowed"
         >
           <ChevronUp className="w-3.5 h-3.5" />
         </button>
@@ -388,29 +388,29 @@ function ItemRow({
           onClick={() => onMoveDown(item.id)}
           disabled={index === total - 1}
           title="Move down"
-          className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+          className="p-1.5 text-fg-muted hover:text-fg hover:bg-ink-inset rounded-lg transition-all disabled:opacity-20 disabled:cursor-not-allowed"
         >
           <ChevronDown className="w-3.5 h-3.5" />
         </button>
         <button
           onClick={() => setEditing(true)}
           title="Edit item"
-          className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-all"
+          className="p-1.5 text-fg-muted hover:text-fg hover:bg-ink-inset rounded-lg transition-all"
         >
           <Pencil className="w-3.5 h-3.5" />
         </button>
         {confirmDelete ? (
           <div className="flex items-center gap-1 ml-1">
-            <span className="text-xs text-red-600 font-medium">Delete?</span>
+            <span className="text-xs text-status-rejected font-medium">Delete?</span>
             <button
               onClick={handleDelete}
-              className="px-2 py-1 text-xs font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors"
+              className="px-2 py-1 text-xs font-medium text-white bg-status-rejected rounded-md hover:bg-status-rejected transition-colors"
             >
               Yes
             </button>
             <button
               onClick={() => setConfirmDelete(false)}
-              className="px-2 py-1 text-xs font-medium text-slate-600 hover:text-slate-900 transition-colors"
+              className="px-2 py-1 text-xs font-medium text-fg-body hover:text-fg transition-colors"
             >
               No
             </button>
@@ -419,7 +419,7 @@ function ItemRow({
           <button
             onClick={() => setConfirmDelete(true)}
             title="Delete item"
-            className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+            className="p-1.5 text-fg-muted hover:text-status-rejected hover:bg-status-rejected/10 rounded-lg transition-all"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -458,7 +458,7 @@ function TemplateNameEditor({ template }: { template: Template }) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="text-xl font-semibold text-slate-900 border-b-2 border-slate-900 focus:outline-none bg-transparent min-w-48"
+          className="text-xl font-semibold text-fg border-b-2 border-line-strong focus:outline-none bg-transparent min-w-48"
           autoFocus
         />
         <input
@@ -466,13 +466,13 @@ function TemplateNameEditor({ template }: { template: Template }) {
           value={roleType}
           onChange={(e) => setRoleType(e.target.value)}
           placeholder="Role type (optional)"
-          className="text-sm text-slate-500 border-b border-slate-300 focus:outline-none bg-transparent focus:border-slate-500 min-w-40"
+          className="text-sm text-fg-muted border-b border-line-strong focus:outline-none bg-transparent focus:border-brand min-w-40"
         />
         <div className="flex items-center gap-2">
           <button
             onClick={handleSave}
             disabled={isPending}
-            className="inline-flex items-center gap-1 text-sm font-medium text-white bg-violet-700 px-3 py-1.5 rounded-lg hover:bg-violet-800 disabled:opacity-60 transition-colors"
+            className="inline-flex items-center gap-1 text-sm font-medium text-white bg-brand px-3 py-1.5 rounded-lg hover:bg-brand-hover disabled:opacity-60 transition-colors"
           >
             {isPending ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -487,7 +487,7 @@ function TemplateNameEditor({ template }: { template: Template }) {
               setName(template.template_name)
               setRoleType(template.role_type ?? '')
             }}
-            className="p-1.5 text-slate-400 hover:text-slate-700 transition-colors"
+            className="p-1.5 text-fg-muted hover:text-fg transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -500,27 +500,27 @@ function TemplateNameEditor({ template }: { template: Template }) {
     <div className="flex items-center gap-2 group">
       <div>
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-semibold text-slate-900">{name}</h1>
+          <h1 className="text-xl font-semibold text-fg">{name}</h1>
           {template.is_default && (
-            <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
-              <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-status-pending bg-status-pending/10 border border-status-pending/30 px-2 py-0.5 rounded-full">
+              <Star className="w-3 h-3 fill-status-pending text-status-pending" />
               Default template
             </span>
           )}
           {saved && (
-            <span className="text-xs text-emerald-600 font-medium flex items-center gap-1">
+            <span className="text-xs text-status-approved font-medium flex items-center gap-1">
               <Check className="w-3 h-3" />
               Saved
             </span>
           )}
         </div>
         {roleType && (
-          <p className="text-sm text-slate-500 mt-0.5">{roleType}</p>
+          <p className="text-sm text-fg-muted mt-0.5">{roleType}</p>
         )}
       </div>
       <button
         onClick={() => setEditing(true)}
-        className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-slate-700 transition-all"
+        className="opacity-0 group-hover:opacity-100 p-1 text-fg-muted hover:text-fg transition-all"
         title="Edit template name"
       >
         <Pencil className="w-3.5 h-3.5" />
@@ -588,13 +588,13 @@ export function TemplateEditor({ template }: { template: Template }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-ink-inset">
       <div className="max-w-3xl mx-auto px-6 py-10">
 
         {/* Back nav */}
         <Link
           href="/templates"
-          className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-fg-muted hover:text-fg transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           All templates
@@ -604,7 +604,7 @@ export function TemplateEditor({ template }: { template: Template }) {
         <div className="flex items-start justify-between mb-8">
           <TemplateNameEditor template={template} />
           {isSavingOrder && (
-            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+            <div className="flex items-center gap-1.5 text-xs text-fg-muted">
               <Loader2 className="w-3 h-3 animate-spin" />
               Saving order…
             </div>
@@ -612,48 +612,48 @@ export function TemplateEditor({ template }: { template: Template }) {
         </div>
 
         {/* Stats bar */}
-        <div className="flex items-center gap-6 mb-6 px-4 py-3 bg-white rounded-xl border border-slate-200">
+        <div className="flex items-center gap-6 mb-6 px-4 py-3 bg-ink-raised rounded-xl border border-line">
           <div className="text-center">
-            <div className="text-lg font-semibold text-slate-900">
+            <div className="text-lg font-semibold text-fg">
               {items.length}
             </div>
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-fg-muted">
               {items.length === 1 ? 'item' : 'items'}
             </div>
           </div>
-          <div className="w-px h-8 bg-slate-200" />
+          <div className="w-px h-8 bg-line" />
           <div className="text-center">
-            <div className="text-lg font-semibold text-slate-900">
+            <div className="text-lg font-semibold text-fg">
               {items.filter((i) => i.item_type === 'document_upload').length}
             </div>
-            <div className="text-xs text-slate-400">uploads</div>
+            <div className="text-xs text-fg-muted">uploads</div>
           </div>
-          <div className="w-px h-8 bg-slate-200" />
+          <div className="w-px h-8 bg-line" />
           <div className="text-center">
-            <div className="text-lg font-semibold text-slate-900">
+            <div className="text-lg font-semibold text-fg">
               {items.filter((i) => i.item_type === 'form').length}
             </div>
-            <div className="text-xs text-slate-400">forms</div>
+            <div className="text-xs text-fg-muted">forms</div>
           </div>
-          <div className="w-px h-8 bg-slate-200" />
+          <div className="w-px h-8 bg-line" />
           <div className="text-center">
-            <div className="text-lg font-semibold text-slate-900">
+            <div className="text-lg font-semibold text-fg">
               {items.filter((i) => i.item_type === 'acknowledgement').length}
             </div>
-            <div className="text-xs text-slate-400">acknowledgements</div>
+            <div className="text-xs text-fg-muted">acknowledgements</div>
           </div>
         </div>
 
         {/* Items list */}
         {items.length === 0 && !showAddForm ? (
-          <div className="text-center py-14 bg-white rounded-xl border border-dashed border-slate-300 mb-4">
-            <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <Plus className="w-5 h-5 text-slate-400" />
+          <div className="text-center py-14 bg-ink-raised rounded-xl border border-dashed border-line-strong mb-4">
+            <div className="w-12 h-12 bg-ink-inset rounded-xl flex items-center justify-center mx-auto mb-3">
+              <Plus className="w-5 h-5 text-fg-muted" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 mb-1">
+            <h3 className="text-sm font-semibold text-fg mb-1">
               No checklist items yet
             </h3>
-            <p className="text-sm text-slate-500 max-w-xs mx-auto">
+            <p className="text-sm text-fg-muted max-w-xs mx-auto">
               Add the documents, forms, and acknowledgements you need from new
               starters.
             </p>
@@ -678,8 +678,8 @@ export function TemplateEditor({ template }: { template: Template }) {
 
         {/* Add item panel */}
         {showAddForm ? (
-          <div className="bg-white border border-slate-200 rounded-xl p-5">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-4">
+          <div className="bg-ink-raised border border-line rounded-xl p-5">
+            <p className="text-xs font-semibold text-fg-muted uppercase tracking-wide mb-4">
               New checklist item
             </p>
             <ItemForm
@@ -691,7 +691,7 @@ export function TemplateEditor({ template }: { template: Template }) {
         ) : (
           <button
             onClick={() => setShowAddForm(true)}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-slate-300 rounded-xl text-sm font-medium text-slate-500 hover:border-slate-400 hover:text-slate-700 hover:bg-white transition-all"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-line-strong rounded-xl text-sm font-medium text-fg-muted hover:border-brand hover:text-fg hover:bg-ink-raised transition-all"
           >
             <Plus className="w-4 h-4" />
             Add checklist item
@@ -700,7 +700,7 @@ export function TemplateEditor({ template }: { template: Template }) {
 
         {/* Help text */}
         {items.length > 0 && (
-          <p className="text-xs text-slate-400 text-center mt-6">
+          <p className="text-xs text-fg-muted text-center mt-6">
             Use the ↑ ↓ arrows to reorder items · Order is saved automatically
           </p>
         )}

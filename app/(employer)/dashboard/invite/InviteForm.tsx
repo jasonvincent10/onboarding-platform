@@ -39,33 +39,33 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
   // ── Success state ──────────────────────────────────────────────────────────
   if (state?.success) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-start justify-center pt-16 px-4">
+      <div className="min-h-screen bg-ink-inset flex items-start justify-center pt-16 px-4">
         <div className="w-full max-w-lg">
 
           {/* Success card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-emerald-50 border-b border-emerald-100 px-8 py-6 flex items-start gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center mt-0.5">
-                <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+          <div className="bg-ink-raised rounded-2xl shadow-sm border border-line overflow-hidden">
+            <div className="bg-status-approved/10 border-b border-status-approved/20 px-8 py-6 flex items-start gap-4">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-status-approved/15 flex items-center justify-center mt-0.5">
+                <svg className="w-5 h-5 text-status-approved" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </div>
               <div>
-                <p className="text-emerald-700 text-sm font-semibold">Invitation sent</p>
-                <p className="text-emerald-900 text-lg font-bold mt-0.5">
+                <p className="text-status-approved text-sm font-semibold">Invitation sent</p>
+                <p className="text-status-approved text-lg font-bold mt-0.5">
                   {state.inviteeName} is on their way.
                 </p>
               </div>
             </div>
 
             <div className="px-8 py-6">
-              <p className="text-slate-600 text-sm leading-relaxed">
+              <p className="text-fg-body text-sm leading-relaxed">
                 An invitation email has been sent to{' '}
-                <span className="font-medium text-slate-800">{state.inviteeEmail}</span> with a
+                <span className="font-medium text-fg">{state.inviteeEmail}</span> with a
                 secure link to complete their onboarding checklist.
               </p>
 
-              <p className="text-slate-500 text-sm mt-3 leading-relaxed">
+              <p className="text-fg-muted text-sm mt-3 leading-relaxed">
                 You&apos;ll be notified when they start completing items and when documents are
                 ready for your review. Track progress on your dashboard.
               </p>
@@ -73,15 +73,15 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => setState(null)}
-                  className="flex-1 bg-slate-900 hover:bg-slate-700 text-white text-sm font-semibold
+                  className="flex-1 bg-brand hover:bg-brand-hover text-white text-sm font-semibold
                              px-4 py-2.5 rounded-lg transition-colors"
                 >
                   Invite another starter
                 </button>
                 <Link
                   href="/dashboard"
-                  className="flex-1 text-center bg-white hover:bg-slate-50 text-slate-700 text-sm font-medium
-                             px-4 py-2.5 rounded-lg border border-slate-200 transition-colors"
+                  className="flex-1 text-center bg-ink-raised hover:bg-ink-raised-hover text-fg-body text-sm font-medium
+                             px-4 py-2.5 rounded-lg border border-line transition-colors"
                 >
                   Back to dashboard
                 </Link>
@@ -96,13 +96,13 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
 
   // ── Main form ──────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-12">
+    <div className="min-h-screen bg-ink-inset px-4 py-12">
       <div className="w-full max-w-lg mx-auto">
 
         {/* Back link */}
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800
+          className="inline-flex items-center gap-1.5 text-sm text-fg-muted hover:text-fg
                      transition-colors mb-6"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -113,22 +113,22 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
 
         {/* Page header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-2xl font-bold text-fg tracking-tight">
             Invite a new starter
           </h1>
           {companyName && (
-            <p className="mt-1 text-slate-500 text-sm">
+            <p className="mt-1 text-fg-muted text-sm">
               Sending on behalf of{' '}
-              <span className="font-medium text-slate-700">{companyName}</span>
+              <span className="font-medium text-fg-body">{companyName}</span>
             </p>
           )}
         </div>
 
         {/* No templates warning */}
         {templates.length === 0 && (
-          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-            <p className="text-amber-800 text-sm font-medium">No templates found</p>
-            <p className="text-amber-700 text-sm mt-0.5">
+          <div className="mb-6 p-4 bg-status-pending/10 border border-status-pending/30 rounded-xl">
+            <p className="text-status-pending text-sm font-medium">No templates found</p>
+            <p className="text-status-pending text-sm mt-0.5">
               You need at least one onboarding template before you can invite a new starter.{' '}
               <Link href="/dashboard/templates" className="underline font-medium">
                 Create a template →
@@ -139,9 +139,9 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
 
         {/* Error banner */}
         {state?.error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex gap-3">
+          <div className="mb-6 p-4 bg-status-rejected/10 border border-status-rejected/30 rounded-xl flex gap-3">
             <svg
-              className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"
+              className="w-5 h-5 text-status-rejected flex-shrink-0 mt-0.5"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2}
@@ -154,11 +154,11 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
               />
             </svg>
             <div>
-              <p className="text-red-700 text-sm leading-relaxed">{state.error}</p>
+              <p className="text-status-rejected text-sm leading-relaxed">{state.error}</p>
               {state.billingRequired && (
                 <Link
                   href="/dashboard"
-                  className="mt-2 inline-block text-sm font-medium text-red-800 underline underline-offset-2"
+                  className="mt-2 inline-block text-sm font-medium text-status-rejected underline underline-offset-2"
                 >
                   Go to dashboard to buy a credit →
                 </Link>
@@ -168,11 +168,11 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
         )}
 
         {/* Form card */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-slate-200">
+        <form onSubmit={handleSubmit} className="bg-ink-raised rounded-2xl shadow-sm border border-line">
 
-          <div className="px-8 py-6 border-b border-slate-100">
-            <h2 className="text-base font-semibold text-slate-800">New starter details</h2>
-            <p className="text-slate-500 text-sm mt-0.5">
+          <div className="px-8 py-6 border-b border-line">
+            <h2 className="text-base font-semibold text-fg">New starter details</h2>
+            <p className="text-fg-muted text-sm mt-0.5">
               These details will appear in the invitation email.
             </p>
           </div>
@@ -183,9 +183,9 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
             <div>
               <label
                 htmlFor="invitee_name"
-                className="block text-sm font-medium text-slate-700 mb-1.5"
+                className="block text-sm font-medium text-fg-body mb-1.5"
               >
-                Full name <span className="text-red-400">*</span>
+                Full name <span className="text-fg-muted">*</span>
               </label>
               <input
                 id="invitee_name"
@@ -194,9 +194,9 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
                 required
                 autoComplete="off"
                 placeholder="e.g. Sarah Johnson"
-                className="w-full px-3.5 py-2.5 text-sm text-slate-900 bg-white border border-slate-300
-                           rounded-lg placeholder-slate-400 focus:outline-none focus:ring-2
-                           focus:ring-slate-900 focus:border-transparent transition"
+                className="w-full px-3.5 py-2.5 text-sm text-fg bg-ink-raised border border-line-strong
+                           rounded-lg placeholder-fg-muted focus:outline-none focus:ring-2
+                           focus:ring-brand focus:border-transparent transition"
               />
             </div>
 
@@ -204,9 +204,9 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
             <div>
               <label
                 htmlFor="invitee_email"
-                className="block text-sm font-medium text-slate-700 mb-1.5"
+                className="block text-sm font-medium text-fg-body mb-1.5"
               >
-                Email address <span className="text-red-400">*</span>
+                Email address <span className="text-fg-muted">*</span>
               </label>
               <input
                 id="invitee_email"
@@ -215,11 +215,11 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
                 required
                 autoComplete="off"
                 placeholder="sarah@example.com"
-                className="w-full px-3.5 py-2.5 text-sm text-slate-900 bg-white border border-slate-300
-                           rounded-lg placeholder-slate-400 focus:outline-none focus:ring-2
-                           focus:ring-slate-900 focus:border-transparent transition"
+                className="w-full px-3.5 py-2.5 text-sm text-fg bg-ink-raised border border-line-strong
+                           rounded-lg placeholder-fg-muted focus:outline-none focus:ring-2
+                           focus:ring-brand focus:border-transparent transition"
               />
-              <p className="mt-1.5 text-xs text-slate-400">
+              <p className="mt-1.5 text-xs text-fg-muted">
                 The invitation link will be sent here. Use their personal email, not a work one they
                 don&apos;t have yet.
               </p>
@@ -229,9 +229,9 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
             <div>
               <label
                 htmlFor="role_title"
-                className="block text-sm font-medium text-slate-700 mb-1.5"
+                className="block text-sm font-medium text-fg-body mb-1.5"
               >
-                Job title <span className="text-red-400">*</span>
+                Job title <span className="text-fg-muted">*</span>
               </label>
               <input
                 id="role_title"
@@ -240,9 +240,9 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
                 required
                 autoComplete="off"
                 placeholder="e.g. Marketing Manager"
-                className="w-full px-3.5 py-2.5 text-sm text-slate-900 bg-white border border-slate-300
-                           rounded-lg placeholder-slate-400 focus:outline-none focus:ring-2
-                           focus:ring-slate-900 focus:border-transparent transition"
+                className="w-full px-3.5 py-2.5 text-sm text-fg bg-ink-raised border border-line-strong
+                           rounded-lg placeholder-fg-muted focus:outline-none focus:ring-2
+                           focus:ring-brand focus:border-transparent transition"
               />
             </div>
 
@@ -250,9 +250,9 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
             <div>
               <label
                 htmlFor="start_date"
-                className="block text-sm font-medium text-slate-700 mb-1.5"
+                className="block text-sm font-medium text-fg-body mb-1.5"
               >
-                Start date <span className="text-red-400">*</span>
+                Start date <span className="text-fg-muted">*</span>
               </label>
               <input
                 id="start_date"
@@ -260,11 +260,11 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
                 type="date"
                 required
                 min={getMinDate()}
-                className="w-full px-3.5 py-2.5 text-sm text-slate-900 bg-white border border-slate-300
-                           rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900
+                className="w-full px-3.5 py-2.5 text-sm text-fg bg-ink-raised border border-line-strong
+                           rounded-lg focus:outline-none focus:ring-2 focus:ring-brand
                            focus:border-transparent transition"
               />
-              <p className="mt-1.5 text-xs text-slate-400">
+              <p className="mt-1.5 text-xs text-fg-muted">
                 Checklist deadlines are calculated automatically from this date.
               </p>
             </div>
@@ -273,9 +273,9 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
             <div>
               <label
                 htmlFor="template_id"
-                className="block text-sm font-medium text-slate-700 mb-1.5"
+                className="block text-sm font-medium text-fg-body mb-1.5"
               >
-                Onboarding template <span className="text-red-400">*</span>
+                Onboarding template <span className="text-fg-muted">*</span>
               </label>
 
               {templates.length > 0 ? (
@@ -284,8 +284,8 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
                   name="template_id"
                   required
                   defaultValue={templates.find((t) => t.is_default)?.id ?? templates[0]?.id ?? ''}
-                  className="w-full px-3.5 py-2.5 text-sm text-slate-900 bg-white border border-slate-300
-                             rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900
+                  className="w-full px-3.5 py-2.5 text-sm text-fg bg-ink-raised border border-line-strong
+                             rounded-lg focus:outline-none focus:ring-2 focus:ring-brand
                              focus:border-transparent transition appearance-none
                              bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')]
                              bg-no-repeat bg-[right_12px_center]"
@@ -299,15 +299,15 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
                   ))}
                 </select>
               ) : (
-                <div className="w-full px-3.5 py-2.5 text-sm text-slate-400 bg-slate-50 border
-                                border-slate-200 rounded-lg">
+                <div className="w-full px-3.5 py-2.5 text-sm text-fg-muted bg-ink-inset border
+                                border-line rounded-lg">
                   No templates available
                 </div>
               )}
 
-              <p className="mt-1.5 text-xs text-slate-400">
+              <p className="mt-1.5 text-xs text-fg-muted">
                 This determines which documents and forms the new starter will need to complete.{' '}
-                <Link href="/dashboard/templates" className="text-slate-500 underline">
+                <Link href="/dashboard/templates" className="text-fg-muted underline">
                   Manage templates
                 </Link>
               </p>
@@ -316,10 +316,10 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
           </div>
 
           {/* Form footer */}
-          <div className="px-8 py-5 bg-slate-50 border-t border-slate-100 rounded-b-2xl
+          <div className="px-8 py-5 bg-ink-inset border-t border-line rounded-b-2xl
                           flex flex-col sm:flex-row items-center justify-between gap-3">
 
-            <p className="text-xs text-slate-400 order-2 sm:order-1">
+            <p className="text-xs text-fg-muted order-2 sm:order-1">
               An email will be sent immediately on submission.
             </p>
 
@@ -327,7 +327,7 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
               type="submit"
               disabled={isPending || templates.length === 0}
               className="w-full sm:w-auto order-1 sm:order-2 flex items-center justify-center gap-2
-                         bg-slate-900 hover:bg-slate-700 disabled:bg-slate-300 disabled:cursor-not-allowed
+                         bg-brand hover:bg-brand-hover disabled:bg-line-strong disabled:cursor-not-allowed
                          text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors"
             >
               {isPending ? (
@@ -375,7 +375,7 @@ export default function InviteForm({ templates, companyName }: InviteFormProps) 
         </form>
 
         {/* GDPR note */}
-        <p className="mt-4 text-xs text-center text-slate-400 leading-relaxed">
+        <p className="mt-4 text-xs text-center text-fg-muted leading-relaxed">
           By sending this invitation you confirm you have a lawful basis under UK GDPR to collect
           this employee&apos;s personal data. The new starter will be asked to give explicit consent
           before sharing any sensitive information.

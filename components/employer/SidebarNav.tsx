@@ -78,8 +78,8 @@ export default function SidebarNav({
           bottom: 0;
           z-index: 50;
           width: 240px;
-          background: white;
-          border-right: 1px solid #e2e8f0;
+          background: var(--bg-raised);
+          border-right: 1px solid var(--border);
           flex-direction: column;
           display: none;
         }
@@ -101,16 +101,16 @@ export default function SidebarNav({
       `}</style>
 
       {/* Mobile top bar */}
-      <div className="obd-topbar fixed top-0 left-0 right-0 z-30 items-center justify-between bg-white border-b border-slate-200 px-4 h-14">
+      <div className="obd-topbar fixed top-0 left-0 right-0 z-30 items-center justify-between bg-ink-raised border-b border-line px-4 h-14">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-violet-700 flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-brand flex items-center justify-center shrink-0">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M2 3.5C2 2.67 2.67 2 3.5 2h7C11.33 2 12 2.67 12 3.5v2C12 6.33 11.33 7 10.5 7h-7C2.67 7 2 6.33 2 5.5v-2ZM2 9.5C2 8.67 2.67 8 3.5 8H7c.83 0 1.5.67 1.5 1.5S7.83 11 7 11H3.5C2.67 11 2 10.33 2 9.5Z" fill="white" />
             </svg>
           </div>
-          <span className="text-sm font-semibold text-slate-900 truncate max-w-[180px]">{companyName}</span>
+          <span className="text-sm font-semibold text-fg truncate max-w-[180px]">{companyName}</span>
         </div>
-        <button onClick={() => setMobileOpen(true)} className="p-2 text-slate-500 hover:text-slate-800">
+        <button onClick={() => setMobileOpen(true)} className="p-2 text-fg-muted hover:text-fg">
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -126,18 +126,18 @@ export default function SidebarNav({
       <aside className={`obd-sidebar shrink-0 min-h-screen ${mobileOpen ? 'obd-open' : ''}`}>
 
         {/* Logo + company */}
-        <div className="px-5 py-5 border-b border-slate-100">
+        <div className="px-5 py-5 border-b border-line">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-violet-700 flex items-center justify-center shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-brand flex items-center justify-center shrink-0">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M2 3.5C2 2.67 2.67 2 3.5 2h7C11.33 2 12 2.67 12 3.5v2C12 6.33 11.33 7 10.5 7h-7C2.67 7 2 6.33 2 5.5v-2ZM2 9.5C2 8.67 2.67 8 3.5 8H7c.83 0 1.5.67 1.5 1.5S7.83 11 7 11H3.5C2.67 11 2 10.33 2 9.5Z" fill="white" />
               </svg>
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-slate-900 truncate leading-tight">{companyName}</p>
-              <p className="text-[11px] text-slate-400 leading-tight mt-0.5">Vopria</p>
+              <p className="text-sm font-semibold text-fg truncate leading-tight">{companyName}</p>
+              <p className="text-[11px] text-fg-muted leading-tight mt-0.5">Vopria</p>
             </div>
-            <button onClick={() => setMobileOpen(false)} className="ml-auto text-slate-400 hover:text-slate-700 p-1" style={{display: mobileOpen ? 'block' : 'none'}}>
+            <button onClick={() => setMobileOpen(false)} className="ml-auto text-fg-muted hover:text-fg p-1" style={{display: mobileOpen ? 'block' : 'none'}}>
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -154,9 +154,9 @@ export default function SidebarNav({
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-violet-50 text-violet-800' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-brand/15 text-fg-accent' : 'text-fg-body hover:bg-ink-raised-hover hover:text-fg'}`}
               >
-                <span className={isActive ? 'text-violet-700' : 'text-slate-400'}>{item.icon}</span>
+                <span className={isActive ? 'text-fg-accent' : 'text-fg-muted'}>{item.icon}</span>
                 {item.label}
               </Link>
             )
@@ -165,15 +165,15 @@ export default function SidebarNav({
 
         {/* Trial banner */}
         {isOnTrial && (
-          <div className="mx-3 mb-3 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3.5">
-            <p className="text-xs font-semibold text-amber-800 mb-0.5">Free trial</p>
-            <p className="text-xs text-amber-700 leading-relaxed">
+          <div className="mx-3 mb-3 rounded-xl bg-status-pending/15 border border-status-pending/30 px-4 py-3.5">
+            <p className="text-xs font-semibold text-status-pending mb-0.5">Free trial</p>
+            <p className="text-xs text-fg-body leading-relaxed">
               {trialRemaining > 0
                 ? `${trialRemaining} free onboarding${trialRemaining !== 1 ? 's' : ''} remaining`
                 : 'Trial complete — add billing to continue'}
             </p>
             {trialRemaining === 0 && (
-              <Link href="/settings/billing" className="mt-2 block text-xs font-semibold text-amber-800 underline hover:text-amber-900 transition">
+              <Link href="/settings/billing" className="mt-2 block text-xs font-semibold text-status-pending underline hover:text-fg transition">
                 Add payment method
               </Link>
             )}
@@ -181,16 +181,16 @@ export default function SidebarNav({
         )}
 
         {/* User + logout */}
-        <div className="px-3 py-3 border-t border-slate-100">
+        <div className="px-3 py-3 border-t border-line">
           <div className="flex items-center gap-2.5 px-2 py-2">
-            <div className="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center shrink-0">
-              <span className="text-xs font-semibold text-violet-800">{memberName.charAt(0).toUpperCase()}</span>
+            <div className="w-7 h-7 rounded-full bg-brand/15 flex items-center justify-center shrink-0">
+              <span className="text-xs font-semibold text-fg-accent">{memberName.charAt(0).toUpperCase()}</span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium text-slate-700 truncate">{memberName}</p>
+              <p className="text-xs font-medium text-fg-body truncate">{memberName}</p>
             </div>
             <form action={logout}>
-              <button type="submit" title="Sign out" className="text-slate-400 hover:text-slate-700 transition p-1">
+              <button type="submit" title="Sign out" className="text-fg-muted hover:text-fg transition p-1">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M9.5 4.5 12 7l-2.5 2.5M12 7H5.5M5.5 2H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

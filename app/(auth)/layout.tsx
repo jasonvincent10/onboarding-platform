@@ -7,11 +7,11 @@ export const metadata: Metadata = {
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col">
+    <div className="min-h-screen bg-ink flex flex-col">
       {/* Top bar */}
       <header className="px-6 py-5 flex items-center">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 rounded-lg bg-violet-700 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-brand flex items-center justify-center">
             <svg
               width="14"
               height="14"
@@ -25,7 +25,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               />
             </svg>
           </div>
-          <span className="font-extrabold text-violet-700 text-xl tracking-tight">
+          <span className="font-semibold text-brand text-xl tracking-tight">
             Vopria
           </span>
         </Link>
@@ -38,7 +38,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       {/* Footer */}
       <footer className="px-6 py-4 text-center">
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-fg-muted">
           UK GDPR compliant · Data stored in the EU · ICO registered
         </p>
       </footer>

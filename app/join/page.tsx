@@ -56,25 +56,25 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
       'the inviting company'
 
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-xl border border-gray-200 p-8">
-          <h1 className="text-lg font-semibold text-gray-900 mb-2">
+      <div className="min-h-screen bg-ink-inset flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-ink-raised rounded-xl border border-line p-8">
+          <h1 className="text-lg font-semibold text-fg mb-2">
             You are signed in as an employer
           </h1>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-fg-body mb-4">
             This invitation from {companyName} is for a new starter and must be
             accepted with an employee account. You are currently signed in to an
             employer account, so accepting it here would link the onboarding to
             the wrong account.
           </p>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-fg-body mb-6">
             To accept this invitation: sign out first, or open the invite link
             in a different browser or a private window, then sign in or sign up
             with the employee email address.
           </p>
           <a
             href="/dashboard"
-            className="inline-block w-full text-center rounded-lg bg-gray-900 text-white text-sm font-medium py-2.5 hover:bg-gray-700"
+            className="inline-block w-full text-center rounded-lg bg-brand text-white text-sm font-medium py-2.5 hover:bg-brand-hover"
           >
             Back to your dashboard
           </a>

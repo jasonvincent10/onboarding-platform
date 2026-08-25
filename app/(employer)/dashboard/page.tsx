@@ -13,10 +13,10 @@ function getTimeOfDay() {
 }
 
 function StatCard({ label, value, accent }: { label: string; value: number; accent?: 'amber' | 'teal' }) {
-  const valueColor = accent === 'amber' ? 'text-amber-600' : accent === 'teal' ? 'text-violet-700' : 'text-slate-900'
+  const valueColor = accent === 'amber' ? 'text-status-pending' : accent === 'teal' ? 'text-fg-accent' : 'text-fg'
   return (
-    <div className="bg-white rounded-xl border border-slate-200 px-5 py-4">
-      <p className="text-xs font-medium text-slate-500 mb-1">{label}</p>
+    <div className="bg-ink-raised rounded-xl border border-line px-5 py-4">
+      <p className="text-xs font-medium text-fg-muted mb-1">{label}</p>
       <p className={`text-3xl font-semibold tabular-nums ${valueColor}`}>{value}</p>
     </div>
   )
@@ -24,17 +24,17 @@ function StatCard({ label, value, accent }: { label: string; value: number; acce
 
 function EmptyState() {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
-      <div className="h-1.5 rounded-t-2xl bg-gradient-to-r from-violet-400 via-violet-600 to-violet-800" />
+    <div className="bg-ink-raised rounded-2xl border border-line shadow-sm">
+      <div className="h-1.5 rounded-t-2xl bg-gradient-to-r from-brand via-brand-hover to-brand-deep" />
       <div className="px-8 py-16 flex flex-col items-center text-center max-w-md mx-auto">
-        <div className="w-16 h-16 rounded-2xl bg-violet-50 border border-violet-100 flex items-center justify-center mb-6">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="text-violet-600">
+        <div className="w-16 h-16 rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center mb-6">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="text-fg-accent">
             <path d="M14 4C8.477 4 4 8.477 4 14s4.477 10 10 10 10-4.477 10-10S19.523 4 14 4Z" stroke="currentColor" strokeWidth="1.5" />
             <path d="M14 9v5l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h2 className="text-lg font-semibold text-slate-900 mb-2">No active onboardings</h2>
-        <p className="text-[15px] text-slate-500 leading-relaxed mb-8">
+        <h2 className="text-lg font-semibold text-fg mb-2">No active onboardings</h2>
+        <p className="text-[15px] text-fg-muted leading-relaxed mb-8">
           When you invite a new starter, their onboarding will appear here. Track progress, review documents, and see day-one readiness at a glance.
         </p>
         <div className="w-full space-y-3 mb-8 text-left">
@@ -44,26 +44,26 @@ function EmptyState() {
             { n: '3', title: 'You review and approve', body: 'One-click approval. Everything logged for compliance.' },
           ].map((step) => (
             <div key={step.n} className="flex gap-3.5 items-start">
-              <div className="w-6 h-6 rounded-full bg-violet-700 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+              <div className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                 {step.n}
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-800">{step.title}</p>
-                <p className="text-sm text-slate-400">{step.body}</p>
+                <p className="text-sm font-medium text-fg">{step.title}</p>
+                <p className="text-sm text-fg-muted">{step.body}</p>
               </div>
             </div>
           ))}
         </div>
         <Link
           href="/dashboard/invite"
-          className="inline-flex items-center gap-2 rounded-lg bg-violet-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 transition"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-hover transition"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M7 2v10M2 7h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
           </svg>
           Invite your first new starter
         </Link>
-        <p className="mt-4 text-xs text-slate-400">Your first 3 onboardings are free. No credit card needed.</p>
+        <p className="mt-4 text-xs text-fg-muted">Your first 3 onboardings are free. No credit card needed.</p>
       </div>
     </div>
   )
@@ -108,10 +108,10 @@ export default async function DashboardPage() {
     <div>
       <div className="flex items-start justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">
+          <h1 className="text-2xl font-semibold text-fg tracking-tight">
             Good {getTimeOfDay()}, {firstName}
           </h1>
-          <p className="text-slate-500 mt-1 text-[15px]">
+          <p className="text-fg-muted mt-1 text-[15px]">
             {total === 0
               ? 'No active onboardings yet. Invite your first new starter to get going.'
               : `${total} active onboarding${total !== 1 ? 's' : ''} for ${companyName}.`}
@@ -119,7 +119,7 @@ export default async function DashboardPage() {
         </div>
         <Link
           href="/dashboard/invite"
-          className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 transition"
+          className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-hover transition"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M7 2v10M2 7h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
@@ -147,7 +147,7 @@ export default async function DashboardPage() {
           <OnboardingsList items={active} />
           {total === 20 && (
             <p className="mt-4 text-center">
-              <Link href="/onboardings" className="text-sm font-medium text-violet-700 hover:text-violet-800 transition">
+              <Link href="/onboardings" className="text-sm font-medium text-fg-accent hover:text-fg transition">
                 View all onboardings →
               </Link>
             </p>

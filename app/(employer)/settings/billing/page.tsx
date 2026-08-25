@@ -15,23 +15,23 @@ export default async function BillingSettingsPage() {
   const billing = member?.employer_id ? await getBillingState(member.employer_id) : null
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm max-w-xl">
-      <div className="px-6 py-5 border-b border-slate-100">
-        <h2 className="text-sm font-semibold text-slate-800">Billing</h2>
-        <p className="text-sm text-slate-500 mt-0.5">
+    <div className="bg-ink-raised rounded-2xl border border-line shadow-sm max-w-xl">
+      <div className="px-6 py-5 border-b border-line">
+        <h2 className="text-sm font-semibold text-fg">Billing</h2>
+        <p className="text-sm text-fg-muted mt-0.5">
           Manage your payment method and view invoices.
         </p>
       </div>
 
       <div className="px-6 py-5 space-y-4">
         {billing && (
-          <div className="rounded-lg border border-slate-200 px-4 py-3.5">
-            <p className="text-sm font-medium text-slate-900">
+          <div className="rounded-lg border border-line px-4 py-3.5">
+            <p className="text-sm font-medium text-fg">
               {billing.freeRemaining > 0
                 ? `Free trial: ${billing.freeRemaining} of ${billing.freeLimit} free onboardings remaining`
                 : 'Free trial used'}
             </p>
-            <p className="text-sm text-slate-500 mt-0.5">
+            <p className="text-sm text-fg-muted mt-0.5">
               {billing.paidCredits > 0
                 ? `${billing.paidCredits} paid onboarding credit${billing.paidCredits === 1 ? '' : 's'} available`
                 : 'No paid credits yet.'}
@@ -41,7 +41,7 @@ export default async function BillingSettingsPage() {
 
         <BillingPortalButton />
 
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-fg-muted">
           Opens Stripe&apos;s secure billing portal in a new page, where you can update your card,
           view past invoices, and see your billing history.
         </p>

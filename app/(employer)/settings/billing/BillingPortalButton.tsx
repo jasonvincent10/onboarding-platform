@@ -30,11 +30,11 @@ export default function BillingPortalButton() {
         type="button"
         onClick={openPortal}
         disabled={busy}
-        className="rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
+        className="rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-hover disabled:opacity-60 disabled:cursor-not-allowed transition"
       >
         {busy ? 'Opening…' : 'Manage billing'}
       </button>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-sm text-status-rejected">{error}</p>}
     </div>
   )
 }

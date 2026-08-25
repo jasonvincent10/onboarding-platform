@@ -92,42 +92,42 @@ export default function EmergencyContactsForm({
 
   return (
     <div className="max-w-xl">
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">Emergency Contacts</h2>
-      <p className="text-sm text-gray-500 mb-6">
+      <h2 className="text-lg font-semibold text-fg mb-1">Emergency Contacts</h2>
+      <p className="text-sm text-fg-muted mb-6">
         Please provide at least one emergency contact. This is someone your employer can reach if there is an emergency at work. You can add up to 3 contacts.
       </p>
 
       {contacts.map((contact, index) => (
-        <div key={index} className="mb-4 rounded-xl border border-gray-200 bg-gray-50 p-4">
+        <div key={index} className="mb-4 rounded-xl border border-line bg-ink-inset p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-semibold text-gray-700">Contact {index + 1}</span>
+            <span className="text-sm font-semibold text-fg-body">Contact {index + 1}</span>
             {contacts.length > 1 && (
-              <button onClick={() => removeContact(index)} className="text-xs text-red-500 underline underline-offset-2 hover:text-red-700">
+              <button onClick={() => removeContact(index)} className="text-xs text-status-rejected underline underline-offset-2 hover:text-status-rejected">
                 Remove
               </button>
             )}
           </div>
 
           <div className="mb-3">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Full name</label>
+            <label className="block text-xs font-medium text-fg-body mb-1">Full name</label>
             <input
               type="text"
               value={contact.name}
               onChange={(e) => updateContact(index, 'name', e.target.value)}
               placeholder="e.g. Jane Smith"
-              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${errors[index]?.name ? 'border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
+              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 ${errors[index]?.name ? 'border-status-rejected' : 'border-line-strong focus:border-brand'}`}
             />
             {errors[index]?.name && (
-              <p className="mt-1 text-xs text-red-600">{errors[index].name}</p>
+              <p className="mt-1 text-xs text-status-rejected">{errors[index].name}</p>
             )}
           </div>
 
           <div className="mb-3">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Relationship</label>
+            <label className="block text-xs font-medium text-fg-body mb-1">Relationship</label>
             <select
               value={contact.relationship}
               onChange={(e) => updateContact(index, 'relationship', e.target.value)}
-              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${errors[index]?.relationship ? 'border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
+              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 ${errors[index]?.relationship ? 'border-status-rejected' : 'border-line-strong focus:border-brand'}`}
             >
               <option value="">Select relationship</option>
               {RELATIONSHIP_OPTIONS.map((rel) => (
@@ -135,38 +135,38 @@ export default function EmergencyContactsForm({
               ))}
             </select>
             {errors[index]?.relationship && (
-              <p className="mt-1 text-xs text-red-600">{errors[index].relationship}</p>
+              <p className="mt-1 text-xs text-status-rejected">{errors[index].relationship}</p>
             )}
           </div>
 
           <div className="mb-3">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Phone number</label>
+            <label className="block text-xs font-medium text-fg-body mb-1">Phone number</label>
             <input
               type="tel"
               value={contact.phone}
               onChange={(e) => updateContact(index, 'phone', e.target.value)}
               placeholder="e.g. 07700 900000"
               inputMode="tel"
-              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${errors[index]?.phone ? 'border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
+              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 ${errors[index]?.phone ? 'border-status-rejected' : 'border-line-strong focus:border-brand'}`}
             />
             {errors[index]?.phone && (
-              <p className="mt-1 text-xs text-red-600">{errors[index].phone}</p>
+              <p className="mt-1 text-xs text-status-rejected">{errors[index].phone}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              Email <span className="font-normal text-gray-400">(optional)</span>
+            <label className="block text-xs font-medium text-fg-body mb-1">
+              Email <span className="font-normal text-fg-muted">(optional)</span>
             </label>
             <input
               type="email"
               value={contact.email ?? ''}
               onChange={(e) => updateContact(index, 'email', e.target.value)}
               placeholder="e.g. jane@example.com"
-              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${errors[index]?.email ? 'border-red-400' : 'border-gray-300 focus:border-violet-400'}`}
+              className={`block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 ${errors[index]?.email ? 'border-status-rejected' : 'border-line-strong focus:border-brand'}`}
             />
             {errors[index]?.email && (
-              <p className="mt-1 text-xs text-red-600">{errors[index].email}</p>
+              <p className="mt-1 text-xs text-status-rejected">{errors[index].email}</p>
             )}
           </div>
         </div>
@@ -175,14 +175,14 @@ export default function EmergencyContactsForm({
       {contacts.length < 3 && (
         <button
           onClick={addContact}
-          className="mb-6 w-full rounded-lg border border-dashed border-gray-300 px-4 py-3 text-sm text-gray-500 hover:border-violet-300 hover:text-violet-600 transition-colors"
+          className="mb-6 w-full rounded-lg border border-dashed border-line-strong px-4 py-3 text-sm text-fg-muted hover:border-brand/40 hover:text-fg-accent transition-colors"
         >
           + Add another contact ({3 - contacts.length} remaining)
         </button>
       )}
 
       {serverError && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 rounded-lg border border-status-rejected/30 bg-status-rejected/10 px-4 py-3 text-sm text-status-rejected">
           {serverError}
         </div>
       )}
@@ -190,7 +190,7 @@ export default function EmergencyContactsForm({
       <button
         onClick={handleSubmit}
         disabled={submitting}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         {submitting ? (
           <>

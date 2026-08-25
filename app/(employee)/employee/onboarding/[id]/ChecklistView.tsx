@@ -47,32 +47,32 @@ const STATUS_CONFIG: Record<ItemStatus, {
 }> = {
   not_started: {
     label: 'Not started',
-    dotClass: 'bg-slate-300',
-    badgeClass: 'bg-slate-50 text-slate-500 border-slate-200',
+    dotClass: 'bg-status-inactive',
+    badgeClass: 'bg-status-inactive/10 text-status-inactive border-status-inactive/30',
     icon: '○',
   },
   in_progress: {
     label: 'In progress',
-    dotClass: 'bg-amber-400',
-    badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
+    dotClass: 'bg-status-inactive',
+    badgeClass: 'bg-status-inactive/10 text-status-inactive border-status-inactive/30',
     icon: '◐',
   },
   submitted: {
     label: 'Submitted',
-    dotClass: 'bg-blue-400 animate-pulse',
-    badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
+    dotClass: 'bg-status-pending animate-pulse',
+    badgeClass: 'bg-status-pending/10 text-status-pending border-status-pending/30',
     icon: '⟳',
   },
   approved: {
     label: 'Approved',
-    dotClass: 'bg-emerald-500',
-    badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    dotClass: 'bg-status-approved',
+    badgeClass: 'bg-status-approved/10 text-status-approved border-status-approved/30',
     icon: '✓',
   },
   overdue: {
     label: 'Overdue',
-    dotClass: 'bg-red-500',
-    badgeClass: 'bg-red-50 text-red-700 border-red-200',
+    dotClass: 'bg-status-rejected',
+    badgeClass: 'bg-status-rejected/10 text-status-rejected border-status-rejected/30',
     icon: '!',
   },
 }
@@ -127,9 +127,9 @@ function formatDeadline(dateStr: string | null): { label: string; urgency: 'fine
 }
 
 const URGENCY_CLASSES = {
-  fine: 'text-slate-400',
-  soon: 'text-amber-600',
-  overdue: 'text-red-600 font-medium',
+  fine: 'text-fg-muted',
+  soon: 'text-status-pending',
+  overdue: 'text-status-rejected font-medium',
 }
 
 // ─── Main component ───────────────────────────────────────────────────────
@@ -173,19 +173,19 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
 
       {/* Welcome banner */}
       {showWelcomeBanner && (
-        <div className="bg-violet-600 text-white rounded-xl px-4 py-3 flex items-start gap-3">
+        <div className="bg-brand text-white rounded-xl px-4 py-3 flex items-start gap-3">
           <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
           <div className="min-w-0">
             <p className="text-sm font-semibold">Invitation accepted</p>
-            <p className="text-xs text-violet-200 mt-0.5">
+            <p className="text-xs text-white/80 mt-0.5">
               Welcome to {onboarding.companyName}! Complete the steps below before your start date.
             </p>
           </div>
           <button
             onClick={() => setShowWelcomeBanner(false)}
-            className="shrink-0 text-violet-300 hover:text-white ml-auto"
+            className="shrink-0 text-white/70 hover:text-white ml-auto"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -195,17 +195,17 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
       )}
 
       {/* Header card */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5">
+      <div className="bg-ink-raised rounded-2xl border border-line p-5">
         {/* Company + role */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
-            <p className="text-xs font-medium text-violet-600 uppercase tracking-wide">
+            <p className="text-xs font-medium text-fg-accent uppercase tracking-wide">
               {onboarding.companyName}
             </p>
-            <h1 className="text-lg font-semibold text-slate-900 mt-0.5">
+            <h1 className="text-lg font-semibold text-fg mt-0.5">
               {onboarding.roleTitle}
             </h1>
-            <p className="text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">
+            <p className="text-sm text-fg-muted mt-0.5 flex items-center gap-1.5">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
@@ -215,14 +215,14 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
 
           {/* Readiness badge */}
           {isComplete ? (
-            <div className="shrink-0 flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1.5">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full" />
-              <span className="text-xs font-semibold text-emerald-700">Complete</span>
+            <div className="shrink-0 flex items-center gap-1.5 bg-status-approved/10 border border-status-approved/30 rounded-full px-3 py-1.5">
+              <span className="w-2 h-2 bg-status-approved rounded-full" />
+              <span className="text-xs font-semibold text-status-approved">Complete</span>
             </div>
           ) : (
             <div className="shrink-0 text-center">
-              <p className="text-2xl font-bold text-slate-900 leading-none">{pct}%</p>
-              <p className="text-xs text-slate-400 mt-0.5">ready</p>
+              <p className="text-2xl font-bold text-fg leading-none">{pct}%</p>
+              <p className="text-xs text-fg-muted mt-0.5">ready</p>
             </div>
           )}
         </div>
@@ -230,10 +230,10 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
         {/* Progress bar */}
         {!isComplete && (
           <div className="space-y-2">
-            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-2 bg-ink-inset rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-700 ${
-                  pct === 100 ? 'bg-emerald-500' : pct >= 60 ? 'bg-violet-500' : 'bg-amber-400'
+                  pct === 100 ? 'bg-status-approved' : pct >= 60 ? 'bg-brand' : 'bg-status-pending'
                 }`}
                 style={{ width: `${pct}%` }}
               />
@@ -245,7 +245,7 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
                 if (!n) return null
                 const cfg = STATUS_CONFIG[s]
                 return (
-                  <span key={s} className="flex items-center gap-1 text-xs text-slate-500">
+                  <span key={s} className="flex items-center gap-1 text-xs text-fg-muted">
                     <span className={`w-1.5 h-1.5 rounded-full ${cfg.dotClass}`} />
                     {n} {cfg.label.toLowerCase()}
                   </span>
@@ -257,7 +257,7 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
 
         {/* Completed state */}
         {isComplete && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-sm text-emerald-800">
+          <div className="bg-status-approved/10 border border-status-approved/30 rounded-xl p-3 text-sm text-status-approved">
             🎉 All tasks complete. Your profile is saved and ready for your next employer.
           </div>
         )}
@@ -265,11 +265,11 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
 
       {/* Portable profile notice */}
       {items.some(i => i.was_pre_populated) && (
-        <div className="flex items-start gap-2.5 bg-violet-50 border border-violet-200 rounded-xl px-4 py-3">
-          <svg className="w-4 h-4 text-violet-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="flex items-start gap-2.5 bg-brand/10 border border-brand/30 rounded-xl px-4 py-3">
+          <svg className="w-4 h-4 text-fg-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-          <p className="text-xs text-violet-700">
+          <p className="text-xs text-fg-accent">
             <span className="font-semibold">Some items pre-filled from your profile</span> — review them to confirm they're still correct.
           </p>
         </div>
@@ -288,7 +288,7 @@ export default function ChecklistView({ onboarding, items, welcomed }: Checklist
         ))}
 
         {items.length === 0 && (
-          <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-sm text-slate-400">
+          <div className="bg-ink-raised rounded-xl border border-line p-8 text-center text-sm text-fg-muted">
             No checklist items yet. Your employer is setting things up.
           </div>
         )}
@@ -316,12 +316,12 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
 
   return (
     <div
-      className={`bg-white rounded-xl border transition-all ${
+      className={`bg-ink-raised rounded-xl border transition-all ${
         item.status === 'overdue'
-          ? 'border-red-200'
+          ? 'border-status-rejected/30'
           : isApproved
-          ? 'border-emerald-200'
-          : 'border-slate-200'
+          ? 'border-status-approved/30'
+          : 'border-line'
       }`}
     >
       {/* Main row */}
@@ -336,19 +336,19 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <p className={`text-sm font-medium ${isApproved ? 'text-slate-400 line-through' : 'text-slate-900'} truncate`}>
+              <p className={`text-sm font-medium ${isApproved ? 'text-fg-muted line-through' : 'text-fg'} truncate`}>
                 {item.item_name}
               </p>
               <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                 {/* Type label */}
-                <span className="flex items-center gap-1 text-xs text-slate-400">
-                  {typeCfg.icon && <span className="text-slate-400">{typeCfg.icon}</span>}
+                <span className="flex items-center gap-1 text-xs text-fg-muted">
+                  {typeCfg.icon && <span className="text-fg-muted">{typeCfg.icon}</span>}
                   {typeCfg.label}
                 </span>
                 {/* Deadline */}
                 {item.deadline && item.status !== 'approved' && (
                   <>
-                    <span className="text-slate-200">·</span>
+                    <span className="text-fg-muted">·</span>
                     <span className={`text-xs ${URGENCY_CLASSES[deadline.urgency]}`}>
                       {deadline.label}
                     </span>
@@ -357,8 +357,8 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
                 {/* Pre-populated badge */}
                 {item.was_pre_populated && (
                   <>
-                    <span className="text-slate-200">·</span>
-                    <span className="text-xs text-violet-500 font-medium">From profile</span>
+                    <span className="text-fg-muted">·</span>
+                    <span className="text-xs text-fg-accent font-medium">From profile</span>
                   </>
                 )}
               </div>
@@ -371,7 +371,7 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
               </span>
               {/* Chevron */}
               <svg
-                className={`w-4 h-4 text-slate-300 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                className={`w-4 h-4 text-fg-muted transition-transform ${isExpanded ? 'rotate-180' : ''}`}
                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -383,24 +383,24 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
 
       {/* Expanded detail panel */}
       {isExpanded && (
-        <div className="border-t border-slate-100 px-4 pb-4 pt-3 space-y-3">
+        <div className="border-t border-line px-4 pb-4 pt-3 space-y-3">
           {/* Reviewer note */}
           {item.reviewer_notes && item.status !== 'approved' && (
-            <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-              <svg className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-start gap-2 bg-status-pending/10 border border-status-pending/30 rounded-lg px-3 py-2">
+              <svg className="w-4 h-4 text-status-pending shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
               <div>
-                <p className="text-xs font-semibold text-amber-800">Action needed</p>
-                <p className="text-xs text-amber-700 mt-0.5">{item.reviewer_notes}</p>
+                <p className="text-xs font-semibold text-status-pending">Action needed</p>
+                <p className="text-xs text-status-pending mt-0.5">{item.reviewer_notes}</p>
               </div>
             </div>
           )}
 
           {/* Approved confirmation */}
           {isApproved && (
-            <div className="flex items-center gap-2 text-xs text-emerald-700">
-              <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center gap-2 text-xs text-status-approved">
+              <svg className="w-4 h-4 text-status-approved" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Reviewed and approved by your employer.
@@ -409,8 +409,8 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
 
           {/* Submitted state */}
           {item.status === 'submitted' && (
-            <div className="flex items-center gap-2 text-xs text-blue-700">
-              <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center gap-2 text-xs text-status-pending">
+              <svg className="w-4 h-4 text-status-pending" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Submitted — waiting for your employer to review.
@@ -421,7 +421,7 @@ function ChecklistItemCard({ item, onboardingId, isExpanded, onToggle }: Checkli
           {isActionable && (
             <Link
               href={`/employee/onboarding/${onboardingId}/item/${item.id}`}
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg transition-colors text-sm font-medium bg-violet-600 text-white hover:bg-violet-700"
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg transition-colors text-sm font-medium bg-brand text-white hover:bg-brand-hover"
             >
               {item.item_type === 'document_upload' && 'Upload document'}
               {item.item_type === 'form' && 'Fill in details'}

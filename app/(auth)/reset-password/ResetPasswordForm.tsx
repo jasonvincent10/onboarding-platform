@@ -21,18 +21,18 @@ export default function ResetPasswordForm() {
     return (
       <div>
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mb-1.5">
+          <h1 className="text-2xl font-semibold text-fg tracking-tight mb-1.5">
             Password updated
           </h1>
-          <p className="text-[15px] text-slate-500">
+          <p className="text-[15px] text-fg-muted">
             Your password has been changed successfully.
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+        <div className="bg-ink-raised rounded-2xl border border-line shadow-sm p-7">
           <Link
             href="/login"
-            className="block w-full text-center rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800"
+            className="block w-full text-center rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
           >
             Continue to sign in
           </Link>
@@ -44,22 +44,22 @@ export default function ResetPasswordForm() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mb-1.5">
+        <h1 className="text-2xl font-semibold text-fg tracking-tight mb-1.5">
           Choose a new password
         </h1>
-        <p className="text-[15px] text-slate-500">Must be at least 8 characters.</p>
+        <p className="text-[15px] text-fg-muted">Must be at least 8 characters.</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+      <div className="bg-ink-raised rounded-2xl border border-line shadow-sm p-7">
         <form onSubmit={handleSubmit} className="space-y-4">
           {state?.error && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3">
-              <p className="text-sm text-red-700">{state.error}</p>
+            <div className="rounded-lg bg-status-rejected/10 border border-status-rejected/30 px-4 py-3">
+              <p className="text-sm text-status-rejected">{state.error}</p>
             </div>
           )}
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label htmlFor="password" className="block text-sm font-medium text-fg-body mb-1.5">
               New password
             </label>
             <input
@@ -70,14 +70,14 @@ export default function ResetPasswordForm() {
               required
               minLength={8}
               placeholder="••••••••"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
           </div>
 
           <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-slate-700 mb-1.5"
+              className="block text-sm font-medium text-fg-body mb-1.5"
             >
               Confirm new password
             </label>
@@ -89,14 +89,14 @@ export default function ResetPasswordForm() {
               required
               minLength={8}
               placeholder="••••••••"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
           </div>
 
           <button
             type="submit"
             disabled={isPending}
-            className="w-full mt-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full mt-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-ink disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isPending ? 'Updating…' : 'Update password'}
           </button>

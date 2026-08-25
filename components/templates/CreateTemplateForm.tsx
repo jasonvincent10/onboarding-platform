@@ -28,7 +28,7 @@ export function CreateTemplateForm() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 bg-slate-900 text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-slate-800 transition-colors"
+        className="inline-flex items-center gap-2 bg-brand text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-brand-hover transition-colors"
       >
         <Plus className="w-4 h-4" />
         New template
@@ -38,9 +38,9 @@ export function CreateTemplateForm() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+      <div className="bg-ink-raised rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-fg">
             New template
           </h2>
           <button
@@ -48,7 +48,7 @@ export function CreateTemplateForm() {
               setOpen(false)
               setError(null)
             }}
-            className="text-slate-400 hover:text-slate-600 transition-colors"
+            className="text-fg-muted hover:text-fg-body transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -58,9 +58,9 @@ export function CreateTemplateForm() {
           <div>
             <label
               htmlFor="template_name"
-              className="block text-sm font-medium text-slate-700 mb-1.5"
+              className="block text-sm font-medium text-fg-body mb-1.5"
             >
-              Template name <span className="text-red-500">*</span>
+              Template name <span className="text-status-rejected">*</span>
             </label>
             <input
               id="template_name"
@@ -68,7 +68,7 @@ export function CreateTemplateForm() {
               type="text"
               required
               placeholder="e.g. Software Engineer Onboarding"
-              className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent placeholder:text-slate-400"
+              className="w-full px-3.5 py-2.5 text-sm border border-line-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent placeholder:text-fg-muted"
               autoFocus
             />
           </div>
@@ -76,25 +76,25 @@ export function CreateTemplateForm() {
           <div>
             <label
               htmlFor="role_type"
-              className="block text-sm font-medium text-slate-700 mb-1.5"
+              className="block text-sm font-medium text-fg-body mb-1.5"
             >
               Role type{' '}
-              <span className="text-slate-400 font-normal">(optional)</span>
+              <span className="text-fg-muted font-normal">(optional)</span>
             </label>
             <input
               id="role_type"
               name="role_type"
               type="text"
               placeholder="e.g. Engineering, Sales, Operations"
-              className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent placeholder:text-slate-400"
+              className="w-full px-3.5 py-2.5 text-sm border border-line-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent placeholder:text-fg-muted"
             />
-            <p className="mt-1.5 text-xs text-slate-400">
+            <p className="mt-1.5 text-xs text-fg-muted">
               Helps you find the right template when inviting a new starter.
             </p>
           </div>
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            <p className="text-sm text-status-rejected bg-status-rejected/10 border border-status-rejected/30 rounded-lg px-3 py-2">
               {error}
             </p>
           )}
@@ -106,14 +106,14 @@ export function CreateTemplateForm() {
                 setOpen(false)
                 setError(null)
               }}
-              className="px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors"
+              className="px-4 py-2.5 text-sm font-medium text-fg-body hover:text-fg transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="inline-flex items-center gap-2 bg-slate-900 text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-slate-800 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-2 bg-brand text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-brand-hover disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
             >
               {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
               Create template

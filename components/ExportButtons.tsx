@@ -66,11 +66,11 @@ export function EmployerExportButton({
         type="button"
         onClick={() => download(url)}
         disabled={busy}
-        className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50"
+        className="inline-flex items-center gap-2 rounded-md border border-line-strong bg-ink-raised px-3 py-2 text-sm font-medium text-fg-body shadow-sm hover:bg-ink-inset disabled:opacity-50"
       >
         {busy ? "Preparing export..." : onboardingId ? "Export this onboarding (CSV)" : "Export all onboardings (CSV)"}
       </button>
-      {error ? <p className="text-xs text-red-600">{error}</p> : null}
+      {error ? <p className="text-xs text-status-rejected">{error}</p> : null}
     </div>
   );
 }
@@ -84,14 +84,14 @@ export function SarExportButton() {
         type="button"
         onClick={() => download("/api/export/my-data")}
         disabled={busy}
-        className="inline-flex w-fit items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50"
+        className="inline-flex w-fit items-center gap-2 rounded-md border border-line-strong bg-ink-raised px-3 py-2 text-sm font-medium text-fg-body shadow-sm hover:bg-ink-inset disabled:opacity-50"
       >
         {busy ? "Preparing your data..." : "Download my data (CSV)"}
       </button>
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-fg-muted">
         A copy of all personal data we hold about you, in line with UK GDPR.
       </p>
-      {error ? <p className="text-xs text-red-600">{error}</p> : null}
+      {error ? <p className="text-xs text-status-rejected">{error}</p> : null}
     </div>
   );
 }

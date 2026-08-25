@@ -58,8 +58,8 @@ export default async function ConsentsPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-2xl font-semibold text-gray-900">Your data sharing</h1>
-      <p className="mt-2 text-gray-600">
+      <h1 className="text-2xl font-semibold text-fg">Your data sharing</h1>
+      <p className="mt-2 text-fg-body">
         Below is every employer you have shared data with through this
         platform, and what you have shared with each. You can withdraw any
         permission at any time. Withdrawing consent prevents the employer
@@ -68,7 +68,7 @@ export default async function ConsentsPage() {
       </p>
 
       {employers.length === 0 ? (
-        <p className="mt-8 text-sm text-gray-500">
+        <p className="mt-8 text-sm text-fg-muted">
           You haven&apos;t shared data with any employers yet.
         </p>
       ) : (

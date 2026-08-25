@@ -49,29 +49,29 @@ export default async function TeamSettingsPage() {
 
   return (
     <div className="space-y-6 max-w-xl">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
-        <div className="px-6 py-5 border-b border-slate-100 flex items-start justify-between gap-4">
+      <div className="bg-ink-raised rounded-2xl border border-line shadow-sm">
+        <div className="px-6 py-5 border-b border-line flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-sm font-semibold text-slate-800">Team members</h2>
-            <p className="text-sm text-slate-500 mt-0.5">
+            <h2 className="text-sm font-semibold text-fg">Team members</h2>
+            <p className="text-sm text-fg-muted mt-0.5">
               Everyone with access to this employer account.
             </p>
           </div>
         </div>
 
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y divide-line">
           {team.map((m) => (
             <div key={m.id} className="px-6 py-4 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center shrink-0">
-                <span className="text-xs font-semibold text-violet-800">
+              <div className="w-8 h-8 rounded-full bg-brand/15 flex items-center justify-center shrink-0">
+                <span className="text-xs font-semibold text-fg-accent">
                   {(m.full_name || m.email).charAt(0).toUpperCase()}
                 </span>
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-slate-900 truncate">{m.full_name || m.email}</p>
-                <p className="text-xs text-slate-500 truncate">{m.email}</p>
+                <p className="text-sm font-medium text-fg truncate">{m.full_name || m.email}</p>
+                <p className="text-xs text-fg-muted truncate">{m.email}</p>
               </div>
-              <span className="shrink-0 inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 capitalize">
+              <span className="shrink-0 inline-flex items-center rounded-full bg-ink-inset px-2.5 py-0.5 text-xs font-medium text-fg-body capitalize">
                 {m.role}
               </span>
             </div>
@@ -79,16 +79,16 @@ export default async function TeamSettingsPage() {
         </div>
 
         {pending.length > 0 && (
-          <div className="border-t border-slate-100">
-            <p className="px-6 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wide">
+          <div className="border-t border-line">
+            <p className="px-6 pt-4 text-xs font-semibold text-fg-muted uppercase tracking-wide">
               Pending invitations
             </p>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-line">
               {pending.map((inv) => (
                 <div key={inv.id} className="px-6 py-3.5 flex items-center gap-3">
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-slate-700 truncate">{inv.email}</p>
-                    <p className="text-xs text-amber-600">Invited, awaiting response</p>
+                    <p className="text-sm text-fg-body truncate">{inv.email}</p>
+                    <p className="text-xs text-status-pending">Invited, awaiting response</p>
                   </div>
                   <RevokeInviteButton invitationId={inv.id} />
                 </div>
@@ -97,7 +97,7 @@ export default async function TeamSettingsPage() {
           </div>
         )}
 
-        <div className="px-6 py-4 border-t border-slate-100">
+        <div className="px-6 py-4 border-t border-line">
           <InviteTeamMemberForm />
         </div>
       </div>

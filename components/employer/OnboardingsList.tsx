@@ -12,12 +12,12 @@ export interface OnboardingInstance {
 
 function statusBadge(status: string) {
   const map: Record<string, { label: string; className: string }> = {
-    invited: { label: 'Invited', className: 'bg-slate-100 text-slate-600' },
-    in_progress: { label: 'In progress', className: 'bg-blue-50 text-blue-700' },
-    submitted: { label: 'Submitted', className: 'bg-amber-50 text-amber-700' },
-    complete: { label: 'Complete', className: 'bg-violet-50 text-violet-700' },
+    invited: { label: 'Invited', className: 'bg-status-inactive/15 text-status-inactive' },
+    in_progress: { label: 'In progress', className: 'bg-status-inactive/15 text-status-inactive' },
+    submitted: { label: 'Submitted', className: 'bg-status-pending/15 text-status-pending' },
+    complete: { label: 'Complete', className: 'bg-status-approved/15 text-status-approved' },
   }
-  const s = map[status] ?? { label: status, className: 'bg-slate-100 text-slate-600' }
+  const s = map[status] ?? { label: status, className: 'bg-ink-inset text-fg-body' }
   return (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${s.className}`}>
       {s.label}
@@ -26,13 +26,13 @@ function statusBadge(status: string) {
 }
 
 function ReadinessBar({ pct }: { pct: number }) {
-  const color = pct === 100 ? 'bg-violet-500' : pct >= 50 ? 'bg-amber-400' : 'bg-red-400'
+  const color = pct === 100 ? 'bg-status-approved' : pct >= 50 ? 'bg-status-pending' : 'bg-status-rejected'
   return (
     <div className="flex items-center gap-2.5 min-w-0">
-      <div className="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+      <div className="flex-1 bg-ink-inset rounded-full h-1.5 overflow-hidden">
         <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="text-xs tabular-nums text-slate-500 shrink-0">{pct}%</span>
+      <span className="text-xs tabular-nums text-fg-muted shrink-0">{pct}%</span>
     </div>
   )
 }
@@ -51,37 +51,37 @@ function daysUntil(dateStr: string) {
 
 export default function OnboardingsList({ items }: { items: OnboardingInstance[] }) {
   return (
-    <div className="space-y-3 sm:space-y-0 sm:bg-white sm:rounded-2xl sm:border sm:border-slate-200 sm:shadow-sm sm:overflow-hidden">
-      <div className="hidden sm:grid sm:grid-cols-[1fr_120px_140px_160px_80px] gap-4 px-6 py-3.5 border-b border-slate-100 bg-slate-50">
-        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">New starter</span>
-        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Status</span>
-        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Start date</span>
-        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Readiness</span>
+    <div className="space-y-3 sm:space-y-0 sm:bg-ink-raised sm:rounded-2xl sm:border sm:border-line sm:shadow-sm sm:overflow-hidden">
+      <div className="hidden sm:grid sm:grid-cols-[1fr_120px_140px_160px_80px] gap-4 px-6 py-3.5 border-b border-line bg-ink-inset">
+        <span className="text-xs font-semibold text-fg-muted uppercase tracking-wide">New starter</span>
+        <span className="text-xs font-semibold text-fg-muted uppercase tracking-wide">Status</span>
+        <span className="text-xs font-semibold text-fg-muted uppercase tracking-wide">Start date</span>
+        <span className="text-xs font-semibold text-fg-muted uppercase tracking-wide">Readiness</span>
         <span />
       </div>
       {items.map((o) => (
-        <Link key={o.id} href={`/dashboard/onboarding/${o.id}`} className="block bg-white rounded-xl border border-slate-200 px-4 py-4 hover:border-violet-300 hover:shadow-sm transition-all sm:rounded-none sm:border-0 sm:border-b sm:border-slate-100 sm:last:border-0 sm:px-6 sm:hover:bg-stone-50 sm:hover:shadow-none sm:hover:border-slate-100">
+        <Link key={o.id} href={`/dashboard/onboarding/${o.id}`} className="block bg-ink-raised rounded-xl border border-line px-4 py-4 hover:border-brand/40 hover:shadow-sm transition-all sm:rounded-none sm:border-0 sm:border-b sm:border-line sm:last:border-0 sm:px-6 sm:hover:bg-stone-50 sm:hover:shadow-none sm:hover:border-line">
           <div className="flex items-start justify-between gap-3 sm:contents">
             <div className="min-w-0 flex-1 sm:contents">
               <div className="min-w-0 hidden sm:block">
-                <p className="text-sm font-medium text-slate-900 truncate">{o.invitee_name}</p>
-                <p className="text-xs text-slate-400 truncate mt-0.5">{o.role_title}</p>
+                <p className="text-sm font-medium text-fg truncate">{o.invitee_name}</p>
+                <p className="text-xs text-fg-muted truncate mt-0.5">{o.role_title}</p>
               </div>
               <div className="sm:hidden">
-                <p className="text-sm font-semibold text-slate-900">{o.invitee_name}</p>
-                <p className="text-xs text-slate-500 mt-0.5">{o.role_title} · {new Date(o.start_date).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'})}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{daysUntil(o.start_date)}</p>
+                <p className="text-sm font-semibold text-fg">{o.invitee_name}</p>
+                <p className="text-xs text-fg-muted mt-0.5">{o.role_title} · {new Date(o.start_date).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'})}</p>
+                <p className="text-xs text-fg-muted mt-0.5">{daysUntil(o.start_date)}</p>
               </div>
             </div>
             <div className="shrink-0 sm:hidden">{statusBadge(o.status)}</div>
             <div className="hidden sm:block">{statusBadge(o.status)}</div>
             <div className="hidden sm:block">
-              <p className="text-sm text-slate-700">{new Date(o.start_date).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'})}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{daysUntil(o.start_date)}</p>
+              <p className="text-sm text-fg-body">{new Date(o.start_date).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'})}</p>
+              <p className="text-xs text-fg-muted mt-0.5">{daysUntil(o.start_date)}</p>
             </div>
             <div className="hidden sm:block"><ReadinessBar pct={o.readiness_pct ?? 0} /></div>
             <div className="hidden sm:flex sm:justify-end">
-              <span className="text-xs font-medium text-violet-700">Review</span>
+              <span className="text-xs font-medium text-fg-accent">Review</span>
             </div>
           </div>
           <div className="mt-3 sm:hidden">

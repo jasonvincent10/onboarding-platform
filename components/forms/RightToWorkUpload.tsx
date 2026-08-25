@@ -210,9 +210,9 @@ export default function RightToWorkUpload({
     <div className="space-y-6">
 
       {/* Why we need this */}
-      <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-        <h3 className="text-sm font-semibold text-blue-900">Why we need this</h3>
-        <p className="mt-1 text-sm text-blue-800">
+      <div className="rounded-lg border border-brand/30 bg-brand/10 p-4">
+        <h3 className="text-sm font-semibold text-fg">Why we need this</h3>
+        <p className="mt-1 text-sm text-fg-body">
           UK law requires employers to check that every new employee has the right to work before their
           start date. This check must be completed and approved before your first day.
         </p>
@@ -220,13 +220,13 @@ export default function RightToWorkUpload({
 
       {/* Document type selector */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">
+        <label className="mb-1.5 block text-sm font-medium text-fg-body">
           What document are you providing?
         </label>
         <select
           value={selectedDocType}
           onChange={(e) => handleDocTypeChange(e.target.value)}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="w-full rounded-md border border-line-strong px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
         >
           <option value="">Select a document type...</option>
           {RTW_DOCUMENT_TYPES.map((d) => (
@@ -242,18 +242,18 @@ export default function RightToWorkUpload({
         <div className="space-y-5">
 
           {/* Guidance panel */}
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
-            <h4 className="mb-2 text-sm font-semibold text-amber-900">What you need</h4>
+          <div className="rounded-lg border border-status-pending/30 bg-status-pending/10 p-4">
+            <h4 className="mb-2 text-sm font-semibold text-status-pending">What you need</h4>
             <ul className="space-y-1.5">
               {docType.guidance.map((point, i) => (
-                <li key={i} className="flex gap-2 text-sm text-amber-800">
-                  <span className="mt-0.5 flex-shrink-0 text-amber-500">-</span>
+                <li key={i} className="flex gap-2 text-sm text-status-pending">
+                  <span className="mt-0.5 flex-shrink-0 text-status-pending">-</span>
                   <span>{point}</span>
                 </li>
               ))}
             </ul>
             {docType.isOnlineCheck && (
-              <a href="https://www.gov.uk/prove-right-to-work" target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-semibold text-amber-900 underline underline-offset-2">
+              <a href="https://www.gov.uk/prove-right-to-work" target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-semibold text-status-pending underline underline-offset-2">
                 Go to gov.uk/prove-right-to-work
               </a>
             )}
@@ -262,7 +262,7 @@ export default function RightToWorkUpload({
           {/* Share code input */}
           {docType.isOnlineCheck && (
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label className="mb-1 block text-sm font-medium text-fg-body">
                 Your share code
               </label>
               <input
@@ -271,9 +271,9 @@ export default function RightToWorkUpload({
                 onChange={(e) => setShareCode(e.target.value.toUpperCase())}
                 placeholder="e.g. W4G-12K-88K"
                 maxLength={11}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm uppercase tracking-widest focus:border-transparent focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="w-full rounded-md border border-line-strong px-3 py-2 font-mono text-sm uppercase tracking-widest focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-fg-muted">
                 9 characters. Letters and numbers only. Dashes are optional.
               </p>
             </div>
@@ -282,7 +282,7 @@ export default function RightToWorkUpload({
           {/* File upload */}
           {!docType.isOnlineCheck && (
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label className="mb-1 block text-sm font-medium text-fg-body">
                 Upload document
               </label>
               <input
@@ -295,17 +295,17 @@ export default function RightToWorkUpload({
               />
               <label
                 htmlFor="rtw-file-input"
-                className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-4 py-8 text-center transition-colors hover:border-violet-400 hover:bg-violet-50"
+                className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-line-strong px-4 py-8 text-center transition-colors hover:border-brand hover:bg-brand/10"
               >
                 {selectedFile ? (
                   <>
-                    <p className="text-sm font-medium text-violet-700">{selectedFile.name}</p>
-                    <p className="mt-1 text-xs text-gray-500">Click to change</p>
+                    <p className="text-sm font-medium text-fg-accent">{selectedFile.name}</p>
+                    <p className="mt-1 text-xs text-fg-muted">Click to change</p>
                   </>
                 ) : (
                   <>
-                    <p className="text-sm text-gray-600">Click to select a file</p>
-                    <p className="mt-1 text-xs text-gray-400">PDF, JPG or PNG, up to 10MB</p>
+                    <p className="text-sm text-fg-body">Click to select a file</p>
+                    <p className="mt-1 text-xs text-fg-muted">PDF, JPG or PNG, up to 10MB</p>
                   </>
                 )}
               </label>
@@ -315,17 +315,17 @@ export default function RightToWorkUpload({
           {/* Expiry date — required */}
           {docType.requiresExpiry && (
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                Document expiry date <span className="text-red-500">*</span>
+              <label className="mb-1 block text-sm font-medium text-fg-body">
+                Document expiry date <span className="text-status-rejected">*</span>
               </label>
               <input
                 type="date"
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="rounded-md border border-line-strong px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-fg-muted">
                 Must be a future date. Your employer will be reminded before it expires.
               </p>
             </div>
@@ -334,23 +334,23 @@ export default function RightToWorkUpload({
           {/* Expiry date — optional (non-expiring documents) */}
           {!docType.requiresExpiry && !docType.isOnlineCheck && (
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label className="mb-1 block text-sm font-medium text-fg-body">
                 Expiry date{' '}
-                <span className="text-xs font-normal text-gray-400">(optional)</span>
+                <span className="text-xs font-normal text-fg-muted">(optional)</span>
               </label>
               <input
                 type="date"
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
-                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="rounded-md border border-line-strong px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
           )}
 
           {/* Error */}
           {error && (
-            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3">
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="rounded-md border border-status-rejected/30 bg-status-rejected/10 px-4 py-3">
+              <p className="text-sm text-status-rejected">{error}</p>
             </div>
           )}
 
@@ -358,7 +358,7 @@ export default function RightToWorkUpload({
           <button
             onClick={handleSubmit}
             disabled={uploading}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
             {uploading ? (
               <>

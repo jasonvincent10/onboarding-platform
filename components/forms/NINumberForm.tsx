@@ -61,15 +61,15 @@ export default function NINumberForm({
 
   return (
     <div className="max-w-lg">
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">National Insurance Number</h2>
-      <p className="text-sm text-gray-500 mb-6">
+      <h2 className="text-lg font-semibold text-fg mb-1">National Insurance Number</h2>
+      <p className="text-sm text-fg-muted mb-6">
         Your NI number is on your payslip, P60, or any letter from HMRC.
         It is 2 letters, 6 numbers, then 1 letter (e.g. AB 12 34 56 C).
         This will be encrypted before storage.
       </p>
 
       <div className="mb-4">
-        <label htmlFor="ni-number" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="ni-number" className="block text-sm font-medium text-fg-body mb-1">
           NI Number
         </label>
         <input
@@ -81,30 +81,30 @@ export default function NINumberForm({
           maxLength={13}
           autoComplete="off"
           spellCheck={false}
-          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-100 ${error ? 'border-red-400 focus:border-red-400' : isValid ? 'border-emerald-400 focus:border-emerald-400' : 'border-gray-300 focus:border-violet-400'}`}
+          className={`block w-full rounded-lg border px-3 py-2.5 font-mono text-base uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 ${error ? 'border-status-rejected focus:border-status-rejected' : isValid ? 'border-status-approved focus:border-status-approved' : 'border-line-strong focus:border-brand'}`}
         />
         {error && (
-          <p className="mt-1 text-xs text-red-600">{error}</p>
+          <p className="mt-1 text-xs text-status-rejected">{error}</p>
         )}
         {isValid && formatted && (
-          <p className="mt-1 text-xs text-emerald-600">Valid format: {formatted}</p>
+          <p className="mt-1 text-xs text-status-approved">Valid format: {formatted}</p>
         )}
       </div>
 
       {serverError && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 rounded-lg border border-status-rejected/30 bg-status-rejected/10 px-4 py-3 text-sm text-status-rejected">
           {serverError}
         </div>
       )}
 
-      <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs text-emerald-800">
+      <div className="mb-6 rounded-lg border border-status-approved/30 bg-status-approved/10 px-4 py-3 text-xs text-status-approved">
         Your NI number is encrypted before being stored. Your employer will only see it with your explicit consent.
       </div>
 
       <button
         onClick={handleSubmit}
         disabled={!isValid || submitting}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         {submitting ? (
           <>

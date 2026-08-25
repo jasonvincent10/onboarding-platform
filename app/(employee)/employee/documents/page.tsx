@@ -14,8 +14,8 @@ export default async function MyDocumentsPage() {
 
   if (!profile) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
-        <p className="text-sm text-slate-500">Your profile isn&apos;t fully set up yet.</p>
+      <div className="bg-ink-raised rounded-2xl border border-line p-8 text-center">
+        <p className="text-sm text-fg-muted">Your profile isn&apos;t fully set up yet.</p>
       </div>
     )
   }
@@ -67,8 +67,8 @@ export default async function MyDocumentsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">Your documents</h1>
-        <p className="text-sm text-slate-500 mt-0.5">
+        <h1 className="text-xl font-semibold text-fg">Your documents</h1>
+        <p className="text-sm text-fg-muted mt-0.5">
           Everything you&apos;ve uploaded across every onboarding, in one place. Documents
           still linked to an active checklist item can&apos;t be deleted, since your employer
           relies on them as evidence of a completed check.

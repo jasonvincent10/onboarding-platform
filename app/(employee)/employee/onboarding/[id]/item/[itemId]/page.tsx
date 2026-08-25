@@ -74,11 +74,11 @@ export default async function ItemPage({ params }: Props) {
   const companyName = employerAccount?.company_name ?? 'Your employer'
 
   const statusConfig = {
-    not_started: { label: 'Not started', colour: 'bg-slate-100 text-slate-600' },
-    in_progress: { label: 'In progress', colour: 'bg-blue-100 text-blue-700' },
-    submitted: { label: 'Submitted', colour: 'bg-amber-100 text-amber-700' },
-    approved: { label: 'Approved', colour: 'bg-emerald-100 text-emerald-700' },
-    overdue: { label: 'Overdue', colour: 'bg-red-100 text-red-700' },
+    not_started: { label: 'Not started', colour: 'bg-status-inactive/15 text-status-inactive' },
+    in_progress: { label: 'In progress', colour: 'bg-status-inactive/15 text-status-inactive' },
+    submitted: { label: 'Submitted', colour: 'bg-status-pending/15 text-status-pending' },
+    approved: { label: 'Approved', colour: 'bg-status-approved/15 text-status-approved' },
+    overdue: { label: 'Overdue', colour: 'bg-status-rejected/15 text-status-rejected' },
   }
   const status =
     statusConfig[item.status as keyof typeof statusConfig] ??
@@ -104,11 +104,11 @@ export default async function ItemPage({ params }: Props) {
   const isReadOnly = item.status === 'approved'
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-ink-inset">
       <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
         <Link
           href={`/employee/onboarding/${onboardingId}`}
-          className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800"
+          className="inline-flex items-center gap-1.5 text-sm text-fg-muted hover:text-fg"
         >
           <BackArrow className="h-4 w-4" />
           Back to checklist
@@ -117,10 +117,10 @@ export default async function ItemPage({ params }: Props) {
         <div className="mt-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              <p className="text-xs font-medium uppercase tracking-wide text-fg-muted">
                 {companyName} · {categoryLabel}
               </p>
-              <h1 className="mt-1 text-2xl font-bold text-slate-900">
+              <h1 className="mt-1 text-2xl font-bold text-fg">
                 {item.item_name}
               </h1>
             </div>
@@ -132,10 +132,10 @@ export default async function ItemPage({ params }: Props) {
           </div>
 
           {item.deadline && (
-            <div className="mt-3 flex items-center gap-1.5 text-sm text-slate-500">
+            <div className="mt-3 flex items-center gap-1.5 text-sm text-fg-muted">
               <ClockIcon className="h-4 w-4" />
               Due by{' '}
-              <span className="font-medium text-slate-700">
+              <span className="font-medium text-fg-body">
                 {new Date(item.deadline).toLocaleDateString('en-GB', {
                   day: 'numeric',
                   month: 'long',
@@ -146,19 +146,19 @@ export default async function ItemPage({ params }: Props) {
           )}
 
           {item.was_pre_populated && (
-            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-medium text-violet-700">
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-brand/30 bg-brand/10 px-3 py-1 text-xs font-medium text-fg-accent">
               <SparkleIcon className="h-3.5 w-3.5" />
               From your portable profile
             </div>
           )}
         </div>
 
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="border-b border-slate-100 px-6 py-5">
-            <h2 className="text-sm font-semibold text-slate-800">
+        <div className="mt-6 rounded-2xl border border-line bg-ink-raised shadow-sm">
+          <div className="border-b border-line px-6 py-5">
+            <h2 className="text-sm font-semibold text-fg">
               What you need to provide
             </h2>
-            <p className="mt-1.5 text-sm text-slate-600">
+            <p className="mt-1.5 text-sm text-fg-body">
               {getItemGuidance(item.item_name, item.data_category)}
             </p>
           </div>
@@ -225,14 +225,14 @@ export default async function ItemPage({ params }: Props) {
                 acknowledgedAt={item.acknowledged_at ?? null}
               />
             ) : (
-              <div className="rounded-xl border border-dashed border-slate-200 px-6 py-8 text-center">
-                <p className="text-sm text-slate-500">Unknown item type.</p>
+              <div className="rounded-xl border border-dashed border-line px-6 py-8 text-center">
+                <p className="text-sm text-fg-muted">Unknown item type.</p>
               </div>
             )}
           </div>
         </div>
 
-        <p className="mt-4 text-center text-xs text-slate-400">
+        <p className="mt-4 text-center text-xs text-fg-muted">
           Your documents are stored securely and only shared with {companyName}{' '}
           with your consent.
         </p>
@@ -256,13 +256,13 @@ function getItemGuidance(itemName: string, dataCategory: string): string {
 
 function ApprovedBanner() {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4">
-      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
-        <CheckIcon className="h-5 w-5 text-emerald-600" />
+    <div className="flex items-center gap-3 rounded-xl border border-status-approved/30 bg-status-approved/10 px-5 py-4">
+      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-status-approved/15">
+        <CheckIcon className="h-5 w-5 text-status-approved" />
       </div>
       <div>
-        <p className="text-sm font-semibold text-emerald-800">Document approved</p>
-        <p className="text-xs text-emerald-600">No further action needed for this item.</p>
+        <p className="text-sm font-semibold text-status-approved">Document approved</p>
+        <p className="text-xs text-status-approved">No further action needed for this item.</p>
       </div>
     </div>
   )
@@ -288,17 +288,17 @@ function ExistingFileReadOnly({
 
   if (isShareCode) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="rounded-xl border border-line bg-ink-raised p-4">
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-lg font-bold text-slate-400">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-line bg-ink-inset text-lg font-bold text-fg-muted">
             #
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-800">GOV.UK share code submitted</p>
-            <p className="mt-0.5 font-mono text-sm text-slate-600 tracking-widest">
+            <p className="text-sm font-medium text-fg">GOV.UK share code submitted</p>
+            <p className="mt-0.5 font-mono text-sm text-fg-body tracking-widest">
               {shareCodeValue}
             </p>
-            <a href="https://www.gov.uk/view-right-to-work" target="_blank" rel="noopener noreferrer" className="mt-1.5 inline-block text-xs font-medium text-violet-600 underline underline-offset-2">
+            <a href="https://www.gov.uk/view-right-to-work" target="_blank" rel="noopener noreferrer" className="mt-1.5 inline-block text-xs font-medium text-fg-accent underline underline-offset-2">
               Verify at gov.uk/view-right-to-work
             </a>
           </div>
@@ -308,18 +308,18 @@ function ExistingFileReadOnly({
   }
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4">
-      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50">
+    <div className="flex items-center gap-3 rounded-xl border border-line bg-ink-raised p-4">
+      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-line bg-ink-inset">
         {isImage && signedUrl ? (
           <img src={signedUrl} alt="Document" className="h-full w-full rounded-lg object-cover" />
         ) : (
-          <PdfIcon className="h-6 w-6 text-red-400" />
+          <PdfIcon className="h-6 w-6 text-fg-muted" />
         )}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-slate-800">{upload.document_type}</p>
+        <p className="truncate text-sm font-medium text-fg">{upload.document_type}</p>
         {upload.expiry_date && (
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-fg-muted">
             Expires{' '}
             {new Date(upload.expiry_date).toLocaleDateString('en-GB', {
               day: 'numeric',
@@ -330,7 +330,7 @@ function ExistingFileReadOnly({
         )}
       </div>
       {signedUrl && (
-        <a href={signedUrl} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition-colors hover:bg-slate-50">
+        <a href={signedUrl} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 rounded-lg border border-line bg-ink-raised px-3 py-1.5 text-xs font-medium text-fg-body shadow-sm transition-colors hover:bg-ink-raised-hover">
           View
         </a>
       )}

@@ -187,11 +187,11 @@ export default function DocumentUpload({
     return (
       <div className="space-y-4">
         {reviewerNote && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
-            <p className="text-sm font-medium text-amber-800">
+          <div className="rounded-lg border border-status-pending/30 bg-status-pending/10 p-4">
+            <p className="text-sm font-medium text-status-pending">
               Re-upload requested
             </p>
-            <p className="mt-1 text-sm text-amber-700">{reviewerNote}</p>
+            <p className="mt-1 text-sm text-status-pending">{reviewerNote}</p>
           </div>
         )}
 
@@ -203,7 +203,7 @@ export default function DocumentUpload({
         {needsReupload && (
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+            className="inline-flex items-center gap-2 rounded-lg border border-line bg-ink-raised px-4 py-2 text-sm font-medium text-fg-body shadow-sm transition-colors hover:bg-ink-raised-hover"
           >
             <UploadIcon className="h-4 w-4" />
             Upload replacement
@@ -224,15 +224,15 @@ export default function DocumentUpload({
   // ─── Upload done this session ─────────────────────────────────────────────
   if (stage === 'done') {
     return (
-      <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4">
-        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
-          <CheckIcon className="h-5 w-5 text-emerald-600" />
+      <div className="flex items-center gap-3 rounded-xl border border-status-approved/30 bg-status-approved/10 px-5 py-4">
+        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-status-approved/15">
+          <CheckIcon className="h-5 w-5 text-status-approved" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-emerald-800">
+          <p className="text-sm font-semibold text-status-approved">
             Document submitted
           </p>
-          <p className="text-xs text-emerald-600">
+          <p className="text-xs text-status-approved">
             Your employer will review this shortly.
           </p>
         </div>
@@ -262,8 +262,8 @@ export default function DocumentUpload({
         className={[
           'relative cursor-pointer rounded-xl border-2 border-dashed transition-all duration-200',
           isDragOver
-            ? 'border-violet-400 bg-violet-50'
-            : 'border-slate-200 bg-slate-50 hover:border-violet-300 hover:bg-violet-50/40',
+            ? 'border-brand bg-brand/10'
+            : 'border-line bg-ink-inset hover:border-brand/40 hover:bg-brand/10/40',
           selectedFile ? 'cursor-default' : '',
         ].join(' ')}
       >
@@ -286,21 +286,21 @@ export default function DocumentUpload({
                   <img
                     src={previewUrl}
                     alt="Preview"
-                    className="h-20 w-20 rounded-lg border border-slate-200 object-cover shadow-sm"
+                    className="h-20 w-20 rounded-lg border border-line object-cover shadow-sm"
                   />
                 ) : (
-                  <div className="flex h-20 w-20 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <PdfIcon className="h-10 w-10 text-red-400" />
+                  <div className="flex h-20 w-20 items-center justify-center rounded-lg border border-line bg-ink-raised shadow-sm">
+                    <PdfIcon className="h-10 w-10 text-fg-muted" />
                   </div>
                 )}
               </div>
 
               {/* File info */}
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-slate-800">
+                <p className="truncate text-sm font-semibold text-fg">
                   {selectedFile.name}
                 </p>
-                <p className="mt-0.5 text-xs text-slate-500">
+                <p className="mt-0.5 text-xs text-fg-muted">
                   {formatFileSize(selectedFile.size)} ·{' '}
                   {selectedFile.type === 'application/pdf'
                     ? 'PDF document'
@@ -310,16 +310,16 @@ export default function DocumentUpload({
                 {/* Progress bar */}
                 {isUploading && (
                   <div className="mt-3">
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink-inset">
                       <div
-                        className="h-full rounded-full bg-violet-500 transition-all duration-300"
+                        className="h-full rounded-full bg-brand transition-all duration-300"
                         style={{
                           width:
                             stage === 'recording' ? '90%' : `${progress}%`,
                         }}
                       />
                     </div>
-                    <p className="mt-1.5 text-xs text-slate-500">
+                    <p className="mt-1.5 text-xs text-fg-muted">
                       {stage === 'recording'
                         ? 'Saving record...'
                         : 'Uploading...'}
@@ -333,7 +333,7 @@ export default function DocumentUpload({
                       e.stopPropagation()
                       handleReplace()
                     }}
-                    className="mt-2 text-xs text-slate-500 underline underline-offset-2 hover:text-slate-800"
+                    className="mt-2 text-xs text-fg-muted underline underline-offset-2 hover:text-fg"
                   >
                     Choose a different file
                   </button>
@@ -347,21 +347,21 @@ export default function DocumentUpload({
             <div
               className={[
                 'flex h-14 w-14 items-center justify-center rounded-full transition-colors',
-                isDragOver ? 'bg-violet-100' : 'bg-white shadow-sm',
+                isDragOver ? 'bg-brand/15' : 'bg-ink-raised shadow-sm',
               ].join(' ')}
             >
               <UploadIcon
                 className={[
                   'h-6 w-6 transition-colors',
-                  isDragOver ? 'text-violet-600' : 'text-slate-400',
+                  isDragOver ? 'text-fg-accent' : 'text-fg-muted',
                 ].join(' ')}
               />
             </div>
             <div className="text-center">
-              <p className="text-sm font-semibold text-slate-700">
+              <p className="text-sm font-semibold text-fg-body">
                 {isDragOver ? 'Drop file here' : 'Drag & drop or click to upload'}
               </p>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-fg-muted">
                 PDF, JPG or PNG · max {MAX_FILE_SIZE_LABEL}
               </p>
             </div>
@@ -371,9 +371,9 @@ export default function DocumentUpload({
 
       {/* Error message */}
       {stage === 'error' && error && (
-        <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-          <AlertIcon className="h-4 w-4 flex-shrink-0 text-red-500" />
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="flex items-center gap-2 rounded-lg border border-status-rejected/30 bg-status-rejected/10 px-4 py-3">
+          <AlertIcon className="h-4 w-4 flex-shrink-0 text-status-rejected" />
+          <p className="text-sm text-status-rejected">{error}</p>
         </div>
       )}
 
@@ -382,10 +382,10 @@ export default function DocumentUpload({
         <div className="space-y-1.5">
           <label
             htmlFor="expiry-date"
-            className="block text-sm font-medium text-slate-700"
+            className="block text-sm font-medium text-fg-body"
           >
             Document expiry date{' '}
-            <span className="font-normal text-slate-500">(if applicable)</span>
+            <span className="font-normal text-fg-muted">(if applicable)</span>
           </label>
           <input
             id="expiry-date"
@@ -396,10 +396,10 @@ export default function DocumentUpload({
               setExpiryError(null)
             }}
             min={new Date().toISOString().split('T')[0]}
-            className="block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
+            className="block w-full rounded-lg border border-line bg-ink-raised px-3 py-2 text-sm text-fg shadow-sm focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
           />
           {expiryError && (
-            <p className="text-xs text-red-600">{expiryError}</p>
+            <p className="text-xs text-status-rejected">{expiryError}</p>
           )}
         </div>
       )}
@@ -408,7 +408,7 @@ export default function DocumentUpload({
       {selectedFile && !isUploading && (stage as string) !== 'done' && (
         <button
           onClick={handleSubmit}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-violet-700 active:scale-[0.98] disabled:opacity-50 sm:w-auto"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-hover active:scale-[0.98] disabled:opacity-50 sm:w-auto"
         >
           <UploadIcon className="h-4 w-4" />
           Submit document
@@ -418,7 +418,7 @@ export default function DocumentUpload({
       {isUploading && (
         <button
           disabled
-          className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-violet-400 px-5 py-3 text-sm font-semibold text-white sm:w-auto"
+          className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white sm:w-auto"
         >
           <SpinnerIcon className="h-4 w-4 animate-spin" />
           {stage === 'recording' ? 'Saving...' : 'Uploading...'}
@@ -442,11 +442,11 @@ function ExistingFileCard({
       className={[
         'flex items-center gap-3 rounded-xl border p-4',
         isApproved
-          ? 'border-emerald-200 bg-emerald-50'
-          : 'border-slate-200 bg-white',
+          ? 'border-status-approved/30 bg-status-approved/10'
+          : 'border-line bg-ink-raised',
       ].join(' ')}
     >
-      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
+      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-line bg-ink-raised shadow-sm">
         {upload.signedUrl &&
         (upload.filePath.endsWith('.jpg') ||
           upload.filePath.endsWith('.png')) ? (
@@ -456,18 +456,18 @@ function ExistingFileCard({
             className="h-full w-full rounded-lg object-cover"
           />
         ) : (
-          <PdfIcon className="h-6 w-6 text-red-400" />
+          <PdfIcon className="h-6 w-6 text-fg-muted" />
         )}
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-slate-800">
+        <p className="truncate text-sm font-medium text-fg">
           {upload.documentType}
         </p>
         <div className="mt-0.5 flex items-center gap-2">
           <StatusBadge status={upload.verificationStatus} />
           {upload.expiryDate && (
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-fg-muted">
               Expires {new Date(upload.expiryDate).toLocaleDateString('en-GB')}
             </span>
           )}
@@ -480,7 +480,7 @@ function ExistingFileCard({
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="flex-shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition-colors hover:bg-slate-50"
+          className="flex-shrink-0 rounded-lg border border-line bg-ink-raised px-3 py-1.5 text-xs font-medium text-fg-body shadow-sm transition-colors hover:bg-ink-raised-hover"
         >
           View
         </a>
@@ -493,22 +493,22 @@ function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { label: string; className: string }> = {
     pending: {
       label: 'With employer',
-      className: 'bg-amber-100 text-amber-700',
+      className: 'bg-status-pending/15 text-status-pending',
     },
     verified: {
       label: 'Approved',
-      className: 'bg-emerald-100 text-emerald-700',
+      className: 'bg-status-approved/15 text-status-approved',
     },
     expired: {
       label: 'Expired',
-      className: 'bg-red-100 text-red-700',
+      className: 'bg-status-rejected/15 text-status-rejected',
     },
     rejected: {
       label: 'Re-upload needed',
-      className: 'bg-red-100 text-red-700',
+      className: 'bg-status-rejected/15 text-status-rejected',
     },
   }
-  const cfg = map[status] ?? { label: status, className: 'bg-slate-100 text-slate-600' }
+  const cfg = map[status] ?? { label: status, className: 'bg-ink-inset text-fg-body' }
   return (
     <span
       className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${cfg.className}`}

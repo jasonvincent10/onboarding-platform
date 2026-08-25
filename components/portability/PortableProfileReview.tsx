@@ -94,8 +94,8 @@ export default function PortableProfileReview({
           selectedItems={selectedItems}
           onToggle={toggleItem}
           maskedData={maskedData}
-          badgeColor="#059669"
-          badgeBg="#ecfdf5"
+          badgeColor="var(--status-approved)"
+          badgeBg="rgba(93, 202, 165, 0.15)"
         />
       )}
 
@@ -108,8 +108,8 @@ export default function PortableProfileReview({
           selectedItems={selectedItems}
           onToggle={toggleItem}
           maskedData={maskedData}
-          badgeColor="#d97706"
-          badgeBg="#fffbeb"
+          badgeColor="var(--status-pending)"
+          badgeBg="rgba(250, 199, 117, 0.15)"
         />
       )}
 
@@ -122,18 +122,18 @@ export default function PortableProfileReview({
           selectedItems={selectedItems}
           onToggle={toggleItem}
           maskedData={maskedData}
-          badgeColor="#dc2626"
-          badgeBg="#fef2f2"
+          badgeColor="var(--status-rejected)"
+          badgeBg="rgba(240, 130, 142, 0.15)"
         />
       )}
 
       {/* Employer-specific (not portable — info only) */}
       {grouped.employer_specific.length > 0 && (
         <div style={{ marginBottom: '24px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#6b7280', marginBottom: '4px' }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
             New for this employer
           </h2>
-          <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '12px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '12px' }}>
             These items are specific to {employerName} and need to be completed fresh
           </p>
           {grouped.employer_specific.map((item) => (
@@ -141,15 +141,15 @@ export default function PortableProfileReview({
               key={item.checklistItemId}
               style={{
                 padding: '12px 16px',
-                backgroundColor: '#f9fafb',
+                backgroundColor: 'var(--bg-inset)',
                 borderRadius: '8px',
                 marginBottom: '8px',
-                border: '1px solid #f3f4f6',
+                border: '1px solid var(--border)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ color: '#9ca3af', fontSize: '14px' }}>○</span>
-                <span style={{ fontSize: '14px', color: '#6b7280' }}>{item.checklistItemName}</span>
+                <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>○</span>
+                <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{item.checklistItemName}</span>
               </div>
             </div>
           ))}
@@ -160,15 +160,15 @@ export default function PortableProfileReview({
       <div
         style={{
           padding: '16px',
-          backgroundColor: '#eff6ff',
+          backgroundColor: 'rgba(139, 92, 246, 0.1)',
           borderRadius: '8px',
-          border: '1px solid #bfdbfe',
+          border: '1px solid rgba(139, 92, 246, 0.3)',
           marginBottom: '24px',
         }}
       >
-        <p style={{ fontSize: '13px', color: '#1e40af', lineHeight: '1.5', margin: 0 }}>
-          <strong>Data sharing consent:</strong> By carrying forward items, you grant{' '}
-          <strong>{employerName}</strong> access to the selected data categories for this onboarding.
+        <p style={{ fontSize: '13px', color: 'var(--text-body)', lineHeight: '1.6', margin: 0 }}>
+          <strong style={{ color: 'var(--text-primary)' }}>Data sharing consent:</strong> By carrying forward items, you grant{' '}
+          <strong style={{ color: 'var(--text-primary)' }}>{employerName}</strong> access to the selected data categories for this onboarding.
           You can withdraw consent at any time from your profile settings.
         </p>
       </div>
@@ -178,13 +178,13 @@ export default function PortableProfileReview({
         <div
           style={{
             padding: '12px 16px',
-            backgroundColor: '#fef2f2',
+            backgroundColor: 'rgba(240, 130, 142, 0.1)',
             borderRadius: '8px',
-            border: '1px solid #fecaca',
+            border: '1px solid rgba(240, 130, 142, 0.3)',
             marginBottom: '16px',
           }}
         >
-          <p style={{ fontSize: '14px', color: '#dc2626', margin: 0 }}>{error}</p>
+          <p style={{ fontSize: '14px', color: 'var(--status-rejected)', margin: 0 }}>{error}</p>
         </div>
       )}
 
@@ -196,8 +196,8 @@ export default function PortableProfileReview({
           style={{
             flex: 1,
             padding: '14px 24px',
-            backgroundColor: selectedCount > 0 ? '#059669' : '#9ca3af',
-            color: '#ffffff',
+            backgroundColor: selectedCount > 0 ? 'var(--accent)' : 'var(--border-strong)',
+            color: 'var(--on-accent)',
             border: 'none',
             borderRadius: '8px',
             fontSize: '15px',
@@ -217,9 +217,9 @@ export default function PortableProfileReview({
           disabled={isSubmitting}
           style={{
             padding: '14px 24px',
-            backgroundColor: '#ffffff',
-            color: '#6b7280',
-            border: '1px solid #d1d5db',
+            backgroundColor: 'var(--bg-raised)',
+            color: 'var(--text-muted)',
+            border: '1px solid var(--border-strong)',
             borderRadius: '8px',
             fontSize: '15px',
             fontWeight: 500,
@@ -256,10 +256,10 @@ function CategorySection({
 }) {
   return (
     <div style={{ marginBottom: '24px' }}>
-      <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#111827', marginBottom: '4px' }}>
+      <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
         {title}
       </h2>
-      <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '12px' }}>{subtitle}</p>
+      <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '12px' }}>{subtitle}</p>
 
       {items.map((item) => {
         const isSelected = selectedItems.has(item.checklistItemId);
@@ -272,10 +272,10 @@ function CategorySection({
             onClick={() => canSelect && onToggle(item.checklistItemId)}
             style={{
               padding: '16px',
-              backgroundColor: isSelected ? '#f0fdf4' : '#ffffff',
+              backgroundColor: isSelected ? 'rgba(93, 202, 165, 0.1)' : 'var(--bg-raised)',
               borderRadius: '8px',
               marginBottom: '8px',
-              border: `2px solid ${isSelected ? '#86efac' : '#e5e7eb'}`,
+              border: `2px solid ${isSelected ? 'var(--status-approved)' : 'var(--border)'}`,
               cursor: canSelect ? 'pointer' : 'default',
               transition: 'all 0.15s ease',
               opacity: canSelect ? 1 : 0.6,
@@ -288,8 +288,8 @@ function CategorySection({
                   width: '22px',
                   height: '22px',
                   borderRadius: '4px',
-                  border: `2px solid ${isSelected ? '#059669' : '#d1d5db'}`,
-                  backgroundColor: isSelected ? '#059669' : '#ffffff',
+                  border: `2px solid ${isSelected ? 'var(--status-approved)' : 'var(--border-strong)'}`,
+                  backgroundColor: isSelected ? 'var(--status-approved)' : 'var(--bg-raised)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -313,7 +313,7 @@ function CategorySection({
               {/* Content */}
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '15px', fontWeight: 600, color: '#111827' }}>
+                  <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>
                     {item.checklistItemName}
                   </span>
                   {item.hasExistingData && (
@@ -338,7 +338,7 @@ function CategorySection({
                   <p
                     style={{
                       fontSize: '13px',
-                      color: '#6b7280',
+                      color: 'var(--text-muted)',
                       margin: '4px 0 0 0',
                       fontFamily: 'monospace',
                     }}
@@ -349,14 +349,14 @@ function CategorySection({
 
                 {/* Existing data summary */}
                 {item.existingDataSummary && !maskedValue && (
-                  <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
+                  <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
                     {item.existingDataSummary}
                   </p>
                 )}
 
                 {/* Warning (e.g. expired document) */}
                 {item.warning && (
-                  <p style={{ fontSize: '13px', color: '#dc2626', margin: '6px 0 0 0', fontWeight: 500 }}>
+                  <p style={{ fontSize: '13px', color: 'var(--status-rejected)', margin: '6px 0 0 0', fontWeight: 500 }}>
                     ⚠ {item.warning}
                   </p>
                 )}

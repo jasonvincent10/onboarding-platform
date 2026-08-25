@@ -54,10 +54,10 @@ export default async function ConsentPage({ params }: ConsentPageProps) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-2xl font-semibold text-gray-900">
+      <h1 className="text-2xl font-semibold text-fg">
         Sharing your information with {companyName}
       </h1>
-      <p className="mt-3 text-gray-600">
+      <p className="mt-3 text-fg-body">
         Before you start your onboarding, please confirm what information
         you&apos;re happy to share with {companyName}. You can withdraw any of
         these permissions later from your account settings.
@@ -72,7 +72,7 @@ export default async function ConsentPage({ params }: ConsentPageProps) {
         }))}
       />
 
-      <p className="mt-6 text-xs text-gray-500">
+      <p className="mt-6 text-xs text-fg-muted">
         Your data is processed under UK GDPR. {companyName} is the data
         controller for this onboarding. You have the right to withdraw consent
         at any time, request a copy of your data, or ask for it to be deleted.

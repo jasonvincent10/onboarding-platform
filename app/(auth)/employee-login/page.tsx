@@ -37,10 +37,10 @@ function EmployeeLoginForm() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="mb-1.5 text-2xl font-semibold tracking-tight text-slate-900">
+        <h1 className="mb-1.5 text-2xl font-semibold tracking-tight text-fg">
           {mode === 'signup' ? 'Create your account' : 'Welcome back'}
         </h1>
-        <p className="text-[15px] text-slate-500">
+        <p className="text-[15px] text-fg-muted">
           {mode === 'signup'
             ? 'Set up your secure profile to complete your onboarding.'
             : token
@@ -49,11 +49,11 @@ function EmployeeLoginForm() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+      <div className="rounded-2xl border border-line bg-ink-raised p-7 shadow-sm">
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="rounded-lg border border-status-rejected/30 bg-status-rejected/10 px-4 py-3">
+              <p className="text-sm text-status-rejected">{error}</p>
             </div>
           )}
 
@@ -61,7 +61,7 @@ function EmployeeLoginForm() {
             <div>
               <label
                 htmlFor="full_name"
-                className="mb-1.5 block text-sm font-medium text-slate-700"
+                className="mb-1.5 block text-sm font-medium text-fg-body"
               >
                 Full name
               </label>
@@ -72,7 +72,7 @@ function EmployeeLoginForm() {
                 required
                 autoComplete="name"
                 placeholder="Jane Smith"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+                className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
               />
             </div>
           )}
@@ -80,7 +80,7 @@ function EmployeeLoginForm() {
           <div>
             <label
               htmlFor="email"
-              className="mb-1.5 block text-sm font-medium text-slate-700"
+              className="mb-1.5 block text-sm font-medium text-fg-body"
             >
               Email address
             </label>
@@ -91,14 +91,14 @@ function EmployeeLoginForm() {
               required
               autoComplete="email"
               placeholder="jane@example.com"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="mb-1.5 block text-sm font-medium text-slate-700"
+              className="mb-1.5 block text-sm font-medium text-fg-body"
             >
               Password
             </label>
@@ -110,17 +110,17 @@ function EmployeeLoginForm() {
               autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
               placeholder="••••••••"
               minLength={8}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10"
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
             {mode === 'signup' && (
-              <p className="mt-1 text-xs text-slate-400">Minimum 8 characters.</p>
+              <p className="mt-1 text-xs text-fg-muted">Minimum 8 characters.</p>
             )}
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 w-full rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-2 w-full rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-ink disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading
               ? mode === 'signup'
@@ -134,14 +134,14 @@ function EmployeeLoginForm() {
       </div>
 
       {token ? (
-        <p className="mt-5 text-center text-sm text-slate-500">
+        <p className="mt-5 text-center text-sm text-fg-muted">
           {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}{' '}
           <button
             onClick={() => {
               setMode(mode === 'signup' ? 'login' : 'signup')
               setError(null)
             }}
-            className="font-medium text-violet-700 transition hover:text-violet-800"
+            className="font-medium text-fg-accent transition hover:text-fg"
           >
             {mode === 'signup' ? 'Sign in instead' : 'Create one'}
           </button>
@@ -150,7 +150,7 @@ function EmployeeLoginForm() {
         // No token means signup can't succeed (there's nothing to attach a
         // new account to), so don't offer a toggle that dead-ends in a
         // confusing redirect -- point them at the actual next step instead.
-        <p className="mt-5 text-center text-sm text-slate-500">
+        <p className="mt-5 text-center text-sm text-fg-muted">
           New here? You&apos;ll need an invitation from your employer to create an
           account.
         </p>
@@ -161,7 +161,7 @@ function EmployeeLoginForm() {
 
 export default function EmployeeLoginPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-slate-500">Loading…</div>}>
+    <Suspense fallback={<div className="p-8 text-fg-muted">Loading…</div>}>
       <EmployeeLoginForm />
     </Suspense>
   )
