@@ -150,20 +150,45 @@ export default async function RootPage() {
       {/* Pricing */}
       <section id="pricing" className="border-t border-line bg-ink-inset">
         <div className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="text-2xl font-semibold tracking-tight text-fg">Simple per-hire pricing</h2>
-          <div className="mt-8 max-w-md rounded-xl border border-line bg-ink-raised p-8">
-            <p className="text-4xl font-semibold text-fg">
-              25 GBP <span className="text-base font-normal text-fg-muted">per hire</span>
-            </p>
-            <ul className="mt-6 space-y-3 text-sm text-fg-body">
-              <li className="flex gap-2"><span className="text-fg-accent">-</span> First 3 onboardings free, no card required</li>
-              <li className="flex gap-2"><span className="text-fg-accent">-</span> Unlimited templates and reviewers</li>
-              <li className="flex gap-2"><span className="text-fg-accent">-</span> Automated reminders and escalations</li>
-              <li className="flex gap-2"><span className="text-fg-accent">-</span> Audit trail and CSV export included</li>
-            </ul>
-            <Link href="/sign-up" className="mt-8 block rounded-md bg-brand px-6 py-3 text-center text-base font-semibold text-on-accent hover:bg-brand-hover">
-              Start free
-            </Link>
+          <h2 className="text-2xl font-semibold tracking-tight text-fg">Pricing that scales with you</h2>
+          <div className="mt-8 grid gap-6 sm:grid-cols-2">
+            {/* Pay per hire */}
+            <div className="rounded-xl border border-line bg-ink-raised p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">Pay as you go</p>
+              <p className="mt-3 text-4xl font-semibold text-fg">
+                49.99 GBP <span className="text-base font-normal text-fg-muted">per hire</span>
+              </p>
+              <ul className="mt-6 space-y-3 text-sm text-fg-body">
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> First 3 onboardings free, no card required</li>
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> Unlimited templates and reviewers</li>
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> Automated reminders and escalations</li>
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> Audit trail and CSV export included</li>
+              </ul>
+              <Link href="/sign-up" className="mt-8 block rounded-md bg-brand px-6 py-3 text-center text-base font-semibold text-on-accent hover:bg-brand-hover">
+                Start free
+              </Link>
+            </div>
+
+            {/* Unlimited / negotiated */}
+            <div className="rounded-xl border border-line bg-ink-raised p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">Unlimited</p>
+              <p className="mt-3 text-4xl font-semibold text-fg">
+                Custom pricing
+              </p>
+              <p className="mt-1 text-sm text-fg-muted">Tailored to your hiring volume and team size</p>
+              <ul className="mt-6 space-y-3 text-sm text-fg-body">
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> Unlimited new-starter onboardings, no per-hire charge</li>
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> Everything in pay-as-you-go</li>
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> Priority support for your team</li>
+                <li className="flex gap-2"><span className="text-fg-accent">-</span> A plan built around how you actually hire</li>
+              </ul>
+              <a
+                href="mailto:jason@vopria.com?subject=Vopria%20Unlimited%20plan"
+                className="mt-8 block rounded-md border border-line-strong px-6 py-3 text-center text-base font-semibold text-fg hover:border-brand hover:text-fg-accent transition-colors"
+              >
+                Get in touch
+              </a>
+            </div>
           </div>
         </div>
       </section>

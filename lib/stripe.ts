@@ -17,9 +17,9 @@ export function getStripe(): Stripe {
   return stripeClient;
 }
 
-// Per-hire price in pence. Default 2500 (25 GBP). Override with env var.
+// Per-hire price in pence. Default 4999 (49.99 GBP). Override with env var.
 export function getHirePricePence(): number {
   const raw = process.env.STRIPE_HIRE_PRICE_PENCE;
   const parsed = raw ? parseInt(raw, 10) : NaN;
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 2500;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 4999;
 }
