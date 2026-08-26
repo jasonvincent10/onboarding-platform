@@ -53,10 +53,16 @@ export async function loginEmployee(
     return { error: 'Incorrect email or password.' }
   }
 
-  // Mirror of the guard on the employer /login form: this authenticates
-  // any valid Supabase account, so if an employer mistakes this for their
-  // own login page, don't send them into an employee dashboard with no
-  // profile behind it.
+  // Accepting a specific invite -- let /join's own role checks (which
+  // already explicitly reject an employer session here) handle it.
+  if (token) {
+    redirect(`/join?token=${token}`)
+  }
+
+  // Plain sign-in, no token: this form authenticates any valid Supabase
+  // account, so route to wherever this one actually belongs -- mirrors
+  // the same logic on the employer /login form, so either page works
+  // for either role instead of erroring on "the wrong one."
   const { createAdminClient } = await import('@/lib/supabase/admin')
   const adminClient = createAdminClient()
   const { data: profile } = await adminClient
@@ -65,12 +71,20 @@ export async function loginEmployee(
     .eq('user_id', data.user.id)
     .maybeSingle()
 
-  if (!profile) {
-    await supabase.auth.signOut()
-    return {
-      error: "This account isn't registered as an employee. If you're an employer, sign in at /login instead.",
-    }
+  if (profile) {
+    redirect('/employee/dashboard')
   }
 
-  redirect(token ? `/join?token=${token}` : '/employee/dashboard')
+  const { data: member } = await adminClient
+    .from('employer_members')
+    .select('id')
+    .eq('user_id', data.user.id)
+    .maybeSingle()
+
+  if (member) {
+    redirect('/dashboard')
+  }
+
+  await supabase.auth.signOut()
+  return { error: "We couldn't find an account set up for this login. Please contact support." }
 }

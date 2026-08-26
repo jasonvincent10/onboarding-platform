@@ -85,11 +85,9 @@ export async function login(formData: FormData) {
 
   // This form authenticates ANY valid Supabase account, including an
   // employee's -- Supabase auth doesn't know about our employer/employee
-  // role split. Without this check, an employee who mistakes this for
-  // their login page lands on the employer dashboard with no real
-  // employer data behind it (buttons that silently do nothing, since
-  // there's no employer_id to act on). Verify membership before sending
-  // them anywhere.
+  // role split. Rather than reject a login that used "the wrong page,"
+  // route to wherever this account actually belongs -- one login form
+  // should work regardless of which one someone lands on.
   const adminClient = createAdminClient()
   const { data: member } = await adminClient
     .from('employer_members')
@@ -97,15 +95,27 @@ export async function login(formData: FormData) {
     .eq('user_id', data.user.id)
     .maybeSingle()
 
-  if (!member) {
-    await supabase.auth.signOut()
-    return {
-      error: 'This account isn\'t registered as an employer. If you\'re completing your own onboarding, sign in at the employee login instead.',
-    }
+  if (member) {
+    revalidatePath('/', 'layout')
+    redirect('/dashboard')
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  const { data: profile } = await adminClient
+    .from('employee_profiles')
+    .select('id')
+    .eq('user_id', data.user.id)
+    .maybeSingle()
+
+  if (profile) {
+    revalidatePath('/', 'layout')
+    redirect('/employee/dashboard')
+  }
+
+  // Neither role found -- a genuinely orphaned account (e.g. signup was
+  // interrupted before either row was created). Don't leave them signed
+  // in with nowhere to go.
+  await supabase.auth.signOut()
+  return { error: 'We couldn\'t find an account set up for this login. Please contact support.' }
 }
 
 export async function logout() {
