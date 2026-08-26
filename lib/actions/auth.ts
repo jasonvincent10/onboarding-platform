@@ -77,10 +77,31 @@ export async function login(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) {
     return { error: 'Invalid email or password. Please try again.' }
+  }
+
+  // This form authenticates ANY valid Supabase account, including an
+  // employee's -- Supabase auth doesn't know about our employer/employee
+  // role split. Without this check, an employee who mistakes this for
+  // their login page lands on the employer dashboard with no real
+  // employer data behind it (buttons that silently do nothing, since
+  // there's no employer_id to act on). Verify membership before sending
+  // them anywhere.
+  const adminClient = createAdminClient()
+  const { data: member } = await adminClient
+    .from('employer_members')
+    .select('id')
+    .eq('user_id', data.user.id)
+    .maybeSingle()
+
+  if (!member) {
+    await supabase.auth.signOut()
+    return {
+      error: 'This account isn\'t registered as an employer. If you\'re completing your own onboarding, sign in at the employee login instead.',
+    }
   }
 
   revalidatePath('/', 'layout')
