@@ -7,6 +7,7 @@ import {
   type ReminderItem,
   type OverdueEntry,
 } from '@/lib/email/reminder-templates';
+import { RESEND_FROM } from '@/lib/email/from';
 
 interface EmployeeReminderGroup {
   onboardingId: string;
@@ -26,7 +27,7 @@ interface EmployerEscalationGroup {
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = 'onboarding@resend.dev'; // replace with verified domain before launch
+const FROM = RESEND_FROM;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
 
 // How many days ahead counts as "approaching deadline"

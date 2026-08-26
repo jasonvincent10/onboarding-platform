@@ -5,6 +5,7 @@ import { Resend } from 'resend'
 import { revalidatePath } from 'next/cache'
 import { buildInviteEmailHtml } from '@/lib/email/invite-template'
 import { consumeOnboardingSlot } from '@/lib/billing'
+import { RESEND_FROM } from '@/lib/email/from'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -193,9 +194,7 @@ export async function createInvitation(
   const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/join?token=${invitationToken}`
 
   const { error: emailError } = await resend.emails.send({
-    // TODO before launch: replace with your verified Resend domain
-    // e.g. 'Vopria <noreply@yourdomain.co.uk>'
-    from: 'Vopria <onboarding@resend.dev>',
+    from: RESEND_FROM,
     to: inviteeEmail,
     subject: `${companyName} — Complete your new starter onboarding`,
     html: buildInviteEmailHtml({

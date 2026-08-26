@@ -182,12 +182,12 @@ export default async function RootPage() {
                 <li className="flex gap-2"><span className="text-fg-accent">-</span> Priority support for your team</li>
                 <li className="flex gap-2"><span className="text-fg-accent">-</span> A checklist template built for your sector, tailored to what you tell us you need</li>
               </ul>
-              <a
-                href="mailto:jason@vopria.com?subject=Vopria%20Unlimited%20plan"
+              <Link
+                href="/contact"
                 className="mt-8 block rounded-md border border-line-strong px-6 py-3 text-center text-base font-semibold text-fg hover:border-brand hover:text-fg-accent transition-colors"
               >
                 Get in touch
-              </a>
+              </Link>
             </div>
           </div>
         </div>

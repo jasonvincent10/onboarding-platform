@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { Resend } from 'resend'
 import { revalidatePath } from 'next/cache'
 import { buildTeamInviteEmailHtml } from '@/lib/email/team-invite-template'
+import { RESEND_FROM } from '@/lib/email/from'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -87,7 +88,7 @@ export async function inviteTeamMember(
   const inviterName = member.full_name || user.email || 'A teammate'
 
   const { error: emailError } = await resend.emails.send({
-    from: 'Vopria <onboarding@resend.dev>',
+    from: RESEND_FROM,
     to: email,
     subject: `${inviterName} invited you to join ${companyName} on Vopria`,
     html: buildTeamInviteEmailHtml({ companyName, inviterName, inviteUrl }),

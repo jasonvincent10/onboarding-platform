@@ -13,6 +13,8 @@ const PUBLIC_ROUTES = [
   '/auth/callback',
   '/reset-password',
   '/team-invite',
+  '/contact',
+  '/api/contact',
 ]
 
 // Routes that authenticated users can access regardless of auth state
