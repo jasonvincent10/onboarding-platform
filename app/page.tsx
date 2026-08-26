@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
 const heroItems = [
-  { label: 'Right to work check', status: 'approved' },
-  { label: 'P45 uploaded', status: 'approved' },
+  { label: 'Eligibility to work', status: 'approved' },
+  { label: 'Previous employer documents', status: 'approved' },
   { label: 'Bank details', status: 'approved' },
   { label: 'Emergency contacts', status: 'submitted' },
   { label: 'Pension form', status: 'pending' },
@@ -46,15 +46,15 @@ export default async function RootPage() {
       <section className="hero-wash mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:py-24">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">
-            For UK SMEs hiring 5 to 200 people a year
+            For growing companies hiring 5 to 200 people a year
           </p>
           <h1 className="mt-4 text-4xl font-semibold leading-[1.15] tracking-tight text-fg sm:text-5xl">
-            Every new starter ready on day one. Every right to work check done properly.
+            Every new starter ready on day one. Every compliance check done properly.
           </h1>
           <p className="mt-5 max-w-[52ch] text-lg leading-[1.6] text-fg-body">
-            Getting a right to work check wrong can cost up to 60,000 pounds per worker.
-            Vopria replaces the email chase with one guided checklist: documents, bank
-            details, NI number and policy sign-offs, collected, reviewed and logged.
+            Getting onboarding compliance wrong is costly and slow to fix. Vopria replaces
+            the email chase with one guided checklist: documents, bank details, tax
+            information and policy sign-offs, collected, reviewed and logged.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link href="/sign-up" className="rounded-md bg-brand px-6 py-3 text-base font-semibold text-on-accent hover:bg-brand-hover">
@@ -68,7 +68,7 @@ export default async function RootPage() {
         <div className="rounded-xl border border-line bg-ink-raised p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-fg">Amara Okafor</p>
+              <p className="text-sm font-semibold text-fg">John Smith</p>
               <p className="text-xs text-fg-muted">Operations Assistant, starts Monday 20 July</p>
             </div>
             <span className="rounded-full bg-status-approved/15 px-3 py-1 text-xs font-semibold text-status-approved">
@@ -98,8 +98,8 @@ export default async function RootPage() {
           <div>
             <h3 className="text-base font-semibold text-fg">Compliance you can evidence</h3>
             <p className="mt-2 text-sm leading-[1.6] text-fg-body">
-              Structured right to work capture with guidance on acceptable documents, plus a full
-              audit trail of every upload, approval and consent, timestamped and exportable.
+              Structured eligibility and identity capture with guidance on acceptable documents, plus a
+              full audit trail of every upload, approval and consent, timestamped and exportable.
             </p>
           </div>
           <div>
@@ -112,8 +112,9 @@ export default async function RootPage() {
           <div>
             <h3 className="text-base font-semibold text-fg">Built for one person to run</h3>
             <p className="mt-2 text-sm leading-[1.6] text-fg-body">
-              A default UK onboarding template is ready the moment you sign up. Invite a new
-              starter in under a minute; approve documents in one click.
+              A ready-made onboarding template gets you started the moment you sign up. Invite
+              a new starter in under a minute; approve documents in one click. Hiring somewhere
+              with different requirements? We&apos;ll build a template around them.
             </p>
           </div>
         </div>
@@ -215,7 +216,7 @@ export default async function RootPage() {
       {/* Footer */}
       <footer className="border-t border-line bg-ink">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm text-fg-muted">
-          <span>Vopria. Made for UK employers.</span>
+          <span>Vopria. Onboarding, done right.</span>
           <nav className="flex gap-6">
             <Link href="/legal/terms" className="hover:text-fg">Terms</Link>
             <Link href="/legal/privacy" className="hover:text-fg">Privacy</Link>

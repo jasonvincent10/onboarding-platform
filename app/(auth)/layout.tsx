@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Vopria — UK Employee Onboarding',
+  title: 'Vopria — Employee Onboarding',
 }
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

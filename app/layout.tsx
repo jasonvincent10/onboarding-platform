@@ -9,9 +9,9 @@ const jakarta = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Vopria — UK Employee Onboarding',
+  title: 'Vopria — Employee Onboarding',
   description:
-    'Compliant, paperless employee onboarding for UK SMEs. P45, right to work, bank details — all in one place.',
+    'Compliant, paperless employee onboarding for growing teams. Documents, eligibility checks, bank details — all in one place.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
