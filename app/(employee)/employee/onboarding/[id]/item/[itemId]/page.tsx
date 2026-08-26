@@ -213,6 +213,7 @@ export default async function ItemPage({ params }: Props) {
                 itemName={item.item_name}
                 itemDescription={item.description ?? undefined}
                 status={item.status}
+                userId={user.id}
               />
             ) : item.item_type === 'acknowledgement' ? (
               <PolicyAcknowledgement

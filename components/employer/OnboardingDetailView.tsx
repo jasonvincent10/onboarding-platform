@@ -108,6 +108,18 @@ export default function OnboardingDetailView({ onboardingId, items: initialItems
         } else {
           setFormData(result.fields ?? null)
         }
+        // Some form_entry items (proof of address) also carry an uploaded
+        // document alongside the form fields -- show both together.
+        if (item.document_upload_id) {
+          const docResult = await getSignedDocumentUrl(item.document_upload_id, onboardingId)
+          if (!('error' in docResult)) {
+            if ('shareCode' in docResult) {
+              setShareCode(docResult.shareCode ?? null)
+            } else {
+              setDocumentUrl(docResult.url ?? null)
+            }
+          }
+        }
       } else if (item.item_type === 'acknowledgement') {
         setFormData({
           'Acknowledged at': item.acknowledged_at

@@ -232,7 +232,7 @@ export async function getDecryptedFormData(onboardingId: string, dataCategory: s
 
   const { data: profile } = await adminClient
     .from('employee_profiles')
-    .select('ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, bank_account_holder_name, emergency_contacts')
+    .select('ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, bank_account_holder_name, emergency_contacts, address_line_1, address_line_2, city, postcode')
     .eq('id', ctx.employeeId)
     .single()
 
@@ -281,6 +281,17 @@ export async function getDecryptedFormData(onboardingId: string, dataCategory: s
       fields[`Contact ${i + 1}`] = `${c.name} (${c.relationship}) and ${c.phone}`
     })
     await writeAccessAudit()
+    return { fields }
+  }
+
+  if (dataCategory === 'personal_info') {
+    if (!profile.address_line_1) return { fields: { Address: '(not yet submitted)' } }
+    await writeAccessAudit()
+    const fields: Record<string, string> = {
+      Address: [profile.address_line_1, profile.address_line_2].filter(Boolean).join(', '),
+      'Town / City': profile.city ?? '(not provided)',
+      Postcode: profile.postcode ?? '(not provided)',
+    }
     return { fields }
   }
 

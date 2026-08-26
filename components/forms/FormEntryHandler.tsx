@@ -6,14 +6,16 @@ import { getExistingProfileData, type ExistingProfileData } from '@/lib/actions/
 import NINumberForm from '@/components/forms/NINumberForm';
 import BankDetailsForm from '@/components/forms/BankDetailsForm';
 import EmergencyContactsForm from '@/components/forms/EmergencyContactsForm';
+import AddressProofForm from '@/components/forms/AddressProofForm';
 
 interface FormEntryHandlerProps {
   onboardingId: string;
   checklistItemId: string;
-  formFieldKey: string;    // 'ni_number' | 'bank_details' | 'emergency_contacts'
+  formFieldKey: string;    // 'ni_number' | 'bank_details' | 'emergency_contacts' | 'address'
   itemName: string;
   itemDescription?: string;
   status: string;
+  userId: string;
 }
 
 export default function FormEntryHandler({
@@ -23,6 +25,7 @@ export default function FormEntryHandler({
   itemName,
   itemDescription,
   status,
+  userId,
 }: FormEntryHandlerProps) {
   const router = useRouter();
   const [profileData, setProfileData] = useState<ExistingProfileData | null>(null);
@@ -140,6 +143,20 @@ export default function FormEntryHandler({
           onboardingId={onboardingId}
           checklistItemId={checklistItemId}
           existingContacts={profileData?.emergencyContacts ?? null}
+          onSuccess={handleSuccess}
+        />
+      );
+
+    case 'address':
+      return (
+        <AddressProofForm
+          onboardingId={onboardingId}
+          checklistItemId={checklistItemId}
+          userId={userId}
+          existingLine1={profileData?.addressLine1 ?? null}
+          existingLine2={profileData?.addressLine2 ?? null}
+          existingCity={profileData?.city ?? null}
+          existingPostcode={profileData?.postcode ?? null}
           onSuccess={handleSuccess}
         />
       );

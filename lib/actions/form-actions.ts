@@ -9,6 +9,7 @@ import {
   normaliseContacts,
   type EmergencyContact,
 } from '@/lib/validation/emergency-contacts';
+import { validateAddress, normalisePostcode, type AddressInput } from '@/lib/validation/address';
 
 // ============================================================================
 // Form Submission Server Actions
@@ -238,6 +239,124 @@ export async function submitEmergencyContacts(
   }
 }
 
+// ---- Proof of address (address form + supporting document, combined) ----
+//
+// Unlike the other form_entry items, this one also carries a document
+// upload (utility bill, bank statement, etc.) submitted in the same step.
+// The file itself is uploaded to Storage client-side first (see
+// lib/storage/upload.ts) -- this action just records the address fields and
+// the already-uploaded file's metadata together.
+
+export interface AddressProofInput {
+  address: AddressInput;
+  filePath: string;
+  documentType: string;
+}
+
+export async function submitAddressProof(
+  onboardingId: string,
+  checklistItemId: string,
+  input: AddressProofInput
+): Promise<FormActionResult> {
+  try {
+    const supabase = await createClient();
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return { success: false, error: 'Not authenticated' };
+    }
+
+    const validation = validateAddress(input.address);
+    if (!validation.valid) {
+      const firstError = Object.values(validation.errors)[0];
+      return { success: false, error: firstError ?? 'Invalid address' };
+    }
+
+    const { data: profile, error: profileLookupError } = await supabase
+      .from('employee_profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileLookupError || !profile) {
+      return { success: false, error: 'Employee profile not found' };
+    }
+
+    const { data: onboarding, error: onboardingError } = await supabase
+      .from('onboarding_instances')
+      .select('id, employer_id')
+      .eq('id', onboardingId)
+      .eq('employee_id', profile.id)
+      .single();
+
+    if (onboardingError || !onboarding) {
+      return { success: false, error: 'Onboarding not found' };
+    }
+
+    // 1. Update address fields on the profile
+    const { error: profileError } = await supabase
+      .from('employee_profiles')
+      .update({
+        address_line_1: input.address.line1.trim(),
+        address_line_2: input.address.line2.trim() || null,
+        city: input.address.city.trim(),
+        postcode: normalisePostcode(input.address.postcode),
+      })
+      .eq('user_id', user.id);
+
+    if (profileError) {
+      console.error('Failed to update address:', profileError);
+      return { success: false, error: 'Failed to save address' };
+    }
+
+    // 2. Record the uploaded proof document
+    const { data: docUpload, error: uploadError } = await supabase
+      .from('document_uploads')
+      .insert({
+        employee_id: profile.id,
+        document_type: input.documentType,
+        document_name: input.documentType,
+        file_path: input.filePath,
+        data_category: 'personal_info',
+        verification_status: 'pending',
+      })
+      .select('id')
+      .single();
+
+    if (uploadError || !docUpload) {
+      return { success: false, error: uploadError?.message ?? 'Failed to record document' };
+    }
+
+    // 3. Link the document and mark the checklist item submitted
+    const { error: checklistError } = await supabase
+      .from('checklist_items')
+      .update({ status: 'submitted', document_upload_id: docUpload.id })
+      .eq('id', checklistItemId)
+      .eq('onboarding_id', onboardingId);
+
+    if (checklistError) {
+      console.error('Failed to update checklist item:', checklistError);
+    }
+
+    // 4. Audit log
+    await supabase.from('audit_log').insert({
+      actor_id: user.id,
+      actor_type: 'employee',
+      action: 'form_submitted',
+      resource_type: 'checklist_item',
+      resource_id: checklistItemId,
+      employer_id: onboarding.employer_id,
+      employee_id: profile.id,
+      metadata: { field: 'address', onboarding_id: onboardingId, document_upload_id: docUpload.id },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error('submitAddressProof error:', error);
+    return { success: false, error: 'An unexpected error occurred' };
+  }
+}
+
 // ---- Read existing profile data (for pre-filling forms) ----
 
 export interface ExistingProfileData {
@@ -246,6 +365,10 @@ export interface ExistingProfileData {
   accountNumber: string | null;
   accountHolderName: string | null;
   emergencyContacts: EmergencyContact[] | null;
+  addressLine1: string | null;
+  addressLine2: string | null;
+  city: string | null;
+  postcode: string | null;
 }
 
 /**
@@ -269,7 +392,7 @@ export async function getExistingProfileData(): Promise<ExistingProfileData | nu
     const { data: profile, error } = await supabase
       .from('employee_profiles')
       .select(
-        'ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, bank_account_holder_name, emergency_contacts'
+        'ni_number_encrypted, bank_sort_code_encrypted, bank_account_number_encrypted, bank_account_holder_name, emergency_contacts, address_line_1, address_line_2, city, postcode'
       )
       .eq('user_id', user.id)
       .single();
@@ -282,6 +405,10 @@ export async function getExistingProfileData(): Promise<ExistingProfileData | nu
       accountNumber: safeDecryptField(profile.bank_account_number_encrypted),
       accountHolderName: profile.bank_account_holder_name ?? null,
       emergencyContacts: profile.emergency_contacts as EmergencyContact[] | null,
+      addressLine1: profile.address_line_1 ?? null,
+      addressLine2: profile.address_line_2 ?? null,
+      city: profile.city ?? null,
+      postcode: profile.postcode ?? null,
     };
   } catch (error) {
     console.error('getExistingProfileData error:', error);
