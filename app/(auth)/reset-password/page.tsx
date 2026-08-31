@@ -1,6 +1,14 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ResetPasswordForm from './ResetPasswordForm'
+import { pageMetadata } from '@/lib/seo'
+
+export const metadata = pageMetadata({
+  title: 'Set a new password - Vopria',
+  description: 'Set a new password for your Vopria account.',
+  path: '/reset-password',
+  noIndex: true,
+})
 
 export default async function ResetPasswordPage() {
   const supabase = await createClient()

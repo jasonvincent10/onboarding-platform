@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import SidebarNav from '@/components/employer/SidebarNav'
+
+// Every page under here requires an authenticated session, so none of it
+// should be indexed regardless of what a specific page's own metadata says.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
 
 export default async function EmployerLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()

@@ -2,6 +2,14 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { acceptInvitation } from './actions'
+import { pageMetadata } from '@/lib/seo'
+
+export const metadata = pageMetadata({
+  title: 'Accept your invitation - Vopria',
+  description: 'Accept your invitation to Vopria and start your onboarding checklist.',
+  path: '/join',
+  noIndex: true,
+})
 
 interface JoinPageProps {
   searchParams: Promise<{ token?: string }>

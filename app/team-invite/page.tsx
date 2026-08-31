@@ -3,6 +3,14 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { acceptTeamInvitation } from './actions'
 import TeamInviteForm from './TeamInviteForm'
+import { pageMetadata } from '@/lib/seo'
+
+export const metadata = pageMetadata({
+  title: 'Accept team invitation - Vopria',
+  description: "Accept your invitation to join your company's Vopria team.",
+  path: '/team-invite',
+  noIndex: true,
+})
 
 interface Props {
   searchParams: Promise<{ token?: string }>

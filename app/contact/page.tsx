@@ -1,9 +1,13 @@
 import Link from 'next/link'
 import ContactForm from './ContactForm'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Get in touch - Vopria',
-}
+  description:
+    "Interested in Vopria's Unlimited plan? Tell us about your team and hiring volume and we'll get back to you with pricing.",
+  path: '/contact',
+})
 
 export default function ContactPage() {
   return (
