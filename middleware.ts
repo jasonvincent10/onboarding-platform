@@ -85,6 +85,10 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|api/cron|api/webhooks).*)',
+    // Static assets and crawler/SEO files (robots.txt, sitemap.xml, llms.txt,
+    // favicons, manifest, OG image) are fetched anonymously by browsers and
+    // crawlers with no session -- they must never hit the auth check below,
+    // or they get redirected to /login instead of served.
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|llms.txt|site.webmanifest|api/cron|api/webhooks|.*\\.(?:ico|png|jpg|jpeg|svg|webp)$).*)',
   ],
 }
