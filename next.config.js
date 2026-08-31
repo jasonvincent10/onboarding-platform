@@ -31,6 +31,8 @@ const securityHeaders = [
 
 const nextConfig = {
   typedRoutes: false,
+  // Don't advertise the framework via the X-Powered-By response header.
+  poweredByHeader: false,
   images: {
     remotePatterns: [
       {
