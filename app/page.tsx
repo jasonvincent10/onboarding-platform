@@ -1,6 +1,29 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { pageMetadata } from '@/lib/seo'
+
+export const metadata = pageMetadata({
+  title: 'Vopria — Employee Onboarding',
+  description:
+    'Compliant, paperless employee onboarding for growing teams. Documents, eligibility checks, bank details — all in one place.',
+  path: '/',
+})
+
+const softwareApplicationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Vopria',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  offers: {
+    '@type': 'Offer',
+    name: 'Pay as you go',
+    price: '49.99',
+    priceCurrency: 'GBP',
+    url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/#pricing`,
+  },
+}
 
 const heroItems = [
   { label: 'Eligibility to work', status: 'approved' },
@@ -27,6 +50,10 @@ export default async function RootPage() {
 
   return (
     <main className="bg-ink text-fg-body">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationJsonLd) }}
+      />
       {/* Nav */}
       <header className="border-b border-line bg-ink">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
