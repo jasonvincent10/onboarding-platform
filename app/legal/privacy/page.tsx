@@ -1,10 +1,16 @@
 // app/legal/privacy/page.tsx
 // Task 4.3: DRAFT privacy policy. A solicitor MUST review before launch.
-// Replace [PLACEHOLDERS] before publishing.
 
-export const metadata = {
+import { pageMetadata } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/legal/Breadcrumbs";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+export const metadata = pageMetadata({
   title: "Privacy Policy - Vopria",
-};
+  description: "How Vopria collects, uses and protects personal data for employers and employees.",
+  path: "/legal/privacy",
+});
 
 function H2({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-8 text-xl font-semibold text-fg">{children}</h2>;
@@ -16,15 +22,22 @@ function P({ children }: { children: React.ReactNode }) {
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <>
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Legal", path: "/legal" },
+          { name: "Privacy Policy", path: "/legal/privacy" },
+        ]}
+        baseUrl={APP_URL}
+      />
       <h1 className="text-3xl font-bold text-fg">Privacy Policy</h1>
       <P>Last updated: 25 August 2026. This is a draft pending legal review.</P>
 
       <H2>1. Who we are</H2>
       <P>
-        Vopria (Vopria Ltd, registered at [ADDRESS]) provides an employee
-        onboarding platform for UK employers and their new starters.
-        Contact: info@vopria.com.
+        Vopria (Vopria Ltd) provides an employee onboarding platform for UK
+        employers and their new starters. Contact: info@vopria.com.
       </P>
 
       <H2>2. Controller and processor roles</H2>
@@ -139,6 +152,6 @@ export default function PrivacyPolicyPage() {
         We will notify registered users of material changes to this policy by
         email and in-product notice.
       </P>
-    </main>
+    </>
   );
 }

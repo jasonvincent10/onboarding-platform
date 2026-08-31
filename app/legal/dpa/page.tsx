@@ -2,9 +2,16 @@
 // Task 4.3: DRAFT Data Processing Agreement for employer customers.
 // A solicitor MUST review before launch.
 
-export const metadata = {
+import { pageMetadata } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/legal/Breadcrumbs";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+export const metadata = pageMetadata({
   title: "Data Processing Agreement - Vopria",
-};
+  description: "Vopria's data processing commitments to employer customers under UK GDPR.",
+  path: "/legal/dpa",
+});
 
 function H2({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-8 text-xl font-semibold text-fg">{children}</h2>;
@@ -16,7 +23,15 @@ function P({ children }: { children: React.ReactNode }) {
 
 export default function DpaPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <>
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Legal", path: "/legal" },
+          { name: "Data Processing Agreement", path: "/legal/dpa" },
+        ]}
+        baseUrl={APP_URL}
+      />
       <h1 className="text-3xl font-bold text-fg">Data Processing Agreement</h1>
       <P>
         Last updated: 25 August 2026. Draft pending legal review. This DPA forms part
@@ -84,6 +99,6 @@ export default function DpaPage() {
         layer; documents stored in a private bucket with per-user path
         isolation.
       </P>
-    </main>
+    </>
   );
 }

@@ -1,9 +1,16 @@
 // app/legal/terms/page.tsx
 // Task 4.3: DRAFT terms of service. A solicitor MUST review before launch.
 
-export const metadata = {
+import { pageMetadata } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/legal/Breadcrumbs";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+export const metadata = pageMetadata({
   title: "Terms of Service - Vopria",
-};
+  description: "The terms that govern use of the Vopria onboarding platform by employers and employees.",
+  path: "/legal/terms",
+});
 
 function H2({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-8 text-xl font-semibold text-fg">{children}</h2>;
@@ -15,7 +22,15 @@ function P({ children }: { children: React.ReactNode }) {
 
 export default function TermsPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <>
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Legal", path: "/legal" },
+          { name: "Terms of Service", path: "/legal/terms" },
+        ]}
+        baseUrl={APP_URL}
+      />
       <h1 className="text-3xl font-bold text-fg">Terms of Service</h1>
       <P>Last updated: 25 August 2026. This is a draft pending legal review.</P>
 
@@ -117,6 +132,6 @@ export default function TermsPage() {
         to the exclusive jurisdiction of the courts of England and Wales. We
         may update these terms with notice to registered users.
       </P>
-    </main>
+    </>
   );
 }
