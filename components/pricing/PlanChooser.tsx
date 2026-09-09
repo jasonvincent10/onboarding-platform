@@ -214,6 +214,16 @@ export default function PlanChooser({
           {mode === 'billing' && activePeople > 0 && (
             <p className="mt-2 text-xs text-fg-muted">You currently have {activePeople} active {activePeople === 1 ? 'person' : 'people'} in your workforce.</p>
           )}
+
+          {/* Plenty of SMEs cannot put a subscription on a card, and a
+              pricing page that only offers one way to pay reads as though
+              the product is not built for them. Stated plainly rather than
+              as a footnote, so it reassures instead of adding friction. */}
+          <p className="mt-4 border-t border-line pt-4 text-sm text-fg-muted">
+            Need to pay by invoice or raise a purchase order?{' '}
+            <Link href="/contact" className="font-medium text-fg-accent hover:text-fg">Get in touch</Link>
+            {' '}and we will arrange it.
+          </p>
         </div>
       </div>
     </div>
