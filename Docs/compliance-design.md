@@ -88,6 +88,35 @@ compliance-only tier does NOT grant unlimited onboarding.
 
 VAT is still an open decision: prices display "ex VAT" and Stripe Tax is off.
 
+## Where onboarding feeds compliance (migration 012)
+
+A template item can name the compliance requirement it satisfies. That choice
+is copied onto the checklist item when an onboarding is created, the same way
+`item_name` is, so editing a template never rewrites an onboarding already in
+flight. When the employer approves the item,
+`lib/compliance/onboarding-sync.ts` creates the compliance record.
+
+The employment row only exists once the onboarding reaches `complete`, so the
+sync no-ops until then and does its work on the approval that completes the
+onboarding. It is safe to call on every approval and safe to repeat: anything
+already tracked is left alone, so a renewal recorded later is never overwritten
+by re-approving the original item.
+
+**Dates are the subtle part.** Onboarding collects a document, not a renewal
+schedule. An expiry the employee copied off the document is trusted, whatever
+the rule says, because it is the best fact available. Otherwise the record is
+created as `pending` with a note asking for the missing date, and it surfaces
+in the action queue. We deliberately do not infer an issue date from the
+approval date: a CSCS card approved today might expire next month, and showing
+five years of false validity is worse than asking. `decideRecordDates()` is
+pure and unit-tested for exactly this.
+
+One known gap: the evidence file itself is not copied from the
+`employee-documents` bucket into `compliance-evidence`. The record notes
+which onboarding it came from, and the employer attaches evidence properly when
+they confirm the dates. Worth revisiting if people find the double handling
+annoying.
+
 ## Daily sweep
 
 `lib/compliance/sweep.ts`, called from `/api/cron/check-overdue` (Vercel free
@@ -117,7 +146,8 @@ compliance:
 ## Operating checklist
 
 1. Run `Supabase/Migrations/009_workforce_compliance.sql`, then
-   `010_subscriptions.sql`, then `011_plan_modules.sql` in the SQL editor.
+   `010_subscriptions.sql`, `011_plan_modules.sql` and
+   `012_onboarding_compliance_link.sql` in the SQL editor.
    All are re-runnable. Confirm each landed with a catalog query rather than
    assuming: the editor runs a script in one transaction and a mid-script
    error rolls everything back without an obvious signal.
@@ -134,7 +164,7 @@ compliance:
 
 ## Not built yet
 
-- Onboarding template item type that creates a compliance record on approval.
+- Copying onboarding evidence files into the compliance evidence bucket.
 - Asset-level items (vehicle MOT, tachograph calibration, LOLER).
 - Line-manager permissions and multi-site.
 - Course-provider integrations.

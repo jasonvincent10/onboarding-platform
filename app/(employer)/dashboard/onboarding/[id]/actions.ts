@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { decryptField } from '@/lib/encryption'
+import { syncComplianceFromOnboarding } from '@/lib/compliance/onboarding-sync'
 import { revalidatePath } from 'next/cache'
 
 // ============================================================================
@@ -335,6 +336,21 @@ export async function approveChecklistItem(checklistItemId: string, onboardingId
       .from('document_uploads')
       .update({ verification_status: 'verified' })
       .eq('id', documentUploadId)
+  }
+
+  // Approving the final item completes the onboarding, which creates the
+  // employment row by trigger, so by this point there is something to attach
+  // compliance records to. Runs on every approval and no-ops until then.
+  // Never let a failure here block the approval itself.
+  try {
+    const sync = await syncComplianceFromOnboarding({
+      onboardingId,
+      employerId: ctx.employerId,
+      actorUserId: ctx.userId,
+    })
+    if (sync.errors.length > 0) console.error('Compliance sync errors:', sync.errors)
+  } catch (err) {
+    console.error('Compliance sync threw:', err)
   }
 
   const supabase = await createClient()

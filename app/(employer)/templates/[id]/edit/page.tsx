@@ -1,6 +1,8 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { getTemplateWithItems } from '@/app/actions/templates'
-import { TemplateEditor } from '@/components/templates/TemplateEditor'
+import { TemplateEditor, type LinkableRequirement } from '@/components/templates/TemplateEditor'
+import { getEmployerContext } from '@/lib/entitlements'
+import { loadLinkableRequirements } from '@/lib/compliance/onboarding-sync'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -16,9 +18,20 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function TemplateEditorPage({ params }: Props) {
   const { id } = await params
-  const template = await getTemplateWithItems(id)
+  const ctx = await getEmployerContext()
+  if (!ctx) redirect('/login')
 
+  const template = await getTemplateWithItems(id)
   if (!template) notFound()
 
-  return <TemplateEditor template={template} />
+  // Offered whatever the plan, since a template built now should keep working
+  // if compliance is added later. The records it creates only become visible
+  // once the plan includes compliance.
+  const requirements: LinkableRequirement[] = (await loadLinkableRequirements(ctx.employerId)).map((r) => ({
+    id: r.id,
+    name: r.name,
+    category: r.category,
+  }))
+
+  return <TemplateEditor template={template} requirements={requirements} />
 }

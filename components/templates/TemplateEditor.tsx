@@ -30,6 +30,12 @@ import {
   type DataCategory,
 } from '@/app/actions/templates'
 
+export interface LinkableRequirement {
+  id: string
+  name: string
+  category: string
+}
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const ITEM_TYPE_OPTIONS: { value: ItemType; label: string; icon: React.ReactNode; description: string }[] = [
@@ -89,6 +95,7 @@ interface ItemFormValues {
   item_type: ItemType
   data_category: DataCategory
   deadline_days_before_start: number
+  compliance_requirement_type_id: string
 }
 
 const DEFAULT_FORM_VALUES: ItemFormValues = {
@@ -97,6 +104,7 @@ const DEFAULT_FORM_VALUES: ItemFormValues = {
   item_type: 'document_upload',
   data_category: 'documents',
   deadline_days_before_start: 3,
+  compliance_requirement_type_id: '',
 }
 
 interface ItemFormProps {
@@ -104,9 +112,10 @@ interface ItemFormProps {
   onSubmit: (values: ItemFormValues) => Promise<void>
   onCancel: () => void
   submitLabel: string
+  requirements: LinkableRequirement[]
 }
 
-function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
+function ItemForm({ initial, onSubmit, onCancel, submitLabel, requirements }: ItemFormProps) {
   const [values, setValues] = useState<ItemFormValues>({
     ...DEFAULT_FORM_VALUES,
     ...initial,
@@ -234,6 +243,31 @@ function ItemForm({ initial, onSubmit, onCancel, submitLabel }: ItemFormProps) {
         </div>
       </div>
 
+      {/* Compliance link. Turns a one-off onboarding document into something
+          that gets watched for expiry, instead of being re-entered by hand. */}
+      {requirements.length > 0 && (
+        <div>
+          <label className="block text-xs font-medium text-fg-body mb-1.5">
+            Also record this as compliance{' '}
+            <span className="text-fg-muted font-normal">(optional)</span>
+          </label>
+          <select
+            value={values.compliance_requirement_type_id}
+            onChange={(e) => set('compliance_requirement_type_id', e.target.value)}
+            className="w-full px-3 py-2 text-sm border border-line-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-brand bg-ink-raised"
+          >
+            <option value="">Do not track this after onboarding</option>
+            {requirements.map((r) => (
+              <option key={r.id} value={r.id}>{r.name}</option>
+            ))}
+          </select>
+          <p className="mt-1.5 text-xs text-fg-muted">
+            When you approve this item, it becomes a tracked record on that person and you get
+            reminders before it expires.
+          </p>
+        </div>
+      )}
+
       {error && (
         <p className="text-xs text-status-rejected bg-status-rejected/10 border border-status-rejected/30 rounded-lg px-3 py-2">
           {error}
@@ -276,6 +310,7 @@ interface ItemRowProps {
   onMoveDown: (id: string) => void
   onDelete: (id: string) => void
   onUpdate: (id: string, values: ItemFormValues) => Promise<void>
+  requirements: LinkableRequirement[]
 }
 
 function ItemRow({
@@ -287,6 +322,7 @@ function ItemRow({
   onMoveDown,
   onDelete,
   onUpdate,
+  requirements,
 }: ItemRowProps) {
   const [editing, setEditing] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -316,6 +352,7 @@ function ItemRow({
             item_type: item.item_type,
             data_category: item.data_category,
             deadline_days_before_start: item.deadline_days_before_start,
+            compliance_requirement_type_id: item.compliance_requirement_type_id ?? '',
           }}
           onSubmit={async (values) => {
             await onUpdate(item.id, values)
@@ -323,6 +360,7 @@ function ItemRow({
           }}
           onCancel={() => setEditing(false)}
           submitLabel="Save changes"
+          requirements={requirements}
         />
       </div>
     )
@@ -531,7 +569,7 @@ function TemplateNameEditor({ template }: { template: Template }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function TemplateEditor({ template }: { template: Template }) {
+export function TemplateEditor({ template, requirements = [] }: { template: Template; requirements?: LinkableRequirement[] }) {
   const [items, setItems] = useState<TemplateItem[]>(
     template.template_items ?? []
   )
@@ -577,6 +615,7 @@ export function TemplateEditor({ template }: { template: Template }) {
               item_type: values.item_type,
               data_category: values.data_category,
               deadline_days_before_start: values.deadline_days_before_start,
+              compliance_requirement_type_id: values.compliance_requirement_type_id || null,
             }
           : item
       )
@@ -671,6 +710,7 @@ export function TemplateEditor({ template }: { template: Template }) {
                 onMoveDown={(id) => moveItem(id, 'down')}
                 onDelete={handleDeleteItem}
                 onUpdate={handleUpdateItem}
+                requirements={requirements}
               />
             ))}
           </div>
@@ -686,6 +726,7 @@ export function TemplateEditor({ template }: { template: Template }) {
               onSubmit={handleAddItem}
               onCancel={() => setShowAddForm(false)}
               submitLabel="Add item"
+              requirements={requirements}
             />
           </div>
         ) : (

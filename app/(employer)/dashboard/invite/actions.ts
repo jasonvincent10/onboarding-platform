@@ -168,6 +168,9 @@ export async function createInvitation(
       data_category: item.data_category,
       form_field_key: item.form_field_key,
       policy_document_path: item.policy_document_path,
+      // Copied like every other field, so editing the template later never
+      // rewrites an onboarding already under way.
+      compliance_requirement_type_id: item.compliance_requirement_type_id ?? null,
       status: 'not_started',
       // Deadline = start date minus N days. If no deadline_days_before_start, default to start date.
       deadline:

@@ -26,6 +26,8 @@ export interface TemplateItem {
   form_field_key: string | null
   sort_order: number
   deadline_days_before_start: number
+  /** The compliance requirement this item satisfies, if any. */
+  compliance_requirement_type_id: string | null
 }
 
 export interface Template {
@@ -161,15 +163,18 @@ export async function deleteTemplate(templateId: string) {
 
 // ─── Template Item Actions ────────────────────────────────────────────────────
 
+export interface TemplateItemValues {
+  item_name: string
+  description?: string
+  item_type: ItemType
+  data_category: DataCategory
+  deadline_days_before_start: number
+  compliance_requirement_type_id?: string | null
+}
+
 export async function addTemplateItem(
   templateId: string,
-  values: {
-    item_name: string
-    description?: string
-    item_type: ItemType
-    data_category: DataCategory
-    deadline_days_before_start: number
-  }
+  values: TemplateItemValues
 ): Promise<TemplateItem> {
   const supabase = await createClient()
   const employerId = await getEmployerId()
@@ -207,6 +212,7 @@ export async function addTemplateItem(
       item_type: values.item_type,
       data_category: values.data_category,
       deadline_days_before_start: values.deadline_days_before_start,
+      compliance_requirement_type_id: values.compliance_requirement_type_id || null,
       sort_order: nextSortOrder,
     })
     .select()
@@ -220,13 +226,7 @@ export async function addTemplateItem(
 export async function updateTemplateItem(
   itemId: string,
   templateId: string,
-  values: {
-    item_name: string
-    description?: string
-    item_type: ItemType
-    data_category: DataCategory
-    deadline_days_before_start: number
-  }
+  values: TemplateItemValues
 ) {
   const supabase = await createClient()
   const employerId = await getEmployerId()
@@ -249,6 +249,7 @@ export async function updateTemplateItem(
       item_type: values.item_type,
       data_category: values.data_category,
       deadline_days_before_start: values.deadline_days_before_start,
+      compliance_requirement_type_id: values.compliance_requirement_type_id || null,
     })
     .eq('id', itemId)
     .eq('template_id', templateId)
