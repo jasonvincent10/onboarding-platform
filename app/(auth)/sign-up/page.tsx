@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { signUp } from '@/lib/actions/auth'
+import { SECTORS } from '@/lib/compliance/types'
 
 export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null)
@@ -76,6 +77,29 @@ export default function SignUpPage() {
               placeholder="Acme Ltd"
               className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg placeholder:text-fg-muted outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
             />
+          </div>
+
+          {/* Sector. Drives which compliance requirements are switched on, so
+              a new account is useful immediately rather than empty. */}
+          <div>
+            <label htmlFor="sector" className="block text-sm font-medium text-fg-body mb-1.5">
+              What does your company do?
+            </label>
+            <select
+              id="sector"
+              name="sector"
+              defaultValue=""
+              className="w-full rounded-lg border border-line-strong bg-ink-raised px-3.5 py-2.5 text-sm text-fg outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
+            >
+              <option value="">Select your sector</option>
+              {SECTORS.map((s) => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
+              <option value="other">Something else</option>
+            </select>
+            <p className="mt-1 text-xs text-fg-muted">
+              We use this to set up the checks your sector usually needs. You can change all of them later.
+            </p>
           </div>
 
           {/* Email */}

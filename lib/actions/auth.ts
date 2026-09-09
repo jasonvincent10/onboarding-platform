@@ -23,6 +23,10 @@ export async function signUp(formData: FormData) {
 
   const fullName = formData.get('fullName') as string
   const companyName = formData.get('companyName') as string
+  const sectorRaw = (formData.get('sector') as string)?.trim()
+  const sector = ['care', 'construction', 'hospitality', 'logistics', 'security', 'other'].includes(sectorRaw)
+    ? sectorRaw
+    : null
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
@@ -44,6 +48,7 @@ export async function signUp(formData: FormData) {
     .from('employer_accounts')
     .insert({
       company_name: companyName,
+      sector,
       subscription_status: 'trial',
       onboardings_used: 0,
     })
@@ -67,6 +72,36 @@ export async function signUp(formData: FormData) {
   }
 
   await admin.rpc('create_default_template', { p_employer_id: employerAccount.id })
+
+  // Switch on the compliance requirements that sector usually needs, so the
+  // Compliance page has something in it the first time they open it rather
+  // than an empty list they have to build from scratch. Done even on the free
+  // tier: the rows are harmless until the plan grants access, and they are
+  // then already there when a trial starts. "Something else" gets the
+  // cross-sector set, since that is the part that applies to every employer.
+  if (sector) {
+    const librarySector = sector === 'other' ? 'cross_sector' : sector
+    const { data: types, error: typesError } = await admin
+      .from('compliance_requirement_types')
+      .select('id')
+      .is('employer_id', null)
+      .eq('is_active', true)
+      .contains('sectors', [librarySector])
+
+    if (typesError) {
+      // Never block a signup over this. The employer can pick their sector
+      // again from Compliance settings, which runs the same seeding.
+      console.error('Sector requirement seeding failed:', typesError.message)
+    } else if (types && types.length > 0) {
+      const { error: seedError } = await admin
+        .from('employer_requirements')
+        .upsert(
+          types.map((t) => ({ employer_id: employerAccount.id, requirement_type_id: t.id, enabled: true })),
+          { onConflict: 'employer_id,requirement_type_id' }
+        )
+      if (seedError) console.error('Sector requirement seeding failed:', seedError.message)
+    }
+  }
 
   redirect('/dashboard')
 }
