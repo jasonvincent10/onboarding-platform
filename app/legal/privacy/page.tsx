@@ -32,7 +32,7 @@ export default function PrivacyPolicyPage() {
         baseUrl={APP_URL}
       />
       <h1 className="text-3xl font-bold text-fg">Privacy Policy</h1>
-      <P>Last updated: 25 August 2026. This is a draft pending legal review.</P>
+      <P>Last updated: 9 September 2026. This is a draft pending legal review.</P>
 
       <H2>1. Who we are</H2>
       <P>
@@ -63,16 +63,41 @@ export default function PrivacyPolicyPage() {
         never stored on our servers). We also keep audit logs of actions taken
         on the platform and technical data such as IP addresses.
       </P>
+      <P>
+        <strong>Compliance records.</strong> Where your employer uses Vopria to
+        track workforce compliance, we also hold records of the training,
+        licences, certificates, checks, registrations and medical assessments
+        you need for your role. A record may include the date it was issued,
+        the date it expires, a certificate, card or licence number, and a copy
+        of the evidence itself, such as a photograph of a card or a training
+        certificate. These records continue for as long as you work for that
+        employer, not only while you are being onboarded.
+      </P>
 
       <H2>4. Why we process it (lawful bases)</H2>
       <P>
         Performance of a contract: providing the onboarding service to
         employers and the account service to employees. Legal obligation:
         employers use the platform to meet right to work and payroll
-        obligations. Consent: an employer only gains access to a data category
-        with your explicit, granular, recorded consent, which you can withdraw
-        at any time. Legitimate interests: service security, fraud prevention
-        and product improvement.
+        obligations. Consent: for onboarding data, an employer only gains
+        access to a data category with your explicit, granular, recorded
+        consent, which you can withdraw at any time. Legitimate interests:
+        service security, fraud prevention and product improvement.
+      </P>
+      <P>
+        <strong>Compliance records are not held on the basis of consent, and
+        this is an important difference.</strong> Your employer is required to
+        hold evidence that you are trained, qualified or licensed for the work
+        you do, and in many cases to produce it to a regulator such as the Care
+        Quality Commission, the Health and Safety Executive, an environmental
+        health officer or the Driver and Vehicle Standards Agency. The lawful
+        bases are therefore legal obligation and your employer&apos;s legitimate
+        interest in operating safely and lawfully. This means you cannot
+        withdraw your employer&apos;s access to these particular records while
+        you work for them, though every other right described below still
+        applies. Where a record concerns your health, such as a medical or
+        health surveillance assessment, the further condition for processing is
+        employment law under UK GDPR Article 9(2)(b).
       </P>
 
       <H2>5. How we protect it</H2>
@@ -84,11 +109,19 @@ export default function PrivacyPolicyPage() {
         only access onboardings they created, with your active consent for each
         data category. Every access and change is recorded in an audit trail.
       </P>
+      <P>
+        Certificate, card and licence numbers held in compliance records are
+        encrypted at field level in the same way. The evidence documents
+        themselves are kept in separate storage belonging to your employer, and
+        are reachable only through short-lived links issued after we have
+        checked that the person asking is entitled to see them.
+      </P>
 
       <H2>6. Who we share it with</H2>
       <P>
-        Employers you are onboarding with (only the categories you have
-        consented to share); Supabase (database and file storage, EU region);
+        Employers you are onboarding with or already working for (the
+        onboarding categories you have consented to share, plus any compliance
+        records they are required to hold, as explained in section 4); Supabase (database and file storage, EU region);
         Vercel (hosting); Resend (transactional email); Stripe (payments for
         employers); and Sentry (error monitoring). We do not sell personal
         data.
@@ -121,6 +154,15 @@ export default function PrivacyPolicyPage() {
         view that data going forward, but does not itself trigger deletion,
         since the employer may have a separate statutory obligation to retain
         it in their own records.
+      </P>
+      <P>
+        <strong>Compliance records</strong> are kept for as long as you work for
+        that employer, and for as long afterwards as their own regulator,
+        insurer or contracts require, which is commonly several years. They are
+        not removed when you leave. Your employer may need to show a regulator
+        that work carried out at the time was done by someone properly trained
+        and qualified, and that evidence has to survive your departure for it to
+        mean anything.
       </P>
       <P>
         Employers are responsible for their own statutory retention

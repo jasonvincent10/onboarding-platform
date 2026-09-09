@@ -34,7 +34,7 @@ export default function DpaPage() {
       />
       <h1 className="text-3xl font-bold text-fg">Data Processing Agreement</h1>
       <P>
-        Last updated: 25 August 2026. Draft pending legal review. This DPA forms part
+        Last updated: 9 September 2026. Draft pending legal review. This DPA forms part
         of the Terms of Service between Vopria (the Processor) and the
         employer customer (the Controller) and applies to onboarding personal
         data processed on the Controller&apos;s behalf.
@@ -47,6 +47,25 @@ export default function DpaPage() {
         documents, P45 and policy acknowledgements) for the duration of the
         Controller&apos;s use of the service, for the purpose of running
         employee onboarding.
+      </P>
+      <P>
+        Where the Controller uses the workforce compliance features, the
+        processing also covers records of training, licences, certificates,
+        checks, registrations and medical or health surveillance assessments
+        held about the Controller&apos;s workers, including issue and expiry
+        dates, reference numbers and evidence documents. The Controller decides
+        which requirements apply to which of its people, and remains the
+        Controller for those records. Processing continues for the duration of
+        each worker&apos;s employment and for any retention period the
+        Controller sets thereafter, rather than ending when onboarding
+        finishes.
+      </P>
+      <P>
+        Some of this data may be special category data under UK GDPR Article 9,
+        in particular records of medicals and health surveillance. The
+        Controller is responsible for identifying and documenting its own
+        condition for processing special category data, which for employment
+        health records is ordinarily Article 9(2)(b).
       </P>
 
       <H2>2. Processor obligations</H2>
