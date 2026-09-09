@@ -4,6 +4,8 @@ import { EmployerExportButton } from "@/components/ExportButtons";
 import { BillingUsage } from "@/components/BillingUsage";
 import { getBillingState } from "@/lib/billing";
 import OnboardingsList, { type OnboardingInstance } from '@/components/employer/OnboardingsList'
+import { getEmployerContext } from '@/lib/entitlements'
+import { buildComplianceOverview } from '@/lib/compliance/queries'
 
 function getTimeOfDay() {
   const h = new Date().getHours()
@@ -105,6 +107,10 @@ export default async function DashboardPage() {
 
   const billing = employerId ? await getBillingState(employerId) : null
 
+  // Compliance summary, only for employers whose plan includes it.
+  const ctx = await getEmployerContext()
+  const compliance = ctx?.entitlements.compliance ? await buildComplianceOverview(ctx.employerId) : null
+
   return (
     <div>
       <div className="flex items-start justify-between mb-8 gap-4">
@@ -130,6 +136,21 @@ export default async function DashboardPage() {
       </div>
 
       {billing && <div className="mb-6"><BillingUsage state={billing} /></div>}
+
+      {compliance && (compliance.personRequirements.length + compliance.organisation.length > 0) && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-semibold text-fg">Compliance</h2>
+            <Link href="/compliance" className="text-xs font-medium text-fg-accent hover:text-fg transition">Open overview</Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+            <StatCard label="People tracked" value={compliance.totals.people} />
+            <StatCard label="Expired or missing" value={compliance.totals.expired + compliance.totals.missing + compliance.totals.rejected} accent="amber" />
+            <StatCard label="Expiring soon" value={compliance.totals.expiring} accent="amber" />
+            <StatCard label="Awaiting review" value={compliance.totals.awaiting_review} accent="teal" />
+          </div>
+        </div>
+      )}
 
       {total > 0 && <EmployerExportButton />}
 

@@ -95,3 +95,34 @@ export function SarExportButton() {
     </div>
   );
 }
+
+export function ComplianceExportButton({
+  employmentId,
+  verifiedOnly = false,
+}: {
+  employmentId?: string;
+  verifiedOnly?: boolean;
+}) {
+  const { busy, error, download } = useDownload();
+
+  const params = new URLSearchParams();
+  if (employmentId) params.set("employmentId", employmentId);
+  if (verifiedOnly) params.set("verifiedOnly", "1");
+  const qs = params.toString();
+  const url = "/api/export/compliance" + (qs ? "?" + qs : "");
+
+  return (
+    <div className="inline-flex flex-col items-start gap-1">
+      <button
+        type="button"
+        onClick={() => download(url)}
+        disabled={busy}
+        className="inline-flex items-center gap-2 rounded-lg border border-line-strong bg-ink-raised px-4 py-2.5 text-sm font-medium text-fg-body hover:bg-ink-raised-hover disabled:opacity-50"
+        title={verifiedOnly ? "Verified records only, ready to import into another system" : undefined}
+      >
+        {busy ? "Preparing export..." : employmentId ? "Export record (CSV)" : verifiedOnly ? "Export verified (CSV)" : "Export workforce (CSV)"}
+      </button>
+      {error ? <p className="text-xs text-status-rejected">{error}</p> : null}
+    </div>
+  );
+}

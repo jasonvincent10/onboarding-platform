@@ -38,7 +38,7 @@ The core differentiator is a **portable employee profile**: documents and data a
 
 ---
 
-## Database schema (10 tables, all RLS-enabled)
+## Database schema (10 core tables + 7 compliance tables from migration 009, all RLS-enabled)
 
 - `employer_accounts` — id, company_name, company_number, stripe_customer_id, subscription_status, onboardings_used, paid_credits
 - `employer_members` — id, employer_id → employer_accounts, user_id → auth.users, role, full_name, email
@@ -60,7 +60,7 @@ The core differentiator is a **portable employee profile**: documents and data a
 - `employer_members` join table supports future multi-user per org
 - **`employee_id` on `onboarding_instances` stores `employee_profiles.id`, NOT `auth.users.id`** — use `getProfileIdForUser()` to translate
 - Data categories: personal_info, ni_number, bank_details, emergency_contacts, right_to_work, documents, policy_acknowledgements
-- Billing model: credit-based per-hire. 3 free onboardings, then 1 paid credit per onboarding. Credits granted only via Stripe webhook (idempotent check against audit_log session id). `consume_onboarding_slot()` Postgres function makes the billing gate atomic. **Billing gate not yet wired into invitation flow — operating on free/BACS basis for early customers.**
+- Billing model (Sep 2026): tiered subscriptions, see the Workforce compliance section below. Legacy per-hire credits still work for free-tier accounts: 3 free onboardings, then 1 paid credit per onboarding, credits granted only via the Stripe webhook. `consume_onboarding_slot()` is atomic and returns true without touching credits on any paid plan (`plan_has_unlimited_onboarding()`).
 
 ### RLS / helper functions
 - Helper functions: `get_my_employer_id()`, `get_my_employee_id()`, `has_active_consent()`
@@ -75,6 +75,24 @@ The core differentiator is a **portable employee profile**: documents and data a
 - `consume_onboarding_slot(employer_id)` — atomic billing gate; returns true if slot consumed (migration 002)
 - `get_billing_state(employer_id)` — returns onboardings_used, free_limit, paid_credits, can_start (migration 002)
 - NOTE: there are two overloaded `create_onboarding_from_template` functions in the DB, but **neither is actually called by the app** — the invite flow copies template_items → checklist_items via a direct `.insert()` in `app/(employer)/dashboard/invite/actions.ts`.
+
+---
+
+## Workforce compliance + subscription plans (Sep 2026)
+
+Full design in `Docs/compliance-design.md`. Summary:
+- **Migration status (9 Sep 2026): NEITHER 009 nor 010 is applied to the live DB.** A first attempt at 009 rolled back (the Supabase SQL editor runs a script in one transaction, so a mid-script error reverts everything) — most likely on the `moddatetime` trigger, since 001 creates that extension but never uses it and its schema is unproven. 009 now defines a local `set_updated_at()` instead. Run 009 whole, then 010, then add the Stripe subscription webhook events. **Verify with a catalog query, not by assuming a clean run: a script that errors reports nothing obvious in that editor.** Once real workforce data exists, avoid full re-runs of 009 — the backfill resurrects anyone marked as a leaver, because the unique index only covers active people.
+- New tables: `employments` (the workforce, employee_id NULL until claimed), `compliance_requirement_types` (library, ~90 seeded system rows + employer custom rows), `employer_requirements` (what this employer ticks, interval override, lead days, applies-to), `role_groups` + 2 join tables, `compliance_records` (per person per requirement per cycle, superseded_by keeps history), `compliance_hours_log` (Driver CPC), `compliance_notifications_sent` (sweep dedupe). `employer_accounts.sector` and plan columns (`plan_tier`, `plan_band`, `plan_interval`, `stripe_subscription_id`, `current_period_end`, `trial_ends_at`).
+- New private bucket `compliance-evidence`, created by the migration. All access via signed upload/view URLs minted server-side after ownership checks; no storage policies needed.
+- Trigger `onboarding_complete_creates_employment`: a completed onboarding becomes an active employment (links a CSV-imported row by email if one exists). Existing complete onboardings were backfilled by the migration.
+- Renewal engine is pure TypeScript in `lib/compliance/engine.ts` (7 rules: fixed_interval, employer_interval, document_date, no_expiry, age_based, status_check, event_based), unit-tested. **Status is derived from expires_at + lead days, never stored.**
+- Compliance records are employer-controlled data and are **NOT consent-gated** (lawful basis: legal obligation / legitimate interest). Legal pages still need a paragraph on this.
+- Employer routes: `/workforce`, `/workforce/[id]`, `/compliance`, `/compliance/settings`. Employee: `/employee/compliance`. Public: `/workforce-invite?token=` (in middleware PUBLIC_ROUTES + ALWAYS_ACCESSIBLE, mirrors /team-invite). Export: `/api/export/compliance` (`?verifiedOnly=1`, `?employmentId=`).
+- Daily sweep `lib/compliance/sweep.ts` (employee reminders at lead days, work-blocking escalation, Monday digest) runs inside `/api/cron/check-overdue` because Vercel's free tier caps crons at 2.
+- **Pricing is two modules on one size axis** (restructured 9 Sep 2026, migration 011). The customer buys Onboarding, Compliance, or both, priced by headcount. Tiers: `free` (3 onboardings) / `onboarding` / `compliance` / `complete` (both, ~20% cheaper than separately) / `custom` (over 200, set by hand). Bands: 25 / 50 / 100 / 200 people. Monthly prices in pence live ONLY in `lib/plans.ts`; top of the banded range is Complete at £399. Annual = 10 months. 14-day no-card trial on a first subscription of any paid tier. Headcount = active employments, enforced only when the plan includes compliance. **The earlier free/onboard/comply model was replaced because it used two pricing units, hid the fact comply contained onboard, and offered no compliance-only option.**
+- Entitlements: `getEmployerContext()` in `lib/entitlements.ts` returns plan flags; every compliance page/action checks `entitlements.compliance`. SQL mirror: `plan_has_unlimited_onboarding(tier, status)`.
+- Stripe: `/api/billing/subscribe` creates a subscription Checkout with inline `price_data` (nothing to set up in the Stripe dashboard) or changes a live subscription in place. The webhook (`checkout.session.completed`, `customer.subscription.*`, `invoice.paid`, `invoice.payment_failed`) is the only writer of plan columns. `subscription_status` values are now trial | trialing | active | past_due | cancelled | unpaid.
+- Still open: VAT (prices shown ex VAT, Stripe Tax off), legal page updates, onboarding template item that creates a compliance record, asset-level items.
 
 ---
 
@@ -146,6 +164,8 @@ SENTRY_AUTH_TOKEN=     # needed in Vercel for production source maps — add via
 - **Do NOT use `employer_accounts!inner` (or similar) joins** — they silently return null. Fetch with separate two-step queries. Supabase can't auto-traverse indirect relationships in nested selects.
 - **Keep JSX attributes on a single line**, and keep multi-line TS generics (`Record<...>`) on one line or extract to a named type — both cause Turbopack/parser errors in this setup. Avoid non-ASCII symbols (↗, …, HTML entities) in JSX.
 - **Client Components can't receive function props from Server Components** — pass data only; do redirects via `useRouter().push()/refresh()` inside the client component
+- **The `moddatetime` extension is created in 001 but never used by it** — which schema it landed in is unproven, so a bare `EXECUTE FUNCTION moddatetime(updated_at)` in a new trigger can fail with "function does not exist". Migration 009 defines a local `set_updated_at()` instead; use that for any new updated_at trigger.
+- **Run migration files whole, never a partial editor selection** — copying from line 2 drops the leading `-- ` and Postgres tries to parse the comment text as SQL (`syntax error at or near "Migration"`).
 - **`audit_action` enum must be kept up to date** — missing values cause silent insert failures. `data_exported` and `payment_completed` added in migration 002.
 - **Always check the `error` returned from an `audit_log` insert** — silent failures look identical to "code never ran."
 - **`reviewed_by`** is a FK to `auth.users` — use `user.id`, not `member.id`

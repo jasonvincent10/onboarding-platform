@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
+import { runComplianceSweep } from '@/lib/compliance/sweep'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -45,7 +46,12 @@ export async function GET(request: Request) {
 
   const purged = await purgeRejectedCandidates(supabase)
 
-  return NextResponse.json({ processed, errors, purged })
+  // Compliance reminders, escalations and the Monday digest ride on this
+  // cron because Vercel's free tier allows only two scheduled jobs.
+  const compliance = await runComplianceSweep()
+  if (compliance.errors.length > 0) console.error('[cron/check-overdue] compliance sweep errors:', compliance.errors)
+
+  return NextResponse.json({ processed, errors, purged, compliance })
 }
 
 // ─── Purge rejected candidates' data, 7 days after rejection ──────────────
