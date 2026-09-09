@@ -172,19 +172,29 @@ export default async function RootPage() {
 
       {/* Benefits / feature strip */}
       <section className="border-t border-line bg-ink-inset">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 sm:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl gap-x-8 gap-y-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h3 className="text-base font-semibold text-fg">Compliance you can evidence</h3>
+            <h3 className="text-base font-semibold text-fg">Evidence for every check</h3>
             <p className="mt-2 text-sm leading-[1.6] text-fg-body">
-              Structured eligibility and identity capture with guidance on acceptable documents, plus a
-              full audit trail of every upload, approval and consent, timestamped and exportable.
+              Structured eligibility and identity capture with guidance on acceptable documents, and a
+              timestamped trail of every upload, approval and consent behind it. When an inspector asks
+              how you know, you can show them.
             </p>
           </div>
           <div>
-            <h3 className="text-base font-semibold text-fg">No more chasing</h3>
+            <h3 className="text-base font-semibold text-fg">Nothing lapses without warning</h3>
             <p className="mt-2 text-sm leading-[1.6] text-fg-body">
-              Automatic reminders nudge new starters before deadlines and escalate anything
-              overdue to you, so nothing gets missed in an inbox.
+              Reminders reach new starters before a deadline and your team before a certificate runs out,
+              at ninety, thirty and seven days. Anything that stops someone working legally is escalated
+              the day it lapses.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-fg">Your records, exportable any time</h3>
+            <p className="mt-2 text-sm leading-[1.6] text-fg-body">
+              Everything you put in, you can take out. Download your workforce with every certificate and
+              expiry date, or a full onboarding history, as a spreadsheet whenever you want it. For an
+              inspection, for your own files, or to load straight into payroll or an HR system.
             </p>
           </div>
           <div>
