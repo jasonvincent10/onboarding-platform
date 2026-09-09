@@ -38,10 +38,10 @@ const heroOnboarding = [
 ]
 
 const heroCompliance = [
-  { name: 'Sarah Ahmed', requirement: 'First aid at work', status: 'expired', note: 'Expired' },
+  { name: 'Sarah Bennett', requirement: 'First aid at work', status: 'expired', note: 'Expired' },
   { name: 'Tom Reilly', requirement: 'DBS check', status: 'expiring', note: '12 days' },
-  { name: 'Priya Shah', requirement: 'Moving and handling', status: 'expiring', note: '26 days' },
-  { name: 'Dan Okafor', requirement: 'CSCS card', status: 'valid', note: 'Aug 2029' },
+  { name: 'Laura Webb', requirement: 'Moving and handling', status: 'expiring', note: '26 days' },
+  { name: 'Mark Ellison', requirement: 'CSCS card', status: 'valid', note: 'Aug 2029' },
 ]
 
 const DOT_COLOURS: Record<string, string> = {
