@@ -8,7 +8,7 @@ import { pageMetadata } from '@/lib/seo'
 export const metadata = pageMetadata({
   title: 'Vopria — Employee Onboarding',
   description:
-    'Compliant, paperless employee onboarding for growing teams. Documents, eligibility checks, bank details — all in one place.',
+    'Onboard new starters and keep your whole workforce compliant. Right to work, DBS, tickets, licences and mandatory training, tracked and chased before they expire.',
   path: '/',
 })
 
@@ -20,29 +20,46 @@ const softwareApplicationJsonLd = {
   operatingSystem: 'Web',
   offers: {
     '@type': 'Offer',
-    name: 'Pay as you go',
+    name: 'Onboarding',
     price: '49',
     priceCurrency: 'GBP',
     url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/#pricing`,
   },
 }
 
-const heroItems = [
+// Four of five approved is 80%, which is how the real dashboard computes
+// readiness. The previous version showed three of five and claimed 80%.
+const heroOnboarding = [
   { label: 'Eligibility to work', status: 'approved' },
   { label: 'Previous employer documents', status: 'approved' },
   { label: 'Bank details', status: 'approved' },
+  { label: 'Pension form', status: 'approved' },
   { label: 'Emergency contacts', status: 'submitted' },
-  { label: 'Pension form', status: 'pending' },
 ]
 
+const heroCompliance = [
+  { name: 'Sarah Ahmed', requirement: 'First aid at work', status: 'expired', note: 'Expired' },
+  { name: 'Tom Reilly', requirement: 'DBS check', status: 'expiring', note: '12 days' },
+  { name: 'Priya Shah', requirement: 'Moving and handling', status: 'expiring', note: '26 days' },
+  { name: 'Dan Okafor', requirement: 'CSCS card', status: 'valid', note: 'Aug 2029' },
+]
+
+const DOT_COLOURS: Record<string, string> = {
+  approved: 'bg-status-approved',
+  valid: 'bg-status-approved',
+  submitted: 'bg-status-pending',
+  expiring: 'bg-status-pending',
+  expired: 'bg-status-rejected',
+}
+
 function StatusDot({ status }: { status: string }) {
-  const color =
-    status === 'approved'
-      ? 'bg-status-approved'
-      : status === 'submitted'
-        ? 'bg-status-pending'
-        : 'bg-status-inactive'
-  return <span className={'inline-block h-2.5 w-2.5 rounded-full ' + color} />
+  return <span className={'inline-block h-2.5 w-2.5 shrink-0 rounded-full ' + (DOT_COLOURS[status] ?? 'bg-status-inactive')} />
+}
+
+function noteColour(status: string): string {
+  if (status === 'expired') return 'text-status-rejected'
+  if (status === 'expiring') return 'text-status-pending'
+  return 'text-fg-muted'
 }
 
 export default async function RootPage() {
@@ -75,15 +92,15 @@ export default async function RootPage() {
       <section className="hero-wash mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:py-24">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">
-            For growing companies hiring 5 to 200 people a year
+            For UK companies with 20 to 200 people
           </p>
           <h1 className="mt-4 text-4xl font-semibold leading-[1.15] tracking-tight text-fg sm:text-5xl">
             Every new starter ready on day one. Every compliance check done properly.
           </h1>
           <p className="mt-5 max-w-[52ch] text-lg leading-[1.6] text-fg-body">
-            Getting onboarding compliance wrong is costly and slow to fix. Vopria replaces
-            the email chase with one guided checklist: documents, bank details, tax
-            information and policy sign-offs, collected, reviewed and logged.
+            Getting this wrong is costly and slow to fix. Vopria gets every new starter ready
+            for day one, then keeps the team you already have in date: DBS checks, tickets,
+            licences and mandatory training, tracked and chased before they lapse.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link href="/sign-up" className="rounded-md bg-brand px-6 py-3 text-base font-semibold text-on-accent hover:bg-brand-hover">
@@ -93,30 +110,62 @@ export default async function RootPage() {
           </div>
         </div>
 
-        {/* Hero checklist card */}
-        <div className="rounded-xl border border-line bg-ink-raised p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold text-fg">John Smith</p>
-              <p className="text-xs text-fg-muted">Operations Assistant, starts Monday 20 July</p>
+        {/* Hero mockups: one card per product, so the page shows both jobs */}
+        <div className="space-y-4">
+          <div className="rounded-xl border border-line bg-ink-raised p-6">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">Onboarding</p>
+                <p className="mt-1.5 text-sm font-semibold text-fg">John Smith</p>
+                <p className="text-xs text-fg-muted">Operations Assistant, starts Monday 20 July</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-status-approved/15 px-3 py-1 text-xs font-semibold text-status-approved">
+                80% ready
+              </span>
             </div>
-            <span className="rounded-full bg-status-approved/15 px-3 py-1 text-xs font-semibold text-status-approved">
-              80% ready
-            </span>
+            <ul className="mt-4 divide-y divide-line rounded-lg border border-line bg-ink-inset">
+              {heroOnboarding.map((item) => (
+                <li key={item.label} className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm">
+                  <span className="flex items-center gap-3 text-fg-body">
+                    <StatusDot status={item.status} />
+                    {item.label}
+                  </span>
+                  <span className="shrink-0 text-xs capitalize text-fg-muted">{item.status}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="mt-5 divide-y divide-line rounded-lg border border-line bg-ink-inset">
-            {heroItems.map((item) => (
-              <li key={item.label} className="flex items-center justify-between px-4 py-3 text-sm">
-                <span className="flex items-center gap-3 text-fg-body">
-                  <StatusDot status={item.status} />
-                  {item.label}
-                </span>
-                <span className="text-xs capitalize text-fg-muted">{item.status}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 text-xs text-fg-muted">
-            The dashboard answers one question at a glance: will this person be ready on their start date?
+
+          <div className="rounded-xl border border-line bg-ink-raised p-6">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">Compliance</p>
+                <p className="mt-1.5 text-sm font-semibold text-fg">Your workforce</p>
+                <p className="text-xs text-fg-muted">62 people tracked, every day of the year</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-status-rejected/15 px-3 py-1 text-xs font-semibold text-status-rejected">
+                3 need attention
+              </span>
+            </div>
+            <ul className="mt-4 divide-y divide-line rounded-lg border border-line bg-ink-inset">
+              {heroCompliance.map((row) => (
+                <li key={row.name} className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm">
+                  <span className="flex min-w-0 items-center gap-3">
+                    <StatusDot status={row.status} />
+                    <span className="truncate text-fg-body">
+                      {row.name}
+                      <span className="text-fg-muted"> · {row.requirement}</span>
+                    </span>
+                  </span>
+                  <span className={'shrink-0 text-xs font-medium ' + noteColour(row.status)}>{row.note}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <p className="text-xs leading-[1.6] text-fg-muted">
+            Two questions, answered at a glance. Will this person be ready on their start date, and is
+            everyone already here still in date?
           </p>
         </div>
       </section>
