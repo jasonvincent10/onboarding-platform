@@ -33,7 +33,7 @@ export default async function EmployerLayout({ children }: { children: React.Rea
   const { data: employerAccount } = member?.employer_id
     ? await adminClient
         .from('employer_accounts')
-        .select('company_name, subscription_status, onboardings_used')
+        .select('company_name, subscription_status, onboardings_used, plan_tier, trial_ends_at')
         .eq('id', member.employer_id)
         .maybeSingle()
     : { data: null }
@@ -41,6 +41,8 @@ export default async function EmployerLayout({ children }: { children: React.Rea
   const companyName = employerAccount?.company_name ?? 'Your Company'
   const onboardingsUsed = employerAccount?.onboardings_used ?? 0
   const subscriptionStatus = employerAccount?.subscription_status ?? 'trial'
+  const planTier = employerAccount?.plan_tier ?? 'free'
+  const trialEndsAt = employerAccount?.trial_ends_at ?? null
 
   return (
     <div className="min-h-screen bg-ink lg:flex">
@@ -49,6 +51,8 @@ export default async function EmployerLayout({ children }: { children: React.Rea
         memberName={memberName}
         onboardingsUsed={onboardingsUsed}
         subscriptionStatus={subscriptionStatus}
+        planTier={planTier}
+        trialEndsAt={trialEndsAt}
       />
       <div className="flex-1 flex flex-col min-w-0">
         <main className="flex-1 px-4 pt-20 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:px-10 lg:py-10 max-w-6xl">

@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { FREE_FEATURES, FREE_ONBOARDING_LIMIT, MONTHLY_PRICE_PENCE } from '@/lib/plans'
+import PlanChooser from '@/components/pricing/PlanChooser'
 import { pageMetadata } from '@/lib/seo'
 
 export const metadata = pageMetadata({
@@ -19,7 +21,7 @@ const softwareApplicationJsonLd = {
   offers: {
     '@type': 'Offer',
     name: 'Pay as you go',
-    price: '49.99',
+    price: '49',
     priceCurrency: 'GBP',
     url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/#pricing`,
   },
@@ -177,44 +179,33 @@ export default async function RootPage() {
 
       {/* Pricing */}
       <section id="pricing" className="border-t border-line bg-ink-inset">
-        <div className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="text-2xl font-semibold tracking-tight text-fg">Pricing that scales with you</h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            {/* Pay per hire */}
-            <div className="rounded-xl border border-line bg-ink-raised p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">Pay as you go</p>
-              <p className="mt-3 text-4xl font-semibold text-fg">
-                49.99 GBP <span className="text-base font-normal text-fg-muted">per hire</span>
-              </p>
-              <ul className="mt-6 space-y-3 text-sm text-fg-body">
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> First 3 onboardings free, no card required</li>
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> Unlimited templates and reviewers</li>
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> Automated reminders and escalations</li>
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> Audit trail and CSV export included</li>
-              </ul>
-              <Link href="/sign-up" className="mt-8 block rounded-md bg-brand px-6 py-3 text-center text-base font-semibold text-on-accent hover:bg-brand-hover">
-                Start free
-              </Link>
-            </div>
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <h2 className="text-2xl font-semibold tracking-tight text-fg">Pay for what you need</h2>
+          <p className="mt-2 max-w-2xl text-[15px] leading-[1.6] text-fg-body">
+            Vopria does two jobs. It gets new starters ready for day one, and it keeps the team you
+            already have in date all year. Take either on its own, or both together for less.
+          </p>
 
-            {/* Unlimited / negotiated */}
-            <div className="rounded-xl border border-line bg-ink-raised p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">Unlimited</p>
-              <p className="mt-3 text-4xl font-semibold text-fg">
-                Custom pricing
-              </p>
-              <p className="mt-1 text-sm text-fg-muted">Tailored to your hiring volume and team size</p>
-              <ul className="mt-6 space-y-3 text-sm text-fg-body">
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> Unlimited new-starter onboardings, no per-hire charge</li>
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> Everything in pay-as-you-go</li>
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> Priority support for your team</li>
-                <li className="flex gap-2"><span className="text-fg-accent">-</span> A checklist template built for your sector, tailored to what you tell us you need</li>
-              </ul>
-              <Link
-                href="/contact"
-                className="mt-8 block rounded-md border border-line-strong px-6 py-3 text-center text-base font-semibold text-fg hover:border-brand hover:text-fg-accent transition-colors"
-              >
-                Get in touch
+          <div className="mt-8">
+            <PlanChooser mode="marketing" />
+          </div>
+
+          <div className="mt-6 rounded-xl border border-line bg-ink-raised p-6">
+            <div className="flex flex-wrap items-start justify-between gap-5">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.09em] text-fg-accent">Not ready to pay?</p>
+                <p className="mt-1 text-lg font-semibold text-fg">Your first {FREE_ONBOARDING_LIMIT} onboardings are free</p>
+                <ul className="mt-3 space-y-1.5">
+                  {FREE_FEATURES.map((f) => (
+                    <li key={f} className="flex gap-2 text-sm text-fg-body">
+                      <span className="text-fg-accent">-</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Link href="/sign-up" className="rounded-md border border-line-strong px-6 py-3 text-base font-semibold text-fg hover:border-brand hover:text-fg-accent transition-colors">
+                Start free
               </Link>
             </div>
           </div>

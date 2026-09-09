@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { logout } from '@/lib/actions/auth'
+import { PLAN_NAMES, type PlanTier } from '@/lib/plans'
 
 const navItems = [
   {
@@ -25,6 +26,28 @@ const navItems = [
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5v-7Z" stroke="currentColor" strokeWidth="1.5" />
         <path d="M5 7.5h6M5 10h3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Workforce',
+    href: '/workforce',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="6" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M1.5 13.5c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="11.5" cy="5.5" r="2" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M12 9.5c1.6.2 2.5 1.5 2.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Compliance',
+    href: '/compliance',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 1.5 3 3.5v4c0 3.2 2.1 5.6 5 7 2.9-1.4 5-3.8 5-7v-4L8 1.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+        <path d="m5.75 8 1.5 1.5 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -54,6 +77,8 @@ interface SidebarNavProps {
   memberName: string
   onboardingsUsed: number
   subscriptionStatus: string
+  planTier?: string
+  trialEndsAt?: string | null
 }
 
 export default function SidebarNav({
@@ -61,12 +86,16 @@ export default function SidebarNav({
   memberName,
   onboardingsUsed,
   subscriptionStatus,
+  planTier = 'free',
+  trialEndsAt = null,
 }: SidebarNavProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const trialRemaining = Math.max(0, 3 - onboardingsUsed)
-  const isOnTrial = subscriptionStatus === 'trial'
+  const isOnTrial = planTier === 'free'
+  const planLabel = planTier !== 'free' && planTier in PLAN_NAMES ? PLAN_NAMES[planTier as PlanTier] + ' plan' : null
+  const trialDaysLeft = trialEndsAt ? Math.max(0, Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / 86400000)) : null
 
   return (
     <>
@@ -163,6 +192,23 @@ export default function SidebarNav({
           })}
         </nav>
 
+        {/* Plan chip */}
+        {planLabel && (
+          <div className="mx-3 mb-3 rounded-xl bg-brand/10 border border-brand/20 px-4 py-3">
+            <p className="text-xs font-semibold text-fg-accent">{planLabel}</p>
+            <p className="text-xs text-fg-body leading-relaxed">
+              {subscriptionStatus === 'trialing' && trialDaysLeft !== null
+                ? `Free trial, ${trialDaysLeft} day${trialDaysLeft === 1 ? '' : 's'} left`
+                : subscriptionStatus === 'past_due'
+                  ? 'Payment overdue, please update your card'
+                  : 'Unlimited onboardings'}
+            </p>
+            {(subscriptionStatus === 'trialing' || subscriptionStatus === 'past_due') && (
+              <Link href="/settings/billing" className="mt-1 block text-xs font-semibold text-fg-accent underline hover:text-fg transition">Manage billing</Link>
+            )}
+          </div>
+        )}
+
         {/* Trial banner */}
         {isOnTrial && (
           <div className="mx-3 mb-3 rounded-xl bg-status-pending/15 border border-status-pending/30 px-4 py-3.5">
@@ -172,11 +218,9 @@ export default function SidebarNav({
                 ? `${trialRemaining} free onboarding${trialRemaining !== 1 ? 's' : ''} remaining`
                 : 'Trial complete — add billing to continue'}
             </p>
-            {trialRemaining === 0 && (
-              <Link href="/settings/billing" className="mt-2 block text-xs font-semibold text-status-pending underline hover:text-fg transition">
-                Add payment method
-              </Link>
-            )}
+            <Link href="/settings/billing" className="mt-2 block text-xs font-semibold text-status-pending underline hover:text-fg transition">
+              {trialRemaining === 0 ? 'Choose a plan' : 'See plans'}
+            </Link>
           </div>
         )}
 

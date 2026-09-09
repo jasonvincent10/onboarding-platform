@@ -15,6 +15,8 @@ export type BillingUsageState = {
   paidCredits: number;
   canStart: boolean;
   freeRemaining: number;
+  planTier?: string;
+  unlimited?: boolean;
 };
 
 export function BillingUsage({ state }: { state: BillingUsageState }) {
@@ -44,6 +46,15 @@ export function BillingUsage({ state }: { state: BillingUsageState }) {
   }
 
   const inTrial = state.freeRemaining > 0;
+
+  if (state.unlimited) {
+    return (
+      <div className="rounded-lg border border-line bg-ink-raised p-4">
+        <p className="text-sm font-medium text-fg">Unlimited onboardings included in your plan</p>
+        <p className="text-sm text-fg-muted">{state.onboardingsUsed} onboarding{state.onboardingsUsed === 1 ? "" : "s"} so far. Manage your plan in Settings, Billing.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-lg border border-line bg-ink-raised p-4">

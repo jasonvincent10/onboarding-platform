@@ -11,6 +11,7 @@
 //   }
 //
 import { createAdminClient } from "@/lib/supabase/admin";
+import { entitlementsFor, type PlanTier } from "@/lib/plans";
 
 export const FREE_ONBOARDING_LIMIT = 3;
 
@@ -20,13 +21,15 @@ export type BillingState = {
   paidCredits: number;
   canStart: boolean;
   freeRemaining: number;
+  planTier: PlanTier;
+  unlimited: boolean;
 };
 
 export async function getBillingState(employerId: string): Promise<BillingState | null> {
   const adminClient = createAdminClient();
   const { data } = await adminClient
     .from("employer_accounts")
-    .select("onboardings_used, paid_credits")
+    .select("onboardings_used, paid_credits, plan_tier, plan_band, subscription_status, trial_ends_at, current_period_end")
     .eq("id", employerId)
     .maybeSingle();
 
@@ -34,12 +37,15 @@ export async function getBillingState(employerId: string): Promise<BillingState 
 
   const used = data.onboardings_used ?? 0;
   const credits = data.paid_credits ?? 0;
+  const ent = entitlementsFor(data);
   return {
     onboardingsUsed: used,
     freeLimit: FREE_ONBOARDING_LIMIT,
     paidCredits: credits,
-    canStart: used < FREE_ONBOARDING_LIMIT || credits > 0,
+    canStart: ent.unlimitedOnboarding || used < FREE_ONBOARDING_LIMIT || credits > 0,
     freeRemaining: Math.max(0, FREE_ONBOARDING_LIMIT - used),
+    planTier: ent.tier,
+    unlimited: ent.unlimitedOnboarding,
   };
 }
 

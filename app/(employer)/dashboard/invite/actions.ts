@@ -113,7 +113,7 @@ export async function createInvitation(
     return {
       success: false,
       error:
-        "You've used all your free onboardings and have no paid credits left. Buy a credit from your dashboard to invite another new starter.",
+        "You've used all your free onboardings and have no paid credits left. Choose a plan with unlimited onboardings in Settings, Billing, or buy a single credit from your dashboard.",
       billingRequired: true,
     }
   }
