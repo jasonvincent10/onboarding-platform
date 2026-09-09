@@ -38,3 +38,9 @@ yarn-error.log*
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Outreach: real prospect contact data and send logs -- never commit PII
+scripts/outreach/data/
+scripts/outreach/sent-log.json
+scripts/outreach/previews/
+Leads for Vopria.xlsx
