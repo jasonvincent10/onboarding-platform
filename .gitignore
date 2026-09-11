@@ -44,3 +44,5 @@ scripts/outreach/data/
 scripts/outreach/sent-log.json
 scripts/outreach/previews/
 Leads for Vopria.xlsx
+vopria-leads-*.xlsx
+vopria-leads-*.csv
