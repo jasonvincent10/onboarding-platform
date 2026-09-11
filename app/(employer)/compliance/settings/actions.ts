@@ -89,7 +89,7 @@ export async function saveSector(sector: string): Promise<ActionResult> {
   const gate = await requireContext()
   if ('error' in gate) return { error: gate.error }
   const { ctx } = gate
-  const allowed = ['care', 'construction', 'hospitality', 'logistics', 'security', 'other']
+  const allowed = ['care', 'construction', 'hospitality', 'logistics', 'security', 'corporate', 'other']
   if (!allowed.includes(sector)) return { error: 'Unknown sector.' }
   const adminClient = createAdminClient()
   const { error } = await adminClient.from('employer_accounts').update({ sector }).eq('id', ctx.employerId)

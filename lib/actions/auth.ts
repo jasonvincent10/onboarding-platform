@@ -24,7 +24,7 @@ export async function signUp(formData: FormData) {
   const fullName = formData.get('fullName') as string
   const companyName = formData.get('companyName') as string
   const sectorRaw = (formData.get('sector') as string)?.trim()
-  const sector = ['care', 'construction', 'hospitality', 'logistics', 'security', 'other'].includes(sectorRaw)
+  const sector = ['care', 'construction', 'hospitality', 'logistics', 'security', 'corporate', 'other'].includes(sectorRaw)
     ? sectorRaw
     : null
   const email = formData.get('email') as string

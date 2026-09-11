@@ -17,7 +17,7 @@ interface Props {
   sector: string | null
 }
 
-const SECTOR_ORDER = ['cross_sector', 'care', 'construction', 'hospitality', 'logistics', 'security', 'custom']
+const SECTOR_ORDER = ['cross_sector', 'care', 'construction', 'hospitality', 'logistics', 'security', 'corporate', 'custom']
 
 export default function RequirementPicker({ library, requirements, roleGroups, sector }: Props) {
   const router = useRouter()

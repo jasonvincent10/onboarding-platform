@@ -18,7 +18,7 @@ systems.
 | Table | Purpose |
 |---|---|
 | `employments` | The workforce. One row per person per employer. `employee_id` is NULL until they claim an account via `/workforce-invite`. Auto-created by trigger when an onboarding reaches `complete`. |
-| `compliance_requirement_types` | The library. System rows have `employer_id NULL` and a stable `code`; employers can add custom rows. ~90 seeded across care, construction, hospitality, logistics, security, cross-sector and organisation-level. |
+| `compliance_requirement_types` | The library. System rows have `employer_id NULL` and a stable `code`; employers can add custom rows. 96 seeded across care, construction, hospitality, logistics, security, corporate, cross-sector and organisation-level. A row can belong to several sectors, which is how the cross-sector safety and HR items reach everyone. |
 | `employer_requirements` | Which types this employer enforces: enabled flag, interval override (only honoured when the type is not `interval_locked`), reminder lead days, applies-to all or role groups. |
 | `role_groups` + join tables | "Drivers", "Kitchen", "Door team". Requirements can be scoped to groups; people can belong to several. |
 | `compliance_records` | One row per person (or organisation) per requirement per cycle. Renewing inserts a new current row and points the old one at it via `superseded_by`, so history is kept. |
@@ -146,8 +146,9 @@ compliance:
 ## Operating checklist
 
 1. Run `Supabase/Migrations/009_workforce_compliance.sql`, then
-   `010_subscriptions.sql`, `011_plan_modules.sql` and
-   `012_onboarding_compliance_link.sql` in the SQL editor.
+   `010_subscriptions.sql`, `011_plan_modules.sql`,
+   `012_onboarding_compliance_link.sql` and `013_corporate_sector.sql`
+   in the SQL editor.
    All are re-runnable. Confirm each landed with a catalog query rather than
    assuming: the editor runs a script in one transaction and a mid-script
    error rolls everything back without an obvious signal.

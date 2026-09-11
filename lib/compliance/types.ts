@@ -2,7 +2,7 @@
 // Shared shapes and display labels for the compliance feature. Safe to import
 // from client components (no server-only imports here).
 
-export type Sector = 'care' | 'construction' | 'hospitality' | 'logistics' | 'security' | 'cross_sector'
+export type Sector = 'care' | 'construction' | 'hospitality' | 'logistics' | 'security' | 'corporate' | 'cross_sector'
 
 export const SECTORS: { value: Exclude<Sector, 'cross_sector'>; label: string }[] = [
   { value: 'care', label: 'Care' },
@@ -10,6 +10,7 @@ export const SECTORS: { value: Exclude<Sector, 'cross_sector'>; label: string }[
   { value: 'hospitality', label: 'Hospitality' },
   { value: 'logistics', label: 'Logistics' },
   { value: 'security', label: 'Security' },
+  { value: 'corporate', label: 'Corporate and professional services' },
 ]
 
 export const SECTOR_LABELS: Record<Sector | 'other', string> = {
@@ -18,6 +19,7 @@ export const SECTOR_LABELS: Record<Sector | 'other', string> = {
   hospitality: 'Hospitality',
   logistics: 'Logistics',
   security: 'Security',
+  corporate: 'Corporate and professional services',
   cross_sector: 'Every sector',
   other: 'Other',
 }
