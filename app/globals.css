@@ -6,46 +6,122 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
 
-    /* Vopria ink-navy palette. Mirrors the colours in tailwind.config.ts —
-       utility classes (bg-ink, text-fg-body, etc.) are the primary way
-       these get used; the custom properties are the source of truth. */
-    --bg-base: #0F1836;
-    --bg-raised: #1A2447;
-    --bg-raised-hover: #212D57;
-    --bg-inset: #0B1229;
+    /* Vopria brand palette. Mirrors the colours in tailwind.config.ts — the
+       Tailwind utilities (bg-canvas, text-ink, etc.) are the primary way these
+       get used; these custom properties cover the cases utilities can't reach,
+       such as ::selection and scrollbar theming. Change both together. */
+    --primary: #5b21b6;
+    --primary-hover: #4c1d95;
+    --primary-deep: #3b1578;
+    --primary-soft: #7c3aed;
 
-    --border: #2C3862;
-    --border-strong: #3B4977;
+    --accent: #8b5cf6;
+    --accent-hover: #7c4def;
+    --accent-soft: #a78bfa;
+    --accent-mist: #c4b5fd;
+    --accent-veil: #ede9fe;
 
-    --text-primary: #F5F3FF;
-    --text-body: #B6BDD4;
-    --text-muted: #7E86A3;
-    --text-accent: #A78BFA;
+    --ink: #1e1b2e;
+    --ink-soft: #453f5c;
+    --ink-muted: #6b6485;
+    --ink-faint: #706a88;
 
-    --accent: #8B5CF6;
-    --accent-hover: #7C4DEF;
-    --accent-deep: #6D28D9;
-    --on-accent: #FFFFFF;
+    --canvas: #faf8ff;
+    --canvas-raised: #ffffff;
+    --canvas-sunken: #f3effe;
 
-    --status-approved: #5DCAA5;
-    --status-pending: #FAC775;
-    --status-inactive: #7E86A3;
-    --status-rejected: #F0828E;
+    --line: #e6e0f7;
+    --line-strong: #d3c9f0;
+
+    --on-primary: #ffffff;
+
+    /* Height of the sticky header, so anchored sections can offset by it. */
+    --header-height: 4.25rem;
   }
 
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    /* Anchor links land below the sticky header rather than under it. */
+    scroll-padding-top: calc(var(--header-height) + 1rem);
     scrollbar-gutter: stable;
+    background-color: var(--canvas);
   }
 
   body {
-    background-color: var(--bg-base);
-    color: var(--text-body);
+    background-color: var(--canvas);
+    color: var(--ink-soft);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--accent-mist);
+    color: var(--ink);
   }
 
   *:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--primary);
     outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Skip link — visually hidden until focused by keyboard. */
+  .skip-link {
+    @apply absolute left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-primary px-4 py-2
+           text-sm font-semibold text-white transition-transform focus-visible:translate-y-0;
+  }
+
+  /* Scroll reveal. Elements start shifted and transparent; the IntersectionObserver
+     in components/Reveal.tsx adds [data-revealed] to play them in. With JS off
+     the observer never runs, so the <noscript> block in app/layout.tsx resets
+     these to their final state — content must never depend on motion to appear. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal[data-revealed='true'] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Motion is a progressive enhancement, never a requirement: if the visitor has
+   asked for reduced motion, everything appears in its final state immediately. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

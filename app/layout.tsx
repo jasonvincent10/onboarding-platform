@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
+import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
+import { APP_URL, bookingHref } from '@/lib/config'
+import { site } from '@/content/site'
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -8,16 +12,18 @@ const jakarta = Plus_Jakarta_Sans({
   display: 'swap',
 })
 
-const SITE_NAME = 'Vopria'
-const SITE_TITLE = 'Vopria — Employee Onboarding'
-const SITE_DESCRIPTION =
-  'Compliant, paperless employee onboarding for growing teams. Documents, eligibility checks, bank details — all in one place.'
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+const SITE_TITLE = 'Vopria — AI consultancy for UK organisations'
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
-  title: SITE_TITLE,
-  description: SITE_DESCRIPTION,
+  title: {
+    default: SITE_TITLE,
+    // Page-level titles render as "Contact — Vopria".
+    template: `%s — ${site.name}`,
+  },
+  description: site.description,
+  applicationName: site.name,
+  alternates: { canonical: '/' },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '32x32' },
@@ -31,44 +37,74 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
   openGraph: {
     title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    siteName: SITE_NAME,
+    description: site.description,
+    siteName: site.name,
     locale: 'en_GB',
     type: 'website',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: SITE_NAME }],
+    url: APP_URL,
   },
   twitter: {
     card: 'summary_large_image',
     title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    images: ['/og-image.png'],
+    description: site.description,
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0F1836',
+  themeColor: '#5B21B6',
 }
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: SITE_NAME,
+  '@id': `${APP_URL}/#organization`,
+  name: site.name,
   url: APP_URL,
   logo: `${APP_URL}/android-chrome-512x512.png`,
-  email: 'info@vopria.com',
+  image: `${APP_URL}/opengraph-image`,
+  email: site.email,
+  description: site.description,
+  areaServed: { '@type': 'Country', name: site.country },
+  knowsAbout: [
+    'Artificial intelligence consultancy',
+    'Business process discovery',
+    'Workflow automation',
+    'AI capability training',
+    'Agentic AI systems',
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'Sales enquiries',
+    email: site.email,
+    areaServed: 'GB',
+    availableLanguage: 'English',
+  },
 }
 
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: SITE_NAME,
+  '@id': `${APP_URL}/#website`,
+  name: site.name,
   url: APP_URL,
+  inLanguage: 'en-GB',
+  publisher: { '@id': `${APP_URL}/#organization` },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={jakarta.variable}>
-      <body className="font-sans antialiased text-fg-body bg-ink">
+    // data-scroll-behavior="smooth" restores Next's scroll override for route
+    // transitions — as of Next 16 it no longer does this automatically, and
+    // without it our global `scroll-behavior: smooth` makes navigations crawl.
+    <html lang="en-GB" className={jakarta.variable} data-scroll-behavior="smooth">
+      <head>
+        {/* With JS off the IntersectionObserver never runs, so reveal elements
+            would stay at opacity 0. Show them immediately instead. */}
+        <noscript>
+          <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
+        </noscript>
+      </head>
+      <body className="bg-canvas font-sans text-ink-soft antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
@@ -77,7 +113,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
-        {children}
+        <a href="#main" className="skip-link">
+          Skip to main content
+        </a>
+        <Header bookingUrl={bookingHref()} />
+        <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   )

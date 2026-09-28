@@ -1,0 +1,57 @@
+import { process } from '@/content/site'
+import { Section, SectionHeading } from '../ui'
+import { Reveal } from '../Reveal'
+
+/**
+ * Discover → Diagnose → Educate → Implement.
+ *
+ * Horizontal timeline on desktop, vertical rail on mobile. The connecting line
+ * is decorative; the <ol> carries the actual sequence for assistive tech.
+ */
+export function Process() {
+  return (
+    <Section id={process.id} tone="canvas" labelledBy="process-heading">
+      <Reveal>
+        <SectionHeading
+          id="process-heading"
+          eyebrow={process.eyebrow}
+          heading={process.heading}
+          intro={process.intro}
+        />
+      </Reveal>
+
+      <ol className="relative mt-12 grid gap-8 md:grid-cols-4 md:gap-6">
+        {/* Desktop connector, level with the centre of the step markers. Both
+            ends fade out so the track does not collide with the section edges,
+            and the colour deepens left to right like the maturity ladder. */}
+        <div
+          aria-hidden="true"
+          className="absolute left-0 right-0 top-6 hidden h-0.5 -translate-y-1/2 bg-[linear-gradient(to_right,transparent_0%,#C4B5FD_7%,#8B5CF6_50%,#5B21B6_88%,transparent_100%)] md:block"
+        />
+
+        {process.steps.map((step, index) => (
+          <Reveal as="li" key={step.number} delay={index * 100} className="relative">
+            {/* Mobile rail, drawn between markers rather than past the last one. */}
+            {index < process.steps.length - 1 ? (
+              <span
+                aria-hidden="true"
+                className="absolute left-6 top-14 h-[calc(100%+1rem)] w-0.5 bg-line-strong md:hidden"
+              />
+            ) : null}
+
+            <div className="flex gap-5 md:flex-col md:gap-4">
+              <span className="relative z-10 inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-gradient text-lg font-extrabold text-white shadow-card ring-4 ring-canvas">
+                {step.number}
+              </span>
+
+              <div className="flex flex-col gap-2 pt-1 md:pt-0">
+                <h3 className="text-lg font-extrabold tracking-tight text-ink">{step.name}</h3>
+                <p className="max-w-sm text-[0.95rem] leading-relaxed text-ink-muted">{step.body}</p>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </ol>
+    </Section>
+  )
+}
