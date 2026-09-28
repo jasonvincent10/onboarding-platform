@@ -46,3 +46,7 @@ scripts/outreach/previews/
 Leads for Vopria.xlsx
 vopria-leads-*.xlsx
 vopria-leads-*.csv
+
+# Pre-wipe credential backups -- never commit
+.env.local.pre-wipe.bak
+.env.sentry-build-plugin.bak
