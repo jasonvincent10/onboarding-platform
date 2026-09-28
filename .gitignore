@@ -42,6 +42,7 @@ yarn-error.log*
 # Outreach: real prospect contact data and send logs -- never commit PII
 scripts/outreach/data/
 scripts/outreach/sent-log.json
+scripts/outreach/suppression.json
 scripts/outreach/previews/
 Leads for Vopria.xlsx
 vopria-leads-*.xlsx
