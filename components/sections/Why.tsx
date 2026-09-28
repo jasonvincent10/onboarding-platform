@@ -1,16 +1,27 @@
 import { why } from '@/content/site'
-import { Section, SectionHeading } from '../ui'
+import { Section, SectionHeading, cx } from '../ui'
 import { Reveal } from '../Reveal'
+import { allComplete } from '@/lib/placeholders'
 
 export function Why() {
+  // The founder note only appears once real words replace the [FOUNDER BIO]
+  // placeholder in content/site.ts. Until then the four points take the full
+  // width, so the section reads as complete rather than half-empty.
+  const showFounder = allComplete(why.founder.body, why.founder.name)
+
   return (
     <Section id={why.id} tone="raised" labelledBy="why-heading">
       <Reveal>
         <SectionHeading id="why-heading" eyebrow={why.eyebrow} heading={why.heading} />
       </Reveal>
 
-      <div className="mt-12 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
-        <ul className="grid gap-5 sm:grid-cols-2">
+      <div
+        className={cx(
+          'mt-12 grid gap-10 lg:gap-14',
+          showFounder && 'lg:grid-cols-[1.15fr_0.85fr]',
+        )}
+      >
+        <ul className={cx('grid gap-5 sm:grid-cols-2', !showFounder && 'lg:grid-cols-4')}>
           {why.points.map((point, index) => (
             <Reveal as="li" key={point.title} delay={index * 80}>
               <div className="flex h-full flex-col gap-3 rounded-2xl border border-line bg-canvas p-6 transition hover:border-accent-mist">
@@ -22,9 +33,11 @@ export function Why() {
           ))}
         </ul>
 
-        <Reveal delay={160}>
-          <FounderNote />
-        </Reveal>
+        {showFounder ? (
+          <Reveal delay={160}>
+            <FounderNote />
+          </Reveal>
+        ) : null}
       </div>
     </Section>
   )

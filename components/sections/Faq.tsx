@@ -1,6 +1,7 @@
 import { faq } from '@/content/site'
 import { Section, SectionHeading } from '../ui'
 import { Reveal } from '../Reveal'
+import { stripMarkers } from '@/lib/placeholders'
 
 /**
  * FAQ accordion built on native <details>/<summary>.
@@ -19,9 +20,7 @@ export function Faq() {
       name: item.question,
       acceptedAnswer: {
         '@type': 'Answer',
-        // Placeholder markers are stripped from structured data so search
-        // engines never index an internal review note.
-        text: item.answer.replace(/\s*\[REVIEW\]\s*/g, '').trim(),
+        text: stripMarkers(item.answer),
       },
     })),
   }
@@ -47,8 +46,10 @@ export function Faq() {
                   <ChevronIcon />
                 </summary>
                 <div className="px-6 pb-6 pt-0">
+                  {/* [REVIEW] is an internal note for Jason, not copy for a
+                      visitor — stripped here as well as from the JSON-LD. */}
                   <p className="max-w-prose text-[0.95rem] leading-relaxed text-ink-muted">
-                    {item.answer}
+                    {stripMarkers(item.answer)}
                   </p>
                 </div>
               </details>

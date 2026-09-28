@@ -1,9 +1,14 @@
 import Link from 'next/link'
 import { Logo } from './Logo'
 import { footer, nav, site } from '@/content/site'
+import { isPlaceholder } from '@/lib/placeholders'
 
 export function Footer() {
   const year = new Date().getFullYear()
+  // Company registration details are a legal statement — better absent than
+  // published as brackets. Fill footer.legalNote in content/site.ts and this
+  // line returns on the next build.
+  const showLegalNote = !isPlaceholder(footer.legalNote)
 
   return (
     <footer className="border-t border-line bg-canvas-sunken px-5 py-14 sm:px-6">
@@ -69,7 +74,7 @@ export function Footer() {
           <p>
             © {year} {site.name}. All rights reserved.
           </p>
-          <p className="max-w-lg sm:text-right">{footer.legalNote}</p>
+          {showLegalNote ? <p className="max-w-lg sm:text-right">{footer.legalNote}</p> : null}
         </div>
       </div>
     </footer>

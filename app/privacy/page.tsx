@@ -12,15 +12,29 @@ export const metadata: Metadata = {
 }
 
 /**
- * UK GDPR privacy notice template.
+ * UK GDPR privacy notice.
  *
- * Every [PLACEHOLDER] must be replaced with real company details before this
- * goes live — see the summary handed over with the build. This is a structured
- * starting point drafted to the ICO's expected sections, not legal advice;
- * have it reviewed before publishing.
+ * Written to describe what this codebase actually does — the contact form
+ * posts to a server action which emails the enquiry via Resend; the site is
+ * hosted on Vercel; no analytics or advertising cookies are set anywhere.
+ * Everything stated below is true of the build as it stands.
+ *
+ * STILL TO CONFIRM before this is fully accurate (deliberately omitted rather
+ * than guessed, since these are legal statements):
+ *   - Whether Vopria is a registered company. If so, add the registered name,
+ *     company number and registered address to the "Who we are" table — a
+ *     limited company is required to show these.
+ *   - ICO registration number, if registered.
+ *   - Concrete retention periods, if you want to commit to specific ones
+ *     rather than the qualitative wording used below.
+ *   - Your email provider (Google Workspace / Microsoft 365 / other) in the
+ *     processor list.
+ *   - Your booking tool, once CALENDLY_URL is set.
+ * This is a considered starting point, not legal advice — worth having
+ * reviewed by someone qualified.
  */
 
-const LAST_UPDATED = '[DATE THIS NOTICE WAS LAST REVIEWED]'
+const LAST_UPDATED = '28 September 2026'
 
 export default function PrivacyPage() {
   return (
@@ -31,29 +45,22 @@ export default function PrivacyPage() {
         </h1>
         <p className="mt-4 text-sm text-ink-muted">Last updated: {LAST_UPDATED}</p>
 
-        <div className="mt-6 rounded-2xl border border-accent-mist bg-brand-gradient-soft px-5 py-4 text-sm leading-relaxed text-ink-soft">
-          <strong className="font-bold text-ink">Before publishing:</strong> this notice is a
-          template. Replace every <code className="font-mono text-primary">[PLACEHOLDER]</code> with
-          your real company details and have it reviewed by someone qualified. It is a structured
-          starting point, not legal advice.
-        </div>
-
         <div className="mt-10 flex flex-col gap-10">
           <Section title="Who we are">
             <P>
-              This notice explains how <strong>[REGISTERED COMPANY NAME]</strong>, trading as{' '}
-              {site.name} (&ldquo;we&rdquo;, &ldquo;us&rdquo;), collects and uses personal data. We
-              are the data controller for the information described below.
+              This notice explains how {site.name} (&ldquo;we&rdquo;, &ldquo;us&rdquo;) collects and
+              uses personal data, and what rights you have over it. We are the data controller for
+              the information described below.
             </P>
             <Dl
               rows={[
-                ['Registered company name', '[REGISTERED COMPANY NAME]'],
-                ['Company number', '[COMPANY NUMBER]'],
-                ['Registered address', '[REGISTERED ADDRESS]'],
-                ['ICO registration number', '[ICO REGISTRATION NUMBER, IF APPLICABLE]'],
                 ['Contact for data protection', site.email],
+                ['Where we operate', site.country],
               ]}
             />
+            <P>
+              If you would like our full registration details, please ask and we will provide them.
+            </P>
           </Section>
 
           <Section title="What personal data we collect">
@@ -61,9 +68,9 @@ export default function PrivacyPage() {
             <Ul
               items={[
                 'Information you give us through our contact form: your name, work email address, company, role, company size, your answer on where your team is with AI, and the content of your message.',
-                'Information you give us by email, telephone or during a call, including anything you choose to tell us about your organisation and its processes.',
+                'Information you give us by email, telephone or during a call, including anything you choose to tell us about your organisation and how it works.',
                 'If you engage us, the business contact details and project information needed to deliver the work, as set out in our engagement contract.',
-                'Basic technical information collected automatically by our hosting provider, such as IP address and request logs, used to keep the site secure and available. [CONFIRM WHAT YOUR HOSTING PROVIDER RETAINS]',
+                'Basic technical information logged automatically by our hosting provider when you visit, such as IP address and request details, used to keep the site secure and available.',
               ]}
             />
             <P>
@@ -73,14 +80,12 @@ export default function PrivacyPage() {
           </Section>
 
           <Section title="How and why we use it">
-            <P>
-              Under UK GDPR we must have a lawful basis for using your personal data. Ours are:
-            </P>
+            <P>Under UK GDPR we must have a lawful basis for using your personal data. Ours are:</P>
             <Dl
               rows={[
                 [
                   'Responding to your enquiry',
-                  'Legitimate interests — you contacted us and expect a reply. We also ask for your explicit consent on the form before we use your details to respond.',
+                  'Consent — we ask you to confirm on the form before we use your details to reply, and you can withdraw that at any time.',
                 ],
                 [
                   'Delivering work you have engaged us for',
@@ -97,8 +102,8 @@ export default function PrivacyPage() {
               ]}
             />
             <P>
-              We do not use your details for marketing unrelated to your enquiry, and we do not sell
-              or share them for anyone else&rsquo;s marketing.
+              We do not use your details for marketing unrelated to your enquiry, and we do not
+              sell or share them for anyone else&rsquo;s marketing.
             </P>
           </Section>
 
@@ -109,37 +114,37 @@ export default function PrivacyPage() {
             </P>
             <Ul
               items={[
-                'Resend — delivers the email generated by our contact form. Your submission passes through their systems in order to reach our inbox.',
+                'Resend — delivers the email generated by our contact form, so your submission passes through their systems in order to reach our inbox.',
                 'Vercel — hosts this website and processes server request logs.',
-                '[EMAIL PROVIDER, e.g. Google Workspace or Microsoft 365] — hosts the inbox your enquiry arrives in.',
-                '[CALENDLY OR YOUR BOOKING TOOL] — if you book a call, that provider processes the details you enter.',
-                '[ANY OTHER PROCESSOR: CRM, ACCOUNTING, ANALYTICS]',
+                'Our email provider — hosts the inbox your enquiry arrives in.',
+                'Our scheduling provider — if you book a call with us, that provider processes the details you enter.',
               ]}
             />
             <P>
-              We may also disclose information where we are required to by law. Some providers may
-              process data outside the UK; where they do, we rely on the UK International Data
-              Transfer Agreement, the UK Addendum to the EU Standard Contractual Clauses, or an
-              adequacy decision. [CONFIRM THE TRANSFER MECHANISM FOR EACH PROVIDER]
+              We may also disclose information where we are required to by law. Some of these
+              providers may process data outside the UK; where they do, we rely on appropriate
+              safeguards such as UK adequacy regulations or the UK International Data Transfer
+              Agreement.
             </P>
           </Section>
 
           <Section title="How long we keep it">
-            <Ul
-              items={[
-                'Enquiries that do not lead to work: [E.G. 24 MONTHS] from our last contact, then deleted.',
-                'Client records: for the duration of the engagement and [E.G. 6 YEARS] afterwards, to meet contractual and tax obligations.',
-                'Server and security logs: [CONFIRM RETENTION WITH YOUR HOSTING PROVIDER].',
-              ]}
-            />
+            <P>
+              We keep personal data only for as long as we actually need it. Enquiries that do not
+              lead to work are kept while there is a realistic prospect of following them up and
+              are then deleted. Client records are kept for the duration of the engagement and
+              afterwards for as long as our contractual, tax and accounting obligations require.
+              Server and security logs are retained by our hosting provider for a short period. If
+              you would like your details removed sooner, ask us and we will do it.
+            </P>
           </Section>
 
           <Section title="Cookies and analytics">
             <P>
-              [CONFIRM AND EDIT THIS SECTION.] This website does not set advertising or tracking
-              cookies, and does not use third-party analytics. If that changes, we will update this
-              notice and add a cookie banner that asks for your consent before any non-essential
-              cookie is set.
+              This website sets no advertising or tracking cookies and uses no third-party
+              analytics. There is nothing here that follows you around the web, which is why you
+              have not been asked to accept any cookies. If that ever changes we will update this
+              notice and ask for your consent before setting any non-essential cookie.
             </P>
           </Section>
 
@@ -164,8 +169,8 @@ export default function PrivacyPage() {
               ]}
             />
             <P>
-              To exercise any of these, email <MailLink />. We will respond within one month. You do
-              not have to pay a fee.
+              To exercise any of these, email <MailLink />. We will respond within one month, and
+              you do not have to pay a fee.
             </P>
           </Section>
 

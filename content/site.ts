@@ -193,9 +193,12 @@ export const why = {
       body: 'Advice, training and delivery from one partner. No handing a strategy deck to a separate build team who were not in the room.',
     },
   ],
+  // The founder note is HIDDEN on the live site while `body` or `name` still
+  // contain a [PLACEHOLDER] — the four points above simply take the full
+  // width instead. Replace both with real text and the note appears on the
+  // next build, no other change needed. See lib/placeholders.ts.
   founder: {
     heading: 'A note from our founder',
-    // [FOUNDER BIO] — replace with Jason's own words before launch.
     body: '[FOUNDER BIO — commercial background across defence, rail and major infrastructure. Two or three sentences in the first person: the sectors worked in, the scale of the work, and why that commercial grounding shapes how Vopria approaches AI.]',
     name: '[FOUNDER NAME]',
     role: 'Founder, Vopria',
@@ -234,8 +237,9 @@ export const faq = {
   id: 'faq',
   eyebrow: 'FAQ',
   heading: 'Questions we get asked first.',
-  // [REVIEW] — these are sensible placeholder answers. Confirm each one
-  // reflects how you actually work before the site goes live.
+  // [REVIEW] markers are STRIPPED before display — they are notes to you, not
+  // copy for visitors, and never reach the page or the structured data. They
+  // are still your cue to confirm each answer reflects how you actually work.
   items: [
     {
       question: 'Do we need technical staff to work with you?',
@@ -317,5 +321,8 @@ export const footer = {
   blurb:
     'Vopria helps UK organisations find and build the AI opportunities that are specific to how they actually work.',
   privacyLabel: 'Privacy notice',
+  // HIDDEN on the live site while this contains a [PLACEHOLDER]. If Vopria is
+  // a registered company you are legally required to show the registered name
+  // and number — fill this in and it appears in the footer automatically.
   legalNote: 'Vopria is a trading name of [REGISTERED COMPANY NAME], registered in [ENGLAND AND WALES], company number [COMPANY NUMBER].',
 } as const
