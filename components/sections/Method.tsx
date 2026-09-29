@@ -1,22 +1,25 @@
-import { process } from '@/content/site'
+import { method } from '@/content/site'
 import { Section, SectionHeading } from '../ui'
 import { Reveal } from '../Reveal'
 
 /**
- * Discover → Diagnose → Educate → Implement.
+ * The Vopria Discovery Method — Map → Measure → Model → Mobilise.
  *
  * Horizontal timeline on desktop, vertical rail on mobile. The connecting line
  * is decorative; the <ol> carries the actual sequence for assistive tech.
+ *
+ * Keeps the `how-we-work` anchor id (from content/site.ts) so links published
+ * before the method was branded still land in the right place.
  */
-export function Process() {
+export function Method() {
   return (
-    <Section id={process.id} tone="canvas" labelledBy="process-heading">
+    <Section id={method.id} tone="canvas" labelledBy="method-heading">
       <Reveal>
         <SectionHeading
-          id="process-heading"
-          eyebrow={process.eyebrow}
-          heading={process.heading}
-          intro={process.intro}
+          id="method-heading"
+          eyebrow={method.eyebrow}
+          heading={method.heading}
+          intro={method.intro}
         />
       </Reveal>
 
@@ -29,10 +32,10 @@ export function Process() {
           className="absolute left-0 right-0 top-6 hidden h-0.5 -translate-y-1/2 bg-[linear-gradient(to_right,transparent_0%,#C4B5FD_7%,#8B5CF6_50%,#5B21B6_88%,transparent_100%)] md:block"
         />
 
-        {process.steps.map((step, index) => (
+        {method.steps.map((step, index) => (
           <Reveal as="li" key={step.number} delay={index * 100} className="relative">
             {/* Mobile rail, drawn between markers rather than past the last one. */}
-            {index < process.steps.length - 1 ? (
+            {index < method.steps.length - 1 ? (
               <span
                 aria-hidden="true"
                 className="absolute left-6 top-14 h-[calc(100%+1rem)] w-0.5 bg-line-strong md:hidden"

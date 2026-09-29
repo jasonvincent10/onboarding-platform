@@ -5,9 +5,14 @@ import { allComplete } from '@/lib/placeholders'
 
 export function Why() {
   // The founder note only appears once real words replace the [FOUNDER BIO]
-  // placeholder in content/site.ts. Until then the four points take the full
+  // placeholder in content/site.ts. Until then the points take the full
   // width, so the section reads as complete rather than half-empty.
   const showFounder = allComplete(why.founder.body, why.founder.name)
+
+  // Five points do not divide evenly into a 4-across row, so without the
+  // founder note they run 3-then-2 on large screens rather than leaving a
+  // single orphan on a second row.
+  const pointColumns = showFounder ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'
 
   return (
     <Section id={why.id} tone="raised" labelledBy="why-heading">
@@ -21,7 +26,7 @@ export function Why() {
           showFounder && 'lg:grid-cols-[1.15fr_0.85fr]',
         )}
       >
-        <ul className={cx('grid gap-5 sm:grid-cols-2', !showFounder && 'lg:grid-cols-4')}>
+        <ul className={cx('grid gap-5', pointColumns)}>
           {why.points.map((point, index) => (
             <Reveal as="li" key={point.title} delay={index * 80}>
               <div className="flex h-full flex-col gap-3 rounded-2xl border border-line bg-canvas p-6 transition hover:border-accent-mist">

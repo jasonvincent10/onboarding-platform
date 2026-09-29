@@ -44,6 +44,18 @@ export function Outcomes() {
           </Reveal>
         ))}
       </ul>
+
+      <Reveal delay={120}>
+        <p className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-[0.975rem] text-ink-soft">
+          {outcomes.ctaText}
+          <a
+            href="/contact"
+            className="rounded font-bold text-primary underline underline-offset-4 transition hover:text-primary-hover"
+          >
+            {outcomes.ctaLabel}
+          </a>
+        </p>
+      </Reveal>
     </Section>
   )
 }

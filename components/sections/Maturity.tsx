@@ -98,12 +98,43 @@ export function Maturity() {
       </div>
 
       <Reveal delay={120}>
-        <p className="mt-12 flex items-center justify-center gap-3 rounded-2xl bg-accent-veil px-6 py-5 text-center text-base font-semibold text-primary sm:text-lg">
-          <RiseIcon />
-          {maturity.caption}
-        </p>
+        <div className="mt-12 flex flex-col items-center gap-3 rounded-2xl bg-accent-veil px-6 py-5 text-center">
+          <p className="flex items-center gap-3 text-base font-semibold text-primary sm:text-lg">
+            <RiseIcon />
+            {maturity.caption}
+          </p>
+          {/* The ladder describes the destination; this is the service that
+              actually gets a team there. */}
+          <a
+            href={maturity.trainingLink.href}
+            className="inline-flex items-center gap-1.5 rounded text-sm font-semibold text-primary underline underline-offset-4 transition hover:text-primary-hover"
+          >
+            {maturity.trainingLink.text}
+            <ArrowIcon />
+          </a>
+        </div>
       </Reveal>
     </Section>
+  )
+}
+
+function ArrowIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M3 8h10" />
+      <path d="M9 4l4 4-4 4" />
+    </svg>
   )
 }
 

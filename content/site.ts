@@ -22,7 +22,8 @@ export const site = {
 export const nav = [
   { label: 'Approach', href: '/#approach' },
   { label: 'Services', href: '/#services' },
-  { label: 'How we work', href: '/#how-we-work' },
+  { label: 'Method', href: '/#how-we-work' },
+  { label: 'What you get', href: '/#what-you-get' },
   { label: 'FAQ', href: '/#faq' },
 ] as const
 
@@ -74,6 +75,11 @@ export const maturity = {
   intro:
     'Almost every organisation we meet sits at stage one or two. The compounding gains — the ones that show up in your numbers — start at stage three.',
   caption: "Wherever your team is today, we'll take them to the next level.",
+  // Points from the ladder to the service that actually moves teams up it.
+  trainingLink: {
+    text: 'AI Capability Training is how we move teams up the ladder',
+    href: '/#services',
+  },
   stages: [
     {
       number: 1,
@@ -106,91 +112,247 @@ export const maturity = {
   ],
 } as const
 
-export const services = {
-  id: 'services',
-  eyebrow: 'What we do',
-  heading: 'Four ways we move you up the ladder.',
-  intro:
-    'Start anywhere. Most organisations begin with discovery, because everything worth doing afterwards depends on knowing where the time actually goes.',
-  items: [
+export const competitive = {
+  id: 'competitive',
+  eyebrow: 'Staying competitive',
+  heading: 'Some uses of AI are becoming standard. Others still set a business apart.',
+  body: 'In every sector there is now a baseline — the things competitors are quietly doing that clients and staff have started to expect. Above that baseline sits a much smaller set of moves that genuinely differentiate. The two are not the same, and the line between them moves at a different speed in every industry.',
+  closing:
+    'We show you where your business sits against both: what you need to match simply to keep pace, and where you have room to lead.',
+  ctaLabel: 'Find out where you stand',
+  markers: [
     {
-      slug: 'process-discovery',
-      title: 'Process Discovery',
-      body: 'We map your processes and procedures with the people who run them and pinpoint where time, cost and effort are lost.',
-      highlight: false,
+      label: 'Table stakes',
+      body: 'What your sector already expects. Catching up here protects your position; it does not advance it.',
     },
     {
-      slug: 'opportunity-report',
-      title: 'AI Opportunity Report',
-      body: 'A bespoke report and presentation showing exactly where AI can improve productivity in your business, prioritised by impact and effort.',
-      highlight: false,
-    },
-    {
-      slug: 'capability-training',
-      title: 'AI Capability Training',
-      body: 'Hands-on sessions that move your staff from stage 1 to building their own workflows, tailored to their real tasks.',
-      highlight: false,
-    },
-    {
-      slug: 'build-implement',
-      title: 'Build & Implement',
-      body: 'We design and build the tools, systems, automations and agentic workflows for you, and hand them over with training and documentation.',
-      highlight: true,
-      badge: 'Full delivery',
+      label: 'Differentiators',
+      body: 'The smaller set of moves specific to how you work, where being early is still worth something.',
     },
   ],
 } as const
 
-export const process = {
-  id: 'how-we-work',
-  eyebrow: 'How we work',
-  heading: 'Four steps, in order.',
+export const services = {
+  id: 'services',
+  eyebrow: 'What we do',
+  heading: 'Three ways to start.',
   intro:
-    'No lengthy transformation programme. Each step produces something you can act on, and you can stop at any point.',
+    'Pick the route that matches where you are. Each one stands on its own — you are never committing to what comes after it.',
+  items: [
+    {
+      slug: 'targeted-review',
+      title: 'Targeted Review',
+      hook: "You know where the problem is. We'll go deep.",
+      body: 'A focused review of one process, team or department. Best when something specific is already costing you time and you want it examined properly rather than guessed at.',
+    },
+    {
+      slug: 'whole-business-review',
+      title: 'Whole-Business Review',
+      hook: 'The full picture, ranked.',
+      body: 'Every team, every significant process, scored and compared — producing a prioritised AI roadmap for the business rather than a list of ideas for one department.',
+    },
+    {
+      slug: 'ai-foundations',
+      title: 'AI Foundations',
+      hook: 'Safe, confident first steps.',
+      body: 'For businesses just starting out: an AI policy your staff will actually follow, approved business-grade tools, the security basics, and training to get everyone moving in the same direction.',
+    },
+  ],
+  followOn: {
+    heading: 'Then, if you want us to',
+    intro:
+      'Neither of these is a condition of the work above. Plenty of clients take the findings and run with them internally.',
+    items: [
+      {
+        slug: 'capability-training',
+        title: 'AI Capability Training',
+        body: 'Hands-on sessions that move your team from simple AI tasks to building their own workflows, tailored to the work they actually do.',
+        // Links across to the maturity ladder, which this service is the
+        // practical answer to — see maturity.trainingLink.
+        laddered: true,
+        highlight: false,
+      },
+      {
+        slug: 'build-implement',
+        title: 'Build & Implement',
+        body: 'We design and build the tools, automations and agentic workflows for you, and hand them over with training and documentation.',
+        laddered: false,
+        highlight: true,
+        badge: 'Full delivery',
+      },
+    ],
+  },
+} as const
+
+export const method = {
+  id: 'how-we-work',
+  eyebrow: 'Our method',
+  heading: 'The Vopria Discovery Method.',
+  intro:
+    'Four steps, in order. Each one produces something you can act on, and you can stop after any of them.',
   steps: [
     {
       number: 1,
-      name: 'Discover',
-      body: 'We sit with the people doing the work and map how it really happens — not how the process document says it does.',
+      name: 'Map',
+      body: 'We capture how your business really works, quickly and remotely, with minimal disruption to your team.',
     },
     {
       number: 2,
-      name: 'Diagnose',
-      body: 'We quantify where time and cost are lost, then rank the AI opportunities by impact against effort.',
+      name: 'Measure',
+      body: 'Every process is scored using the Vopria Opportunity Index, so priorities are based on evidence, not guesswork.',
     },
     {
       number: 3,
-      name: 'Educate',
-      body: 'We train your team on their own tasks, so capability stays in the building once we leave.',
+      name: 'Model',
+      body: 'We go deep on the processes that matter most and design exactly where AI fits.',
     },
     {
       number: 4,
-      name: 'Implement',
-      body: 'If you want it built, we build it — workflows, automations and agentic systems, handed over documented.',
+      name: 'Mobilise',
+      body: 'We train your people and implement the changes, then measure the results.',
     },
   ],
+} as const
+
+export const deliverables = {
+  id: 'what-you-get',
+  eyebrow: 'What you get',
+  heading: 'Five things you keep.',
+  intro:
+    'Not a slide deck and a handshake. Every engagement produces documents your team can act on long after we have left.',
+  items: [
+    {
+      title: 'AI Maturity Profile',
+      body: 'Where each of your teams sits on the AI maturity ladder today, so you can see the gap between departments as well as the gap to where you want to be.',
+    },
+    {
+      title: 'Opportunity Matrix',
+      body: 'A one-page view of every opportunity we find, plotted by value, effort and risk, so the sequencing argument is settled before it starts.',
+    },
+    {
+      title: 'Deep-Dive Packs',
+      body: 'Step-by-step analysis of your highest-value processes as they run today, alongside the AI-enabled future state and what it takes to get there.',
+    },
+    {
+      title: 'AI Opportunity Report',
+      body: 'Your findings and roadmap, written up in full and presented in person to your leadership team rather than emailed over.',
+    },
+    {
+      title: 'Impact Report',
+      body: 'Results measured against the baseline we took at the start, so the value is evidenced rather than asserted.',
+    },
+  ],
+  matrix: {
+    label: 'Illustrative example',
+    title: 'Opportunity Matrix',
+    caption:
+      'Every process we assess is plotted by the value of fixing it against the effort to do so, and shaded by delivery risk. Generic examples shown.',
+    axes: { value: 'Value', effort: 'Effort' },
+    // Shown only on narrow screens, where the chart scrolls sideways.
+    scrollHint: 'Scroll sideways to see the full chart',
+    // Fictional, deliberately generic processes — never client data.
+    //
+    // Values are spaced roughly evenly down the scale so that no two dot
+    // labels can collide horizontally, and efforts are spread so each
+    // quadrant holds two points. Changing these is fine; keep the values
+    // about 10 apart or labels will start overlapping.
+    points: [
+      { label: 'Client onboarding', value: 90, effort: 62, risk: 'medium' },
+      { label: 'Invoice processing', value: 78, effort: 22, risk: 'low' },
+      { label: 'Proposal drafting', value: 66, effort: 44, risk: 'medium' },
+      { label: 'Contract review', value: 56, effort: 84, risk: 'high' },
+      { label: 'Email triage', value: 46, effort: 14, risk: 'low' },
+      { label: 'Month-end reporting', value: 36, effort: 56, risk: 'medium' },
+      { label: 'Complaints handling', value: 26, effort: 74, risk: 'high' },
+      { label: 'Supplier vetting', value: 16, effort: 36, risk: 'low' },
+    ],
+    riskLegend: [
+      { level: 'low', label: 'Lower risk' },
+      { level: 'medium', label: 'Medium risk' },
+      { level: 'high', label: 'Higher risk' },
+    ],
+  },
+} as const
+
+export const security = {
+  id: 'security',
+  eyebrow: 'Safe adoption',
+  heading: "Is your team already using AI you don't know about?",
+  intro:
+    'In most businesses we look at, the answer is yes. Staff are pasting documents, customer details and draft contracts into personal AI accounts because it makes their job easier and nobody has told them otherwise. That is not a discipline problem — it is a policy gap.',
+  points: [
+    {
+      title: 'Shadow AI',
+      body: 'Personal accounts handling business data, outside your systems and invisible to you. The first step is finding out what is actually being used, without blame.',
+    },
+    {
+      title: 'Acceptable use, in plain English',
+      body: 'An AI policy short enough that people read it and specific enough that they can follow it — what is fine, what needs checking, and what must never go near a chatbot.',
+    },
+    {
+      title: 'Approved, business-grade tools',
+      body: 'Giving staff a sanctioned tool that is genuinely good removes the reason to reach for a personal account in the first place.',
+    },
+    {
+      title: 'UK GDPR and data protection',
+      body: 'Where personal data is involved, we work to your obligations — lawful basis, data minimisation, and knowing where information actually goes.',
+    },
+    {
+      title: 'Human oversight',
+      body: 'Automated steps need a person accountable for the outcome. We design the review points in from the start rather than bolting them on later.',
+    },
+  ],
+  cta: {
+    heading: 'Not sure what your team is already using?',
+    body: 'That is usually where we start. A short conversation will tell you whether this is worth looking at properly.',
+    label: 'Talk to us about safe adoption',
+  },
+} as const
+
+export const journey = {
+  id: 'journey',
+  eyebrow: 'What working with us looks like',
+  heading: 'From first call to measured result.',
+  intro:
+    'No long procurement cycle and no open-ended commitment. This is the whole shape of an engagement.',
+  steps: [
+    { name: 'Free discovery call', body: 'A short conversation to understand your business and whether we can genuinely help.' },
+    { name: 'Agreed scope, in writing', body: 'What we will look at, what you will receive, and what it costs. Fixed before we start.' },
+    { name: 'Remote-first discovery', body: 'We work around your team with short surveys and a small number of sessions, not weeks on site.' },
+    { name: 'Findings presented in person', body: 'We come to you and take your leadership through what we found and what we recommend.' },
+    { name: 'Your choice of next step', body: 'Act on it yourself, bring in someone else, or have us build it. No pressure either way.' },
+    { name: 'Follow-up to measure results', body: 'We return to compare the outcome against the baseline we took at the start.' },
+  ],
+  cta: {
+    text: 'Step one costs nothing and takes half an hour.',
+    label: 'Book a discovery call',
+  },
 } as const
 
 export const why = {
   id: 'why',
   eyebrow: 'Why Vopria',
-  heading: 'Specific, commercial, and built to leave you capable.',
+  heading: 'Specific, secure, and built to leave you capable.',
   points: [
     {
       title: 'Nothing generic',
       body: 'Every recommendation is grounded in your processes, your systems and your constraints. If it could have been written for any other company, we have not done our job.',
     },
     {
-      title: 'Commercially focused',
-      body: 'We measure value in hours returned and cost removed, agreed with you up front. Interesting technology that does not move those numbers is a hobby, not a project.',
+      title: 'Eliminate before automate',
+      body: 'We ask whether a step needs to happen at all before we make it faster. Automating work that should have been removed just produces the wrong answer more efficiently.',
     },
     {
       title: 'People first',
       body: 'Your team finishes more capable, not more dependent. We train in the open and document what we build so you are never locked in.',
     },
     {
-      title: 'End to end',
-      body: 'Advice, training and delivery from one partner. No handing a strategy deck to a separate build team who were not in the room.',
+      title: 'Secure by design',
+      body: 'AI is only valuable if it is safe and compliant. Policy, data handling and human oversight are part of the design from the start, not a review at the end.',
+    },
+    {
+      title: 'Measured results',
+      body: 'We take a baseline before anything changes and come back to compare against it. Value you cannot evidence is an opinion.',
     },
   ],
   // The founder note is HIDDEN on the live site while `body` or `name` still
@@ -211,6 +373,8 @@ export const outcomes = {
   heading: 'What stage three and four look like in practice.',
   disclaimer:
     'These are illustrative example scenarios showing the shape of the work — not claims about specific client results.',
+  ctaText: 'Wondering what the equivalent would be in your business?',
+  ctaLabel: 'Ask us',
   items: [
     {
       title: 'Invoice and document processing',
@@ -265,6 +429,31 @@ export const faq = {
       question: 'What size businesses do you work with?',
       answer:
         'Typically organisations from around 20 to 500 staff, where processes are established enough to be worth optimising but there is no internal AI function. We also work with individual departments inside larger organisations. [REVIEW]',
+    },
+    {
+      question: 'Do you need to be on-site?',
+      answer:
+        'Mostly no. Discovery is deliberately remote-first — it is faster for us and far less disruptive for you. We come on-site where it genuinely adds value, and we always present final findings to your leadership in person. [REVIEW]',
+    },
+    {
+      question: "How much of our staff's time will it take?",
+      answer:
+        'Less than you would expect. Typically a short survey for the wider team, a small number of workshops with the people who run the processes we are examining, and optional screen recordings where watching the work is quicker than describing it. We schedule around your operation, not the other way round. [REVIEW]',
+    },
+    {
+      question: 'Who owns what you build?',
+      answer:
+        'You own your data and the deliverables we produce for you — the reports, the analysis, and anything we build and hand over. Vopria retains its own methods, templates and internal tools, which is what lets us work quickly. This is set out in writing before we start. [REVIEW]',
+    },
+    {
+      question: 'How do you handle our data and any recordings?',
+      answer:
+        'Consent first, always. We use only the tools you have agreed to, avoid or redact sensitive and personal data wherever it is not essential, and delete any recordings at the end of the engagement. If your organisation has its own data handling rules, we work to those. [REVIEW]',
+    },
+    {
+      question: "What if we're not ready to use AI yet?",
+      answer:
+        'That is exactly what AI Foundations is for. Plenty of businesses need the policy, the approved tools and the basic training in place before any of the rest makes sense. Starting there is a perfectly sensible answer, and often the right one. [REVIEW]',
     },
   ],
 } as const

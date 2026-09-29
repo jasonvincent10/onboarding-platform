@@ -2,13 +2,13 @@ import { services } from '@/content/site'
 import { ButtonLink, Section, SectionHeading } from '../ui'
 import { Reveal } from '../Reveal'
 
-const standardServices = services.items.filter((item) => !item.highlight)
-const highlightService = services.items.find((item) => item.highlight)
-
 /**
- * The four service cards. "Build & Implement" is the premium offer, so it gets
- * the inverted gradient treatment and spans wider on large screens — the
- * visual hierarchy does the selling rather than a louder headline.
+ * Three entry routes, then the two things that can follow.
+ *
+ * The split matters commercially: the top row is how an engagement starts,
+ * and the "then, if you want us to" row is explicitly optional — which is the
+ * point the copy makes, so the layout should not contradict it by presenting
+ * five equal options. Build & Implement keeps the premium gradient treatment.
  */
 export function Services({ bookingUrl }: { bookingUrl: string }) {
   return (
@@ -22,41 +22,80 @@ export function Services({ bookingUrl }: { bookingUrl: string }) {
         />
       </Reveal>
 
-      {/* The three advisory services sit on one row; the premium build offer
-          spans the full width beneath them, so it reads as the step beyond
-          rather than a fourth equal option. */}
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {standardServices.map((item, index) => (
+        {services.items.map((item, index) => (
           <Reveal key={item.slug} delay={index * 90}>
-            <StandardCard item={item} index={index} />
+            <EntryCard item={item} index={index} />
           </Reveal>
         ))}
       </div>
 
-      {highlightService ? (
-        <Reveal delay={120} className="mt-5">
-          <HighlightCard item={highlightService} bookingUrl={bookingUrl} />
+      {/* Follow-on work, visually separated so it reads as a later choice. */}
+      <div className="mt-16">
+        <Reveal>
+          <div className="flex flex-col gap-2 border-t border-line pt-10">
+            <h3 className="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
+              {services.followOn.heading}
+            </h3>
+            <p className="max-w-prose text-[0.975rem] leading-relaxed text-ink-soft">
+              {services.followOn.intro}
+            </p>
+          </div>
         </Reveal>
-      ) : null}
+
+        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          {services.followOn.items.map((item, index) => (
+            <Reveal key={item.slug} delay={index * 90}>
+              {item.highlight ? (
+                <HighlightCard item={item} bookingUrl={bookingUrl} />
+              ) : (
+                <FollowOnCard item={item} />
+              )}
+            </Reveal>
+          ))}
+        </div>
+      </div>
     </Section>
   )
 }
 
-type ServiceItem = (typeof services.items)[number]
+type EntryItem = (typeof services.items)[number]
+type FollowOnItem = (typeof services.followOn.items)[number]
 
-function StandardCard({ item, index }: { item: ServiceItem; index: number }) {
+function EntryCard({ item, index }: { item: EntryItem; index: number }) {
   return (
     <article className="group flex h-full flex-col gap-4 rounded-3xl border border-line bg-canvas p-7 transition duration-300 hover:-translate-y-1 hover:border-accent-mist hover:shadow-card">
       <ServiceIcon index={index} />
-      <h3 className="text-xl font-extrabold tracking-tight text-ink">{item.title}</h3>
+      <div className="flex flex-col gap-1.5">
+        <h3 className="text-xl font-extrabold tracking-tight text-ink">{item.title}</h3>
+        <p className="text-[0.95rem] font-semibold leading-snug text-primary">{item.hook}</p>
+      </div>
       <p className="text-[0.975rem] leading-relaxed text-ink-soft">{item.body}</p>
     </article>
   )
 }
 
-function HighlightCard({ item, bookingUrl }: { item: ServiceItem; bookingUrl: string }) {
+function FollowOnCard({ item }: { item: FollowOnItem }) {
   return (
-    <article className="relative flex h-full flex-col gap-5 overflow-hidden rounded-3xl bg-brand-gradient p-8 text-white shadow-lifted md:flex-row md:items-center md:gap-10 md:p-10">
+    <article className="flex h-full flex-col gap-4 rounded-3xl border border-line bg-canvas p-7 transition duration-300 hover:border-accent-mist hover:shadow-card">
+      <LadderIcon />
+      <h3 className="text-xl font-extrabold tracking-tight text-ink">{item.title}</h3>
+      <p className="flex-1 text-[0.975rem] leading-relaxed text-ink-soft">{item.body}</p>
+      {/* Ties this card back to the ladder it is the practical answer to. */}
+      <a
+        href="/#approach"
+        className="inline-flex w-fit items-center gap-1.5 rounded text-sm font-semibold text-primary underline underline-offset-4 transition hover:text-primary-hover"
+      >
+        See the four stages
+        <ArrowIcon />
+      </a>
+    </article>
+  )
+}
+
+function HighlightCard({ item, bookingUrl }: { item: FollowOnItem; bookingUrl: string }) {
+  return (
+    <article className="relative flex h-full flex-col gap-5 overflow-hidden rounded-3xl bg-brand-gradient p-8 text-white shadow-lifted">
       {/* Soft bloom so the gradient does not read as a flat block. */}
       <div
         aria-hidden="true"
@@ -68,13 +107,11 @@ function HighlightCard({ item, bookingUrl }: { item: ServiceItem; bookingUrl: st
           <SparkIcon />
           {'badge' in item ? item.badge : 'Full delivery'}
         </span>
-        <h3 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl">
-          {item.title}
-        </h3>
+        <h3 className="text-2xl font-extrabold tracking-tight text-white">{item.title}</h3>
         <p className="max-w-xl text-[1.0625rem] leading-relaxed text-accent-veil">{item.body}</p>
       </div>
 
-      <div className="relative shrink-0">
+      <div className="relative">
         <ButtonLink href={bookingUrl} variant="inverse" size="lg">
           Talk to us about building
         </ButtonLink>
@@ -84,44 +121,67 @@ function HighlightCard({ item, bookingUrl }: { item: ServiceItem; bookingUrl: st
 }
 
 /**
- * Simple custom glyphs, one per service — a map (discovery), a ranked report,
- * a rising person (training). Kept abstract and stroke-based to sit quietly
- * next to the copy.
+ * Simple custom glyphs, one per entry route — a magnifier on a single node
+ * (targeted), a grid of connected nodes (whole business), and a shield
+ * (foundations). Stroke-based so they sit quietly next to the copy.
  */
 function ServiceIcon({ index }: { index: number }) {
-  const common = {
-    width: 40,
-    height: 40,
-    viewBox: '0 0 40 40',
-    fill: 'none',
-    'aria-hidden': true as const,
-    focusable: 'false' as const,
-  }
-
   const glyphs = [
-    // Process map — connected nodes
-    <g key="map" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="14" cy="14" r="3.2" />
-      <circle cx="26" cy="21" r="3.2" />
-      <circle cx="15" cy="27" r="3.2" />
-      <path d="M16.7 15.7l6.6 3.8M23.6 23.2l-5.9 3" />
+    // Targeted — one node, examined closely
+    <g key="targeted" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="18.5" cy="18.5" r="5.5" />
+      <path d="M22.6 22.6L28 28" />
     </g>,
-    // Prioritised report — bars of descending length
-    <g key="report" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round">
-      <rect x="11" y="11" width="18" height="18" rx="3.5" strokeLinejoin="round" />
-      <path d="M15.5 17h9M15.5 20.5h6.5M15.5 24h4" />
+    // Whole business — a grid of connected nodes
+    <g key="whole" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="14" cy="14" r="2.6" />
+      <circle cx="26" cy="14" r="2.6" />
+      <circle cx="14" cy="26" r="2.6" />
+      <circle cx="26" cy="26" r="2.6" />
+      <path d="M16.6 14h6.8M16.6 26h6.8M14 16.6v6.8M26 16.6v6.8" />
     </g>,
-    // Capability — a figure stepping up
-    <g key="training" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="20" cy="14.5" r="3" />
-      <path d="M12.5 28c0-3.6 3.4-6.5 7.5-6.5s7.5 2.9 7.5 6.5" />
+    // Foundations — a shield
+    <g key="foundations" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 10.5l7 2.8v5.2c0 4.4-2.9 8.2-7 9.5-4.1-1.3-7-5.1-7-9.5v-5.2l7-2.8z" />
+      <path d="M17 19.5l2.2 2.2 4-4.2" />
     </g>,
   ]
 
   return (
-    <svg {...common}>
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
       <rect width="40" height="40" rx="11" fill="#EDE9FE" />
       {glyphs[index] ?? glyphs[0]}
+    </svg>
+  )
+}
+
+function LadderIcon() {
+  return (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+      <rect width="40" height="40" rx="11" fill="#EDE9FE" />
+      <g stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 27v-3.5M17.3 27v-7M22.7 27v-10.5M28 27V13" />
+      </g>
+    </svg>
+  )
+}
+
+function ArrowIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M3 8h10" />
+      <path d="M9 4l4 4-4 4" />
     </svg>
   )
 }
