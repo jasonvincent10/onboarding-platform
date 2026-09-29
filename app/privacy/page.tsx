@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { site } from '@/content/site'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Privacy notice',
   description:
     'How Vopria collects, uses and protects personal data, your rights under UK GDPR, and how to contact us about them.',
-  alternates: { canonical: '/privacy' },
+  path: '/privacy',
   // A legal notice has no search value and changes without notice.
-  robots: { index: false, follow: true },
-}
+  index: false,
+})
 
 /**
  * UK GDPR privacy notice.

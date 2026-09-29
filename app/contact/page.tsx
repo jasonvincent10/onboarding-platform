@@ -3,20 +3,14 @@ import { ContactForm } from '@/components/ContactForm'
 import { ButtonLink, Eyebrow } from '@/components/ui'
 import { contactPage, cta, site } from '@/content/site'
 import { CALENDLY_URL, bookingHref } from '@/lib/config'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Contact',
   description:
     'Tell us about your organisation and where your team is with AI today. Book a discovery call or send us a message. We reply within two working days.',
-  alternates: { canonical: '/contact' },
-  openGraph: {
-    title: `Contact | ${site.name}`,
-    description:
-      'Book a discovery call or send us a message. We reply within two working days.',
-    url: '/contact',
-    type: 'website',
-  },
-}
+  path: '/contact',
+})
 
 export default function ContactPage() {
   const bookingUrl = bookingHref()
