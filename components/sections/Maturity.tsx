@@ -17,19 +17,19 @@ import { Reveal } from '../Reveal'
 const stageStyles = [
   {
     lift: 'lg:mt-16',
-    badge: 'bg-accent-veil text-primary',
+    badge: 'bg-accent-veil text-accent',
     card: 'border-line bg-canvas-raised',
     bar: 'from-accent-mist to-accent-soft',
   },
   {
     lift: 'lg:mt-11',
-    badge: 'bg-accent-mist/70 text-primary',
+    badge: 'bg-accent-mist/70 text-accent',
     card: 'border-line bg-canvas-raised',
     bar: 'from-accent-soft to-accent',
   },
   {
     lift: 'lg:mt-6',
-    badge: 'bg-accent/20 text-primary-hover',
+    badge: 'bg-accent/20 text-accent-hover',
     card: 'border-accent-mist bg-canvas-raised shadow-card',
     bar: 'from-accent to-primary-soft',
   },
@@ -99,7 +99,7 @@ export function Maturity() {
 
       <Reveal delay={120}>
         <div className="mt-12 flex flex-col items-center gap-3 rounded-2xl bg-accent-veil px-6 py-5 text-center">
-          <p className="flex items-center gap-3 text-base font-semibold text-primary sm:text-lg">
+          <p className="flex items-center gap-3 text-base font-semibold text-accent sm:text-lg">
             <RiseIcon />
             {maturity.caption}
           </p>
@@ -107,7 +107,7 @@ export function Maturity() {
               actually gets a team there. */}
           <a
             href={maturity.trainingLink.href}
-            className="inline-flex items-center gap-1.5 rounded text-sm font-semibold text-primary underline underline-offset-4 transition hover:text-primary-hover"
+            className="inline-flex items-center gap-1.5 rounded text-sm font-semibold text-accent underline underline-offset-4 transition hover:text-accent-hover"
           >
             {maturity.trainingLink.text}
             <ArrowIcon />

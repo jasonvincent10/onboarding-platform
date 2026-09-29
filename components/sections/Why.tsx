@@ -83,10 +83,10 @@ function FounderNote() {
 function TickIcon() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" focusable="false">
-      <rect width="28" height="28" rx="8" fill="#EDE9FE" />
+      <rect width="28" height="28" rx="8" fill="#2C1D58" />
       <path
         d="M9 14.4l3.2 3.2L19 10.8"
-        stroke="#5B21B6"
+        stroke="#C4B5FD"
         strokeWidth="2.1"
         strokeLinecap="round"
         strokeLinejoin="round"

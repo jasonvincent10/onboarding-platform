@@ -64,8 +64,8 @@ export function Hero({ bookingUrl }: { bookingUrl: string }) {
 function Backdrop() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute -right-24 -top-40 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.22),transparent_68%)] blur-2xl" />
-      <div className="absolute -left-40 top-36 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(91,33,182,0.14),transparent_70%)] blur-2xl" />
+      <div className="absolute -right-24 -top-40 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(167,139,250,0.20),transparent_68%)] blur-2xl" />
+      <div className="absolute -left-40 top-36 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(124,58,237,0.24),transparent_70%)] blur-2xl" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-line-strong to-transparent" />
     </div>
   )
@@ -107,7 +107,7 @@ function LadderVisual() {
       </div>
       <div className="mt-6 flex items-center justify-between border-t border-line pt-5 text-xs font-medium text-ink-muted">
         <span>Where most teams are</span>
-        <span className="text-primary">Where the value is</span>
+        <span className="text-accent">Where the value is</span>
       </div>
     </div>
   )
@@ -147,7 +147,7 @@ function CheckIcon() {
       <circle cx="8" cy="8" r="8" fill="currentColor" fillOpacity="0.16" />
       <path
         d="M4.75 8.25l2.25 2.25 4.25-4.5"
-        stroke="#5B21B6"
+        stroke="#C4B5FD"
         strokeWidth="1.7"
         strokeLinecap="round"
         strokeLinejoin="round"

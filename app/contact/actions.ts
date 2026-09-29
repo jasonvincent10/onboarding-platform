@@ -72,7 +72,7 @@ export async function submitContact(
     console.error('[contact] RESEND_API_KEY is not set; cannot send enquiry email')
     return {
       status: 'error',
-      message: `Sorry — our contact form is temporarily unavailable. Please email ${CONTACT_INBOX} and we will pick it up right away.`,
+      message: `Sorry, our contact form is temporarily unavailable. Please email ${CONTACT_INBOX} and we will pick it up right away.`,
       values,
     }
   }
@@ -85,7 +85,7 @@ export async function submitContact(
       to: [CONTACT_INBOX],
       // Replies from the inbox go straight back to the enquirer.
       replyTo: data.email,
-      subject: `Website enquiry — ${data.company} (${data.name})`,
+      subject: `Website enquiry from ${data.company} (${data.name})`,
       text: asPlainText(data),
       html: asHtml(data),
     })
@@ -94,7 +94,7 @@ export async function submitContact(
       console.error('[contact] Resend rejected the message:', error)
       return {
         status: 'error',
-        message: `Sorry — we could not send that just now. Please try again, or email ${CONTACT_INBOX} directly.`,
+        message: `Sorry, we could not send that just now. Please try again, or email ${CONTACT_INBOX} directly.`,
         values,
       }
     }
@@ -104,7 +104,7 @@ export async function submitContact(
     console.error('[contact] Unexpected failure sending enquiry:', cause)
     return {
       status: 'error',
-      message: `Sorry — something went wrong at our end. Please try again, or email ${CONTACT_INBOX} directly.`,
+      message: `Sorry, something went wrong at our end. Please try again, or email ${CONTACT_INBOX} directly.`,
       values,
     }
   }
@@ -124,7 +124,7 @@ function asPlainText(data: ContactFields): string {
     `Message:`,
     data.message,
     ``,
-    `— Consent given to reply to this enquiry.`,
+    `Consent given to reply to this enquiry.`,
   ].join('\n')
 }
 

@@ -1,5 +1,5 @@
 import { deliverables } from '@/content/site'
-import { ButtonLink, Section, SectionHeading } from '../ui'
+import { ButtonLink, Section, SectionHeading, type HeadingLevel } from '../ui'
 import { Reveal } from '../Reveal'
 import { OpportunityMatrix } from '../OpportunityMatrix'
 
@@ -12,7 +12,17 @@ import { OpportunityMatrix } from '../OpportunityMatrix'
  * where a wide chart is better met first at full width than squeezed
  * alongside text.
  */
-export function Deliverables({ bookingUrl }: { bookingUrl: string }) {
+export function Deliverables({
+  bookingUrl,
+  headingLevel = 'h2',
+}: {
+  bookingUrl: string
+  headingLevel?: HeadingLevel
+}) {
+
+  // One level below the section heading, so a page whose section leads with an
+  // h1 never jumps straight to h3.
+  const ItemHeading = headingLevel === 'h1' ? 'h2' : 'h3'
   return (
     <Section id={deliverables.id} tone="raised" labelledBy="deliverables-heading">
       <Reveal>
@@ -21,6 +31,7 @@ export function Deliverables({ bookingUrl }: { bookingUrl: string }) {
           eyebrow={deliverables.eyebrow}
           heading={deliverables.heading}
           intro={deliverables.intro}
+        as={headingLevel}
         />
       </Reveal>
 
@@ -31,12 +42,12 @@ export function Deliverables({ bookingUrl }: { bookingUrl: string }) {
               <article className="flex gap-4 rounded-2xl border border-line bg-canvas p-5 transition hover:border-accent-mist sm:p-6">
                 <span
                   aria-hidden="true"
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-veil text-sm font-extrabold text-primary"
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-veil text-sm font-extrabold text-accent"
                 >
                   {index + 1}
                 </span>
                 <div className="flex flex-col gap-1.5">
-                  <h3 className="text-base font-extrabold tracking-tight text-ink">{item.title}</h3>
+                  <ItemHeading className="text-base font-extrabold tracking-tight text-ink">{item.title}</ItemHeading>
                   <p className="text-[0.925rem] leading-relaxed text-ink-muted">{item.body}</p>
                 </div>
               </article>
@@ -59,7 +70,7 @@ export function Deliverables({ bookingUrl }: { bookingUrl: string }) {
 
       <Reveal delay={140}>
         <div className="mt-12 flex flex-col items-start gap-4 rounded-2xl bg-accent-veil px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-xl text-[0.975rem] font-semibold leading-relaxed text-primary">
+          <p className="max-w-xl text-[0.975rem] font-semibold leading-relaxed text-accent">
             Every one of these is yours to keep, whether or not you ask us to build anything.
           </p>
           <ButtonLink href={bookingUrl} size="md" className="shrink-0">

@@ -7,10 +7,10 @@ import { CALENDLY_URL, bookingHref } from '@/lib/config'
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Tell us about your organisation and where your team is with AI today. Book a discovery call or send us a message — we reply within two working days.',
+    'Tell us about your organisation and where your team is with AI today. Book a discovery call or send us a message. We reply within two working days.',
   alternates: { canonical: '/contact' },
   openGraph: {
-    title: `Contact — ${site.name}`,
+    title: `Contact | ${site.name}`,
     description:
       'Book a discovery call or send us a message. We reply within two working days.',
     url: '/contact',
@@ -63,7 +63,7 @@ export default function ContactPage() {
                 </span>
                 <a
                   href={`mailto:${site.email}`}
-                  className="rounded text-[0.95rem] font-semibold text-primary underline underline-offset-4 transition hover:text-primary-hover"
+                  className="rounded text-[0.95rem] font-semibold text-accent underline underline-offset-4 transition hover:text-accent-hover"
                 >
                   {site.email}
                 </a>
@@ -81,7 +81,7 @@ export default function ContactPage() {
                   'If it looks like a fit, we scope a discovery engagement.',
                 ].map((step, index) => (
                   <li key={step} className="flex gap-3 text-[0.9rem] leading-relaxed text-ink-muted">
-                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-accent-veil text-xs font-bold text-primary">
+                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-accent-veil text-xs font-bold text-accent">
                       {index + 1}
                     </span>
                     {step}

@@ -1,5 +1,5 @@
 import { outcomes } from '@/content/site'
-import { Section, SectionHeading } from '../ui'
+import { Section, SectionHeading, type HeadingLevel } from '../ui'
 import { Reveal } from '../Reveal'
 
 /**
@@ -9,7 +9,11 @@ import { Reveal } from '../Reveal'
  * cards rather than in small print beneath them — so nobody can read these as
  * claims about real client results.
  */
-export function Outcomes() {
+export function Outcomes({ headingLevel = 'h2' }: { headingLevel?: HeadingLevel } = {}) {
+  // One level below the section heading, so a page whose section leads with an
+  // h1 never jumps straight to h3.
+  const ItemHeading = headingLevel === 'h1' ? 'h2' : 'h3'
+
   return (
     <Section id={outcomes.id} tone="sunken" labelledBy="outcomes-heading">
       <Reveal>
@@ -17,6 +21,7 @@ export function Outcomes() {
           id="outcomes-heading"
           eyebrow={outcomes.eyebrow}
           heading={outcomes.heading}
+          as={headingLevel}
         />
       </Reveal>
 
@@ -31,12 +36,12 @@ export function Outcomes() {
         {outcomes.items.map((item, index) => (
           <Reveal as="li" key={item.title} delay={index * 95}>
             <article className="flex h-full flex-col gap-4 rounded-3xl border border-line bg-canvas-raised p-7 transition duration-300 hover:-translate-y-1 hover:shadow-card">
-              <span className="w-fit rounded-full bg-accent-veil px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.1em] text-primary">
+              <span className="w-fit rounded-full bg-accent-veil px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.1em] text-accent">
                 {item.stage}
               </span>
-              <h3 className="text-lg font-extrabold tracking-tight text-ink">{item.title}</h3>
+              <ItemHeading className="text-lg font-extrabold tracking-tight text-ink">{item.title}</ItemHeading>
               <p className="flex-1 text-[0.95rem] leading-relaxed text-ink-muted">{item.body}</p>
-              <p className="flex items-center gap-2 border-t border-line pt-4 text-sm font-semibold text-primary">
+              <p className="flex items-center gap-2 border-t border-line pt-4 text-sm font-semibold text-accent">
                 <ArrowUpIcon />
                 {item.metric}
               </p>
@@ -50,7 +55,7 @@ export function Outcomes() {
           {outcomes.ctaText}
           <a
             href="/contact"
-            className="rounded font-bold text-primary underline underline-offset-4 transition hover:text-primary-hover"
+            className="rounded font-bold text-accent underline underline-offset-4 transition hover:text-accent-hover"
           >
             {outcomes.ctaLabel}
           </a>

@@ -26,10 +26,10 @@ export function Method() {
       <ol className="relative mt-12 grid gap-8 md:grid-cols-4 md:gap-6">
         {/* Desktop connector, level with the centre of the step markers. Both
             ends fade out so the track does not collide with the section edges,
-            and the colour deepens left to right like the maturity ladder. */}
+            and the colour brightens left to right like the maturity ladder. */}
         <div
           aria-hidden="true"
-          className="absolute left-0 right-0 top-6 hidden h-0.5 -translate-y-1/2 bg-[linear-gradient(to_right,transparent_0%,#C4B5FD_7%,#8B5CF6_50%,#5B21B6_88%,transparent_100%)] md:block"
+          className="absolute left-0 right-0 top-6 hidden h-0.5 -translate-y-1/2 bg-[linear-gradient(to_right,transparent_0%,#4A3578_7%,#8B5CF6_50%,#C4B5FD_88%,transparent_100%)] md:block"
         />
 
         {method.steps.map((step, index) => (

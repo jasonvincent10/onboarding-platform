@@ -15,7 +15,7 @@ export function Footer() {
       <div className="mx-auto w-full max-w-6xl">
         <div className="flex flex-col gap-10 md:flex-row md:justify-between">
           <div className="max-w-sm">
-            <Link href="/" className="inline-flex rounded-lg" aria-label="Vopria — home">
+            <Link href="/" className="inline-flex rounded-lg" aria-label="Vopria, home">
               <Logo />
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-ink-muted">{footer.blurb}</p>
@@ -29,7 +29,7 @@ export function Footer() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="rounded text-sm text-ink-muted transition hover:text-primary"
+                      className="rounded text-sm text-ink-muted transition hover:text-accent"
                     >
                       {item.label}
                     </Link>
@@ -44,7 +44,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/contact"
-                    className="rounded text-sm text-ink-muted transition hover:text-primary"
+                    className="rounded text-sm text-ink-muted transition hover:text-accent"
                   >
                     Book a discovery call
                   </Link>
@@ -52,7 +52,7 @@ export function Footer() {
                 <li>
                   <a
                     href={`mailto:${site.email}`}
-                    className="rounded text-sm text-ink-muted transition hover:text-primary"
+                    className="rounded text-sm text-ink-muted transition hover:text-accent"
                   >
                     {site.email}
                   </a>
@@ -60,7 +60,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/privacy"
-                    className="rounded text-sm text-ink-muted transition hover:text-primary"
+                    className="rounded text-sm text-ink-muted transition hover:text-accent"
                   >
                     {footer.privacyLabel}
                   </Link>

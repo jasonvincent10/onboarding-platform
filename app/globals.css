@@ -6,32 +6,33 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
 
-    /* Vopria brand palette. Mirrors the colours in tailwind.config.ts — the
-       Tailwind utilities (bg-canvas, text-ink, etc.) are the primary way these
-       get used; these custom properties cover the cases utilities can't reach,
-       such as ::selection and scrollbar theming. Change both together. */
-    --primary: #5b21b6;
-    --primary-hover: #4c1d95;
-    --primary-deep: #3b1578;
-    --primary-soft: #7c3aed;
+    /* Vopria brand palette: light text on deep purple. Mirrors the colours
+       in tailwind.config.ts, where the reasoning behind each value lives.
+       The Tailwind utilities are the primary way these get used; these custom
+       properties cover what utilities cannot reach, such as ::selection.
+       Change both together. */
+    --primary: #7c3aed;
+    --primary-hover: #8b5cf6;
+    --primary-deep: #5b21b6;
+    --primary-soft: #a78bfa;
 
-    --accent: #8b5cf6;
-    --accent-hover: #7c4def;
-    --accent-soft: #a78bfa;
-    --accent-mist: #c4b5fd;
-    --accent-veil: #ede9fe;
+    --accent: #a78bfa;
+    --accent-hover: #c4b5fd;
+    --accent-soft: #8b5cf6;
+    --accent-mist: #4a3578;
+    --accent-veil: #271a4d;
 
-    --ink: #1e1b2e;
-    --ink-soft: #453f5c;
-    --ink-muted: #6b6485;
-    --ink-faint: #706a88;
+    --ink: #f7f5ff;
+    --ink-soft: #cfc7e8;
+    --ink-muted: #aba1c9;
+    --ink-faint: #9289b0;
 
-    --canvas: #faf8ff;
-    --canvas-raised: #ffffff;
-    --canvas-sunken: #f3effe;
+    --canvas: #17102d;
+    --canvas-raised: #221741;
+    --canvas-sunken: #100a21;
 
-    --line: #e6e0f7;
-    --line-strong: #d3c9f0;
+    --line: #33254f;
+    --line-strong: #463467;
 
     --on-primary: #ffffff;
 

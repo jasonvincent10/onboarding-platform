@@ -68,7 +68,7 @@ function EntryCard({ item, index }: { item: EntryItem; index: number }) {
       <ServiceIcon index={index} />
       <div className="flex flex-col gap-1.5">
         <h3 className="text-xl font-extrabold tracking-tight text-ink">{item.title}</h3>
-        <p className="text-[0.95rem] font-semibold leading-snug text-primary">{item.hook}</p>
+        <p className="text-[0.95rem] font-semibold leading-snug text-accent">{item.hook}</p>
       </div>
       <p className="text-[0.975rem] leading-relaxed text-ink-soft">{item.body}</p>
     </article>
@@ -84,7 +84,7 @@ function FollowOnCard({ item }: { item: FollowOnItem }) {
       {/* Ties this card back to the ladder it is the practical answer to. */}
       <a
         href="/#approach"
-        className="inline-flex w-fit items-center gap-1.5 rounded text-sm font-semibold text-primary underline underline-offset-4 transition hover:text-primary-hover"
+        className="inline-flex w-fit items-center gap-1.5 rounded text-sm font-semibold text-accent underline underline-offset-4 transition hover:text-accent-hover"
       >
         See the four stages
         <ArrowIcon />
@@ -108,7 +108,7 @@ function HighlightCard({ item, bookingUrl }: { item: FollowOnItem; bookingUrl: s
           {'badge' in item ? item.badge : 'Full delivery'}
         </span>
         <h3 className="text-2xl font-extrabold tracking-tight text-white">{item.title}</h3>
-        <p className="max-w-xl text-[1.0625rem] leading-relaxed text-accent-veil">{item.body}</p>
+        <p className="max-w-xl text-[1.0625rem] leading-relaxed text-white/85">{item.body}</p>
       </div>
 
       <div className="relative">
@@ -128,12 +128,12 @@ function HighlightCard({ item, bookingUrl }: { item: FollowOnItem; bookingUrl: s
 function ServiceIcon({ index }: { index: number }) {
   const glyphs = [
     // Targeted — one node, examined closely
-    <g key="targeted" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+    <g key="targeted" stroke="#C4B5FD" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="18.5" cy="18.5" r="5.5" />
       <path d="M22.6 22.6L28 28" />
     </g>,
     // Whole business — a grid of connected nodes
-    <g key="whole" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+    <g key="whole" stroke="#C4B5FD" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="14" cy="14" r="2.6" />
       <circle cx="26" cy="14" r="2.6" />
       <circle cx="14" cy="26" r="2.6" />
@@ -141,7 +141,7 @@ function ServiceIcon({ index }: { index: number }) {
       <path d="M16.6 14h6.8M16.6 26h6.8M14 16.6v6.8M26 16.6v6.8" />
     </g>,
     // Foundations — a shield
-    <g key="foundations" stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+    <g key="foundations" stroke="#C4B5FD" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
       <path d="M20 10.5l7 2.8v5.2c0 4.4-2.9 8.2-7 9.5-4.1-1.3-7-5.1-7-9.5v-5.2l7-2.8z" />
       <path d="M17 19.5l2.2 2.2 4-4.2" />
     </g>,
@@ -149,7 +149,7 @@ function ServiceIcon({ index }: { index: number }) {
 
   return (
     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
-      <rect width="40" height="40" rx="11" fill="#EDE9FE" />
+      <rect width="40" height="40" rx="11" fill="#2C1D58" />
       {glyphs[index] ?? glyphs[0]}
     </svg>
   )
@@ -158,8 +158,8 @@ function ServiceIcon({ index }: { index: number }) {
 function LadderIcon() {
   return (
     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
-      <rect width="40" height="40" rx="11" fill="#EDE9FE" />
-      <g stroke="#5B21B6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="40" height="40" rx="11" fill="#2C1D58" />
+      <g stroke="#C4B5FD" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 27v-3.5M17.3 27v-7M22.7 27v-10.5M28 27V13" />
       </g>
     </svg>

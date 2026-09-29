@@ -52,12 +52,12 @@ export function Competitive() {
           </ul>
 
           <div className="mt-6 flex flex-col gap-3 rounded-2xl bg-accent-veil px-5 py-4">
-            <p className="text-[0.975rem] font-semibold leading-relaxed text-primary">
+            <p className="text-[0.975rem] font-semibold leading-relaxed text-accent">
               {competitive.closing}
             </p>
             <a
               href="/contact"
-              className="inline-flex w-fit items-center gap-1.5 rounded text-sm font-bold text-primary underline underline-offset-4 transition hover:text-primary-hover"
+              className="inline-flex w-fit items-center gap-1.5 rounded text-sm font-bold text-accent underline underline-offset-4 transition hover:text-accent-hover"
             >
               {competitive.ctaLabel}
               <ArrowIcon />

@@ -50,7 +50,7 @@ export function ContactForm() {
           ref={errorSummaryRef}
           tabIndex={-1}
           role="alert"
-          className="rounded-2xl border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-800"
+          className="rounded-2xl border border-red-400/40 bg-red-500/10 px-5 py-4 text-sm font-medium text-red-200"
         >
           {state.message}
         </div>
@@ -295,7 +295,7 @@ function ConsentField({ error }: { error?: string }) {
         />
         <label htmlFor={id} className="cursor-pointer text-sm leading-relaxed text-ink-soft">
           {contactPage.fields.consent.label}{' '}
-          <span className="text-red-600" aria-hidden="true">
+          <span className="text-red-400" aria-hidden="true">
             *
           </span>
         </label>
@@ -320,7 +320,7 @@ function FieldLabel({
       {required ? (
         <>
           {' '}
-          <span className="text-red-600" aria-hidden="true">
+          <span className="text-red-400" aria-hidden="true">
             *
           </span>
           <span className="sr-only">(required)</span>
@@ -333,7 +333,7 @@ function FieldLabel({
 function FieldError({ id, error }: { id: string; error?: string }) {
   if (!error) return null
   return (
-    <p id={id} className="text-sm font-medium text-red-700">
+    <p id={id} className="text-sm font-medium text-red-300">
       {error}
     </p>
   )
@@ -343,7 +343,7 @@ function inputClasses(hasError: boolean) {
   return cx(
     'w-full rounded-xl border bg-canvas-raised px-4 py-3 text-[0.95rem] text-ink transition',
     'placeholder:text-ink-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
-    hasError ? 'border-red-400 bg-red-50/40' : 'border-line-strong hover:border-accent-soft',
+    hasError ? 'border-red-400/60 bg-red-500/10' : 'border-line-strong hover:border-accent-soft',
   )
 }
 
@@ -392,10 +392,10 @@ function Spinner() {
 function SuccessIcon() {
   return (
     <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true" focusable="false">
-      <circle cx="22" cy="22" r="22" fill="#5B21B6" fillOpacity="0.12" />
+      <circle cx="22" cy="22" r="22" fill="#A78BFA" fillOpacity="0.12" />
       <path
         d="M14 22.5l5.5 5.5L30 17"
-        stroke="#5B21B6"
+        stroke="#C4B5FD"
         strokeWidth="2.6"
         strokeLinecap="round"
         strokeLinejoin="round"

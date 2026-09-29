@@ -1,5 +1,5 @@
 import { journey } from '@/content/site'
-import { ButtonLink, Section, SectionHeading } from '../ui'
+import { ButtonLink, Section, SectionHeading, type HeadingLevel } from '../ui'
 import { Reveal } from '../Reveal'
 
 /**
@@ -9,7 +9,17 @@ import { Reveal } from '../Reveal'
  * as three columns of two on desktop and a single vertical rail on mobile.
  * Numbered <ol>, because the order is the substance of the section.
  */
-export function Journey({ bookingUrl }: { bookingUrl: string }) {
+export function Journey({
+  bookingUrl,
+  headingLevel = 'h2',
+}: {
+  bookingUrl: string
+  headingLevel?: HeadingLevel
+}) {
+
+  // One level below the section heading, so a page whose section leads with an
+  // h1 never jumps straight to h3.
+  const ItemHeading = headingLevel === 'h1' ? 'h2' : 'h3'
   return (
     <Section id={journey.id} tone="canvas" labelledBy="journey-heading">
       <Reveal>
@@ -18,6 +28,7 @@ export function Journey({ bookingUrl }: { bookingUrl: string }) {
           eyebrow={journey.eyebrow}
           heading={journey.heading}
           intro={journey.intro}
+        as={headingLevel}
         />
       </Reveal>
 
@@ -44,7 +55,7 @@ export function Journey({ bookingUrl }: { bookingUrl: string }) {
               </div>
 
               <div className="flex flex-col gap-1.5 pb-2">
-                <h3 className="text-base font-extrabold tracking-tight text-ink">{step.name}</h3>
+                <ItemHeading className="text-base font-extrabold tracking-tight text-ink">{step.name}</ItemHeading>
                 <p className="text-[0.925rem] leading-relaxed text-ink-muted">{step.body}</p>
               </div>
             </div>
@@ -54,7 +65,7 @@ export function Journey({ bookingUrl }: { bookingUrl: string }) {
 
       <Reveal delay={120}>
         <div className="mt-10 flex flex-col items-start gap-4 rounded-2xl bg-accent-veil px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[0.975rem] font-semibold leading-relaxed text-primary">
+          <p className="text-[0.975rem] font-semibold leading-relaxed text-accent">
             {journey.cta.text}
           </p>
           <ButtonLink href={bookingUrl} size="md" className="shrink-0">

@@ -54,10 +54,10 @@ function StalledIcon() {
       aria-hidden="true"
       focusable="false"
     >
-      <rect width="36" height="36" rx="10" fill="#EDE9FE" />
+      <rect width="36" height="36" rx="10" fill="#2C1D58" />
       <path
         d="M9 24l5-6 4 3"
-        stroke="#5B21B6"
+        stroke="#C4B5FD"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

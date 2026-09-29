@@ -34,9 +34,9 @@ const toY = (value: number) => PLOT.top + (1 - value / 100) * PLOT_H
  * none for low, solid for medium, dashed for high.
  */
 const RISK_STYLE = {
-  low: { fill: '#C4B5FD', ring: 'none' },
-  medium: { fill: '#8B5CF6', ring: 'solid' },
-  high: { fill: '#5B21B6', ring: 'dashed' },
+  low: { fill: '#6D5B9E', ring: 'none' },
+  medium: { fill: '#A78BFA', ring: 'solid' },
+  high: { fill: '#E9E2FF', ring: 'dashed' },
 } as const
 
 type Risk = keyof typeof RISK_STYLE
@@ -46,7 +46,7 @@ export function OpportunityMatrix() {
     <figure className="flex flex-col gap-4 rounded-3xl border border-line bg-canvas-raised p-5 shadow-card sm:p-7">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-base font-extrabold tracking-tight text-ink">{matrix.title}</h3>
-        <span className="rounded-full bg-accent-veil px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.1em] text-primary">
+        <span className="rounded-full bg-accent-veil px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.1em] text-accent">
           {matrix.label}
         </span>
       </div>
@@ -123,24 +123,24 @@ function Quadrants() {
         y={PLOT.top}
         width={midX - PLOT.left}
         height={midY - PLOT.top}
-        fill="#F3EFFE"
+        fill="#2E2154"
       />
-      {/* Deep purple, not the lighter accent: at this size the accent only
-          reaches 3.75:1 on the tinted quadrant, below the 4.5:1 AA floor.
-          Contrast in SVG comes from `fill`, which automated colour checks
-          that read CSS `color` will not catch — so it is set deliberately. */}
+      {/* Light lavender, not the deep brand purple, which is nearly
+          invisible against the dark quadrant tile. Contrast in SVG comes from
+          `fill`, which colour checkers reading CSS `color` will not catch, so
+          every label here is verified by hand. */}
       <text
         x={PLOT.left + 14}
         y={PLOT.top + 26}
-        fill="#5B21B6"
+        fill="#C4B5FD"
         fontSize="13"
         fontWeight="700"
         letterSpacing="0.06em"
       >
         START HERE
       </text>
-      <line x1={midX} y1={PLOT.top} x2={midX} y2={PLOT.bottom} stroke="#E6E0F7" strokeWidth="1.5" />
-      <line x1={PLOT.left} y1={midY} x2={PLOT.right} y2={midY} stroke="#E6E0F7" strokeWidth="1.5" />
+      <line x1={midX} y1={PLOT.top} x2={midX} y2={PLOT.bottom} stroke="#3A2A5C" strokeWidth="1.5" />
+      <line x1={PLOT.left} y1={midY} x2={PLOT.right} y2={midY} stroke="#3A2A5C" strokeWidth="1.5" />
     </g>
   )
 }
@@ -154,7 +154,7 @@ function Axes() {
         y1={PLOT.bottom}
         x2={PLOT.left}
         y2={PLOT.top - 6}
-        stroke="#D3C9F0"
+        stroke="#4E3B73"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -163,7 +163,7 @@ function Axes() {
         y1={PLOT.bottom}
         x2={PLOT.right + 6}
         y2={PLOT.bottom}
-        stroke="#D3C9F0"
+        stroke="#4E3B73"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -172,7 +172,7 @@ function Axes() {
       <text
         transform={`translate(26 ${PLOT.top + PLOT_H / 2}) rotate(-90)`}
         textAnchor="middle"
-        fill="#1E1B2E"
+        fill="#F7F5FF"
         fontSize="15"
         fontWeight="800"
       >
@@ -183,7 +183,7 @@ function Axes() {
         x={PLOT.left + PLOT_W / 2}
         y={PLOT.bottom + 34}
         textAnchor="middle"
-        fill="#1E1B2E"
+        fill="#F7F5FF"
         fontSize="15"
         fontWeight="800"
       >
@@ -216,12 +216,12 @@ function Point({ point }: { point: (typeof matrix.points)[number] }) {
           strokeDasharray={style.ring === 'dashed' ? '3 3' : undefined}
         />
       ) : null}
-      <circle cx={x} cy={y} r="7" fill={style.fill} stroke="#FFFFFF" strokeWidth="2" />
+      <circle cx={x} cy={y} r="7" fill={style.fill} stroke="#221741" strokeWidth="2" />
       <text
         x={labelX}
         y={y + 4}
         textAnchor={labelsLeft ? 'end' : 'start'}
-        fill="#453F5C"
+        fill="#CFC7E8"
         fontSize="13"
         fontWeight="600"
       >
@@ -252,8 +252,8 @@ function Legend() {
                 strokeDasharray={style.ring === 'dashed' ? '3 3' : undefined}
               />
             ) : null}
-            <circle cx="9" cy="0" r="6" fill={style.fill} stroke="#FFFFFF" strokeWidth="1.5" />
-            <text x="26" y="4" fill="#6B6485" fontSize="13" fontWeight="600">
+            <circle cx="9" cy="0" r="6" fill={style.fill} stroke="#221741" strokeWidth="1.5" />
+            <text x="26" y="4" fill="#ABA1C9" fontSize="13" fontWeight="600">
               {entry.label}
             </text>
           </g>

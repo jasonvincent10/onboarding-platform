@@ -12,20 +12,58 @@ export const site = {
   name: 'Vopria',
   tagline: 'AI that fits how your business actually works',
   description:
-    'Vopria helps UK organisations find where AI genuinely raises productivity — mapping your real processes, training your people, and building the workflows and agentic systems that follow.',
+    'Vopria helps UK organisations find where AI genuinely raises productivity. We map how your business really works, train your people, and build the workflows and agentic systems that follow.',
   email: 'jason@vopria.com',
   locale: 'en_GB',
   country: 'United Kingdom',
 } as const
 
-/** Header and footer navigation. `href` values are anchors on the home page. */
+/**
+ * Header and footer navigation.
+ *
+ * The home page carries the main argument; the detail lives on its own pages,
+ * reached from here. Anchors point at sections that remain on the home page,
+ * paths at the further-reading pages.
+ */
 export const nav = [
-  { label: 'Approach', href: '/#approach' },
   { label: 'Services', href: '/#services' },
   { label: 'Method', href: '/#how-we-work' },
-  { label: 'What you get', href: '/#what-you-get' },
-  { label: 'FAQ', href: '/#faq' },
+  { label: 'What you get', href: '/what-you-get' },
+  { label: 'Safe AI', href: '/safe-ai' },
+  { label: 'Working with us', href: '/working-with-us' },
+  { label: 'FAQ', href: '/faq' },
 ] as const
+
+/**
+ * Title and meta description for each further-reading page. Keeping them here
+ * means page copy and page metadata are edited in the same file.
+ */
+export const pages = {
+  whatYouGet: {
+    path: '/what-you-get',
+    title: 'What you get',
+    description:
+      'The five deliverables every Vopria engagement produces: an AI Maturity Profile, Opportunity Matrix, Deep-Dive Packs, AI Opportunity Report and Impact Report.',
+  },
+  safeAi: {
+    path: '/safe-ai',
+    title: 'Safe AI adoption',
+    description:
+      'Shadow AI, acceptable use policies, approved business-grade tools, UK GDPR and human oversight. How we help UK organisations adopt AI safely.',
+  },
+  workingWithUs: {
+    path: '/working-with-us',
+    title: 'Working with us',
+    description:
+      'What a Vopria engagement looks like from first call to measured result, with illustrative examples of the kind of work it produces.',
+  },
+  faq: {
+    path: '/faq',
+    title: 'Frequently asked questions',
+    description:
+      'Common questions about working with Vopria: discovery timescales, how much of your team’s time it takes, data handling, and who owns what we build.',
+  },
+} as const
 
 export const cta = {
   primary: 'Book a discovery call',
@@ -37,7 +75,7 @@ export const hero = {
   eyebrow: 'AI consultancy for UK organisations',
   heading: 'AI that fits how your business actually works.',
   subheading:
-    'We dig into your processes, procedures and workflows to find the efficiency opportunities unique to your business — then show you exactly where AI raises productivity, train your team to use it with confidence, and build the tools if you want us to.',
+    'We dig into your processes, procedures and workflows to find the efficiency opportunities that are unique to your business. Then we show you exactly where AI raises productivity, train your team to use it with confidence, and build the tools if you want us to.',
   primaryCta: { label: cta.primary, href: '/contact' },
   secondaryCta: { label: cta.secondary, href: '/#how-we-work' },
   assurances: ['No generic playbooks', 'Commercially measured', 'UK-based'],
@@ -48,7 +86,7 @@ export const problem = {
   eyebrow: 'The problem',
   heading: 'Most teams are stuck at stage one.',
   body: [
-    'Your staff have discovered AI. They use it to rewrite an awkward email, summarise a long document, or get a first draft moving. That is genuinely useful — and it is roughly one per cent of what these tools can do.',
+    'Your staff have discovered AI. They use it to rewrite an awkward email, summarise a long document, or get a first draft moving. That is genuinely useful. It is also roughly one per cent of what these tools can do.',
     'Meanwhile licences get bought, a pilot runs, an announcement goes out, and a year later nobody can point to time or money saved. The advice on offer is generic: the same ten use cases handed to every organisation, regardless of how the work actually gets done.',
     'The gap is not enthusiasm or budget. It is that nobody has looked closely at how your business runs.',
   ],
@@ -73,7 +111,7 @@ export const maturity = {
   eyebrow: 'The AI maturity journey',
   heading: 'Four stages from chat prompts to working systems.',
   intro:
-    'Almost every organisation we meet sits at stage one or two. The compounding gains — the ones that show up in your numbers — start at stage three.',
+    'Almost every organisation we meet sits at stage one or two. The compounding gains, the ones that show up in your numbers, start at stage three.',
   caption: "Wherever your team is today, we'll take them to the next level.",
   // Points from the ladder to the service that actually moves teams up it.
   trainingLink: {
@@ -100,7 +138,7 @@ export const maturity = {
       name: 'Automate',
       summary: 'Connected workflows that remove repetitive manual steps across tools.',
       detail:
-        'AI stops being a place you visit and becomes part of the pipeline — triggered by real events, writing back into the systems you already use.',
+        'AI stops being a place you visit and becomes part of the pipeline. It is triggered by real events and writes back into the systems you already use.',
     },
     {
       number: 4,
@@ -116,7 +154,7 @@ export const competitive = {
   id: 'competitive',
   eyebrow: 'Staying competitive',
   heading: 'Some uses of AI are becoming standard. Others still set a business apart.',
-  body: 'In every sector there is now a baseline — the things competitors are quietly doing that clients and staff have started to expect. Above that baseline sits a much smaller set of moves that genuinely differentiate. The two are not the same, and the line between them moves at a different speed in every industry.',
+  body: 'In every sector there is now a baseline: the things competitors are quietly doing that clients and staff have started to expect. Above that baseline sits a much smaller set of moves that genuinely differentiate. The two are not the same, and the line between them moves at a different speed in every industry.',
   closing:
     'We show you where your business sits against both: what you need to match simply to keep pace, and where you have room to lead.',
   ctaLabel: 'Find out where you stand',
@@ -137,7 +175,7 @@ export const services = {
   eyebrow: 'What we do',
   heading: 'Three ways to start.',
   intro:
-    'Pick the route that matches where you are. Each one stands on its own — you are never committing to what comes after it.',
+    'Pick the route that matches where you are. Each one stands on its own, so you are never committing to what comes after it.',
   items: [
     {
       slug: 'targeted-review',
@@ -149,7 +187,7 @@ export const services = {
       slug: 'whole-business-review',
       title: 'Whole-Business Review',
       hook: 'The full picture, ranked.',
-      body: 'Every team, every significant process, scored and compared — producing a prioritised AI roadmap for the business rather than a list of ideas for one department.',
+      body: 'Every team and every significant process, scored and compared. The result is a prioritised AI roadmap for the business rather than a list of ideas for one department.',
     },
     {
       slug: 'ai-foundations',
@@ -279,7 +317,7 @@ export const security = {
   eyebrow: 'Safe adoption',
   heading: "Is your team already using AI you don't know about?",
   intro:
-    'In most businesses we look at, the answer is yes. Staff are pasting documents, customer details and draft contracts into personal AI accounts because it makes their job easier and nobody has told them otherwise. That is not a discipline problem — it is a policy gap.',
+    'In most businesses we look at, the answer is yes. Staff are pasting documents, customer details and draft contracts into personal AI accounts because it makes their job easier and nobody has told them otherwise. That is not a discipline problem. It is a policy gap.',
   points: [
     {
       title: 'Shadow AI',
@@ -287,7 +325,7 @@ export const security = {
     },
     {
       title: 'Acceptable use, in plain English',
-      body: 'An AI policy short enough that people read it and specific enough that they can follow it — what is fine, what needs checking, and what must never go near a chatbot.',
+      body: 'An AI policy short enough that people read it and specific enough that they can follow it. What is fine, what needs checking, and what must never go near a chatbot.',
     },
     {
       title: 'Approved, business-grade tools',
@@ -295,7 +333,7 @@ export const security = {
     },
     {
       title: 'UK GDPR and data protection',
-      body: 'Where personal data is involved, we work to your obligations — lawful basis, data minimisation, and knowing where information actually goes.',
+      body: 'Where personal data is involved, we work to your obligations: lawful basis, data minimisation, and knowing where information actually goes.',
     },
     {
       title: 'Human oversight',
@@ -361,7 +399,7 @@ export const why = {
   // next build, no other change needed. See lib/placeholders.ts.
   founder: {
     heading: 'A note from our founder',
-    body: '[FOUNDER BIO — commercial background across defence, rail and major infrastructure. Two or three sentences in the first person: the sectors worked in, the scale of the work, and why that commercial grounding shapes how Vopria approaches AI.]',
+    body: '[FOUNDER BIO. Commercial background across defence, rail and major infrastructure. Two or three sentences in the first person: the sectors worked in, the scale of the work, and why that commercial grounding shapes how Vopria approaches AI.]',
     name: '[FOUNDER NAME]',
     role: 'Founder, Vopria',
   },
@@ -372,14 +410,14 @@ export const outcomes = {
   eyebrow: 'Example outcomes',
   heading: 'What stage three and four look like in practice.',
   disclaimer:
-    'These are illustrative example scenarios showing the shape of the work — not claims about specific client results.',
+    'These are illustrative example scenarios showing the shape of the work. They are not claims about specific client results.',
   ctaText: 'Wondering what the equivalent would be in your business?',
   ctaLabel: 'Ask us',
   items: [
     {
       title: 'Invoice and document processing',
       stage: 'Stage 3 · Automate',
-      body: 'Incoming invoices are read, validated against purchase orders and posted to the finance system automatically. Exceptions — and only exceptions — reach a human queue.',
+      body: 'Incoming invoices are read, validated against purchase orders and posted to the finance system automatically. Exceptions, and only exceptions, reach a human queue.',
       metric: 'Manual keying removed from a daily finance task',
     },
     {
@@ -408,7 +446,7 @@ export const faq = {
     {
       question: 'Do we need technical staff to work with you?',
       answer:
-        'No. Most of the people we work with are operations, finance and department leads rather than engineers. We need people who understand how the work gets done — we bring the technical side. If you do have an IT team, we will work alongside them and to their standards. [REVIEW]',
+        'No. Most of the people we work with are operations, finance and department leads rather than engineers. We need people who understand how the work gets done, and we bring the technical side. If you do have an IT team, we will work alongside them and to their standards. [REVIEW]',
     },
     {
       question: 'How long does discovery take?',
@@ -423,7 +461,7 @@ export const faq = {
     {
       question: 'Do we have to use you to implement?',
       answer:
-        'No, and plenty of clients do not. The Opportunity Report is written so your own team or another supplier can act on it. If you would rather we built it, we can — but the recommendation is never contingent on that. [REVIEW]',
+        'No, and plenty of clients do not. The Opportunity Report is written so your own team or another supplier can act on it. If you would rather we built it, we can, but the recommendation is never contingent on that. [REVIEW]',
     },
     {
       question: 'What size businesses do you work with?',
@@ -433,7 +471,7 @@ export const faq = {
     {
       question: 'Do you need to be on-site?',
       answer:
-        'Mostly no. Discovery is deliberately remote-first — it is faster for us and far less disruptive for you. We come on-site where it genuinely adds value, and we always present final findings to your leadership in person. [REVIEW]',
+        'Mostly no. Discovery is deliberately remote-first, which is faster for us and far less disruptive for you. We come on-site where it genuinely adds value, and we always present final findings to your leadership in person. [REVIEW]',
     },
     {
       question: "How much of our staff's time will it take?",
@@ -443,7 +481,7 @@ export const faq = {
     {
       question: 'Who owns what you build?',
       answer:
-        'You own your data and the deliverables we produce for you — the reports, the analysis, and anything we build and hand over. Vopria retains its own methods, templates and internal tools, which is what lets us work quickly. This is set out in writing before we start. [REVIEW]',
+        'You own your data and the deliverables we produce for you: the reports, the analysis, and anything we build and hand over. Vopria retains its own methods, templates and internal tools, which is what lets us work quickly. This is set out in writing before we start. [REVIEW]',
     },
     {
       question: 'How do you handle our data and any recordings?',
@@ -454,6 +492,41 @@ export const faq = {
       question: "What if we're not ready to use AI yet?",
       answer:
         'That is exactly what AI Foundations is for. Plenty of businesses need the policy, the approved tools and the basic training in place before any of the rest makes sense. Starting there is a perfectly sensible answer, and often the right one. [REVIEW]',
+    },
+  ],
+} as const
+
+/**
+ * Cards at the foot of the home page pointing to the detail pages. The menu is
+ * the primary route to these, but nobody should have to open a menu to find
+ * out the rest of the site exists.
+ */
+export const furtherReading = {
+  id: 'further-reading',
+  eyebrow: 'Read further',
+  heading: 'More detail, when you want it.',
+  intro:
+    'We have kept this page to the essentials. These go deeper on the parts people usually ask about.',
+  items: [
+    {
+      href: '/what-you-get',
+      title: 'What you get',
+      body: 'The five deliverables every engagement produces, including an illustrative Opportunity Matrix.',
+    },
+    {
+      href: '/safe-ai',
+      title: 'Safe AI adoption',
+      body: 'Shadow AI, acceptable use policies, approved tools, UK GDPR and human oversight.',
+    },
+    {
+      href: '/working-with-us',
+      title: 'Working with us',
+      body: 'What an engagement looks like from first call to measured result, with example outcomes.',
+    },
+    {
+      href: '/faq',
+      title: 'Questions',
+      body: 'Timescales, how much of your team’s time it takes, data handling, and who owns what we build.',
     },
   ],
 } as const
@@ -473,7 +546,7 @@ export const contactPage = {
   directHeading: 'Prefer to talk?',
   directBody:
     'Book a 30-minute discovery call at a time that suits you, or email us directly and we will come back to you.',
-  successHeading: 'Thank you — your message is on its way.',
+  successHeading: 'Thank you. Your message is on its way.',
   successBody:
     'We have received your enquiry and will reply within two working days. If it is urgent, email us directly and mark it so.',
   fields: {
@@ -498,10 +571,10 @@ export const contactPage = {
     '500+ staff',
   ],
   aiStages: [
-    'Stage 1 — Assist: chat prompts for emails and summaries',
-    'Stage 2 — Accelerate: shared templates and structured outputs',
-    'Stage 3 — Automate: connected workflows across tools',
-    'Stage 4 — Agentic: multi-step AI systems in production',
+    'Stage 1, Assist: chat prompts for emails and summaries',
+    'Stage 2, Accelerate: shared templates and structured outputs',
+    'Stage 3, Automate: connected workflows across tools',
+    'Stage 4, Agentic: multi-step AI systems in production',
     'Not sure yet',
   ],
 } as const

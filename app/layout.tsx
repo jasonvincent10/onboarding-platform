@@ -12,14 +12,14 @@ const jakarta = Plus_Jakarta_Sans({
   display: 'swap',
 })
 
-const SITE_TITLE = 'Vopria — AI consultancy for UK organisations'
+const SITE_TITLE = 'Vopria | AI consultancy for UK organisations'
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
     default: SITE_TITLE,
     // Page-level titles render as "Contact — Vopria".
-    template: `%s — ${site.name}`,
+    template: `%s | ${site.name}`,
   },
   description: site.description,
   applicationName: site.name,
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#5B21B6',
+  themeColor: '#17102D',
 }
 
 const organizationJsonLd = {

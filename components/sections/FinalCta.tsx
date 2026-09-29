@@ -19,7 +19,7 @@ export function FinalCta({ bookingUrl }: { bookingUrl: string }) {
           {finalCta.heading}
         </h2>
 
-        <p className="max-w-2xl text-lg leading-relaxed text-accent-veil">{finalCta.body}</p>
+        <p className="max-w-2xl text-lg leading-relaxed text-white/85">{finalCta.body}</p>
 
         <div className="mt-2 flex flex-col items-center gap-4 sm:flex-row">
           <ButtonLink href={bookingUrl} variant="inverse" size="lg">
@@ -27,7 +27,7 @@ export function FinalCta({ bookingUrl }: { bookingUrl: string }) {
           </ButtonLink>
           <a
             href={`mailto:${site.email}`}
-            className="rounded text-sm font-semibold text-accent-veil underline underline-offset-4 transition hover:text-white"
+            className="rounded text-sm font-semibold text-white/85 underline underline-offset-4 transition hover:text-white"
           >
             or email {site.email}
           </a>

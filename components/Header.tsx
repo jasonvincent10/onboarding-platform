@@ -61,14 +61,14 @@ export function Header({ bookingUrl }: { bookingUrl: string }) {
     <header
       className={cx(
         'sticky top-0 z-50 w-full bg-canvas/85 backdrop-blur-md transition-shadow',
-        scrolled ? 'border-b border-line shadow-[0_1px_16px_-8px_rgba(91,33,182,0.35)]' : 'border-b border-transparent',
+        scrolled ? 'border-b border-line shadow-[0_1px_20px_-6px_rgba(0,0,0,0.65)]' : 'border-b border-transparent',
       )}
     >
       <div className="mx-auto flex h-[var(--header-height)] w-full max-w-6xl items-center justify-between gap-4 px-5 sm:px-6">
         <Link
           href="/"
           className="rounded-lg"
-          aria-label="Vopria — home"
+          aria-label="Vopria, home"
           onClick={() => setOpen(false)}
         >
           <Logo />
@@ -80,7 +80,7 @@ export function Header({ bookingUrl }: { bookingUrl: string }) {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-3.5 py-2 text-sm font-medium text-ink-soft transition hover:bg-accent-veil hover:text-primary"
+              className="rounded-full px-3.5 py-2 text-sm font-medium text-ink-soft transition hover:bg-accent-veil hover:text-accent"
             >
               {item.label}
             </Link>
@@ -121,7 +121,7 @@ export function Header({ bookingUrl }: { bookingUrl: string }) {
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="block rounded-xl px-3 py-3 text-base font-medium text-ink transition hover:bg-accent-veil hover:text-primary"
+                  className="block rounded-xl px-3 py-3 text-base font-medium text-ink transition hover:bg-accent-veil hover:text-accent"
                 >
                   {item.label}
                 </Link>

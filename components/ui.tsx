@@ -16,13 +16,13 @@ const buttonSizes = {
 } as const
 
 const buttonVariants = {
-  /** Solid brand purple — the single most important action on a screen. */
+  /** Solid violet. The single most important action on a screen. */
   primary: 'bg-primary text-white shadow-card hover:bg-primary-hover hover:shadow-lifted',
-  /** Outlined — secondary actions sitting next to a primary. */
+  /** Outlined, on a raised surface. Secondary actions beside a primary. */
   secondary: 'border border-line-strong bg-canvas-raised text-ink hover:border-accent hover:bg-accent-veil',
-  /** White on purple — for use inside the gradient CTA band and footer. */
-  inverse: 'bg-white text-primary shadow-glow hover:bg-accent-veil',
-  /** Outlined white — secondary action on a dark gradient. */
+  /** White on violet, for use inside the bright gradient bands. */
+  inverse: 'bg-white text-primary-deep shadow-glow hover:bg-white/90',
+  /** Outlined white, a secondary action on the bright gradient. */
   inverseGhost: 'border border-white/40 text-white hover:border-white hover:bg-white/10',
 } as const
 
@@ -71,7 +71,7 @@ export function Eyebrow({ children, inverted = false }: { children: ReactNode; i
     <p
       className={cx(
         'text-xs font-bold uppercase tracking-[0.14em]',
-        inverted ? 'text-accent-mist' : 'text-primary-soft',
+        inverted ? 'text-white/80' : 'text-primary-soft',
       )}
     >
       {children}
@@ -113,7 +113,9 @@ export function Section({
   )
 }
 
-/** Section heading block — eyebrow, h2 and optional standfirst. */
+/** Heading level for a section. `h1` when the section leads its own page. */
+export type HeadingLevel = 'h1' | 'h2'
+
 export function SectionHeading({
   id,
   eyebrow,
@@ -121,6 +123,7 @@ export function SectionHeading({
   intro,
   align = 'left',
   inverted = false,
+  as = 'h2',
 }: {
   id?: string
   eyebrow?: string
@@ -128,21 +131,31 @@ export function SectionHeading({
   intro?: string
   align?: 'left' | 'centre'
   inverted?: boolean
+  /**
+   * A section reused as the lead of its own page passes 'h1', so the page has
+   * exactly one top-level heading instead of repeating the title above it.
+   */
+  as?: HeadingLevel
 }) {
+  const Heading = as
+
   return (
     <div className={cx('flex flex-col gap-3', align === 'centre' && 'items-center text-center')}>
       {eyebrow ? <Eyebrow inverted={inverted}>{eyebrow}</Eyebrow> : null}
-      <h2
+      <Heading
         id={id}
         className={cx(
-          'max-w-3xl text-3xl font-extrabold tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.1]',
+          'max-w-3xl font-extrabold tracking-tight md:leading-[1.1]',
+          as === 'h1'
+            ? 'text-4xl sm:text-5xl md:text-[3.25rem]'
+            : 'text-3xl sm:text-4xl md:text-[2.75rem]',
           inverted && 'text-white',
         )}
       >
         {heading}
-      </h2>
+      </Heading>
       {intro ? (
-        <p className={cx('max-w-prose text-lg', inverted ? 'text-accent-veil' : 'text-ink-soft')}>
+        <p className={cx('max-w-prose text-lg', inverted ? 'text-white/85' : 'text-ink-soft')}>
           {intro}
         </p>
       ) : null}

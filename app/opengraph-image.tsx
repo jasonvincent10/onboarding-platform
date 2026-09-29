@@ -11,7 +11,7 @@ import { ImageResponse } from 'next/og'
  * every element needs an explicit `display`, and flex is the only layout mode.
  */
 
-export const alt = 'Vopria — AI that fits how your business actually works'
+export const alt = 'Vopria. AI that fits how your business actually works'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
