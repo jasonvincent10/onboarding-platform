@@ -402,10 +402,10 @@ export const why = {
       "I'm Jason, founder of Vopria. My career has been in commercial and procurement roles in some of the most demanding environments in the UK, including Defence Intelligence at the Ministry of Defence, BAE Systems, Network Rail and Transport for London. That's where I learned how organisations really work: the processes, the handoffs, and where time and money quietly leak away. The lessons apply to any business, from a 10-person firm to a national programme.",
       "I'm also a builder. I use AI every day to design and build working software, automate my own workflows and cut admin out of both my working and personal life. Vopria brings those two things together: a commercial eye for where the value is, and the hands-on ability to build what captures it.",
     ],
-    name: 'Jason',
+    name: 'Jason Vincent',
     role: 'Founder, Vopria',
     /** Stands in until a photograph is supplied. */
-    initial: 'J',
+    initial: 'JV',
   },
 } as const
 

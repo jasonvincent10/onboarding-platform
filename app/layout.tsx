@@ -4,7 +4,7 @@ import './globals.css'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { APP_URL, bookingHref } from '@/lib/config'
-import { site } from '@/content/site'
+import { site, why } from '@/content/site'
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -65,6 +65,8 @@ const organizationJsonLd = {
   email: site.email,
   description: site.description,
   areaServed: { '@type': 'Country', name: site.country },
+  // Pulled from the founder note so the name is stated once, in content.
+  founder: { '@type': 'Person', name: why.founder.name, jobTitle: why.founder.role },
   knowsAbout: [
     'Artificial intelligence consultancy',
     'Business process discovery',
