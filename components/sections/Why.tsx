@@ -7,7 +7,7 @@ export function Why() {
   // The founder note only appears once real words replace the [FOUNDER BIO]
   // placeholder in content/site.ts. Until then the points take the full
   // width, so the section reads as complete rather than half-empty.
-  const showFounder = allComplete(why.founder.body, why.founder.name)
+  const showFounder = allComplete(...why.founder.body, why.founder.name)
 
   // Five points do not divide evenly into a 4-across row, so without the
   // founder note they run 3-then-2 on large screens rather than leaving a
@@ -28,7 +28,19 @@ export function Why() {
       >
         <ul className={cx('grid gap-5', pointColumns)}>
           {why.points.map((point, index) => (
-            <Reveal as="li" key={point.title} delay={index * 80}>
+            <Reveal
+              as="li"
+              key={point.title}
+              delay={index * 80}
+              // An odd number of points beside the founder note would leave the
+              // last one stranded in a half-empty row, so it takes the full
+              // width instead and the row reads as intended.
+              className={cx(
+                why.points.length % 2 === 1 &&
+                  index === why.points.length - 1 &&
+                  'sm:col-span-2',
+              )}
+            >
               <div className="flex h-full flex-col gap-3 rounded-2xl border border-line bg-canvas p-6 transition hover:border-accent-mist">
                 <TickIcon />
                 <h3 className="text-base font-extrabold tracking-tight text-ink">{point.title}</h3>
@@ -58,8 +70,10 @@ function FounderNote() {
       <div className="flex flex-col gap-4">
         <QuoteIcon />
         <h3 className="text-lg font-extrabold tracking-tight text-ink">{why.founder.heading}</h3>
-        <blockquote className="text-[0.975rem] leading-relaxed text-ink-soft">
-          {why.founder.body}
+        <blockquote className="flex flex-col gap-3 text-[0.975rem] leading-relaxed text-ink-soft">
+          {why.founder.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </blockquote>
       </div>
 
@@ -69,7 +83,7 @@ function FounderNote() {
           aria-hidden="true"
           className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-brand-gradient text-sm font-extrabold text-white"
         >
-          V
+          {why.founder.initial}
         </span>
         <span className="flex flex-col">
           <span className="text-sm font-bold text-ink">{why.founder.name}</span>

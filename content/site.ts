@@ -393,15 +393,19 @@ export const why = {
       body: 'We take a baseline before anything changes and come back to compare against it. Value you cannot evidence is an opinion.',
     },
   ],
-  // The founder note is HIDDEN on the live site while `body` or `name` still
-  // contain a [PLACEHOLDER] — the four points above simply take the full
-  // width instead. Replace both with real text and the note appears on the
-  // next build, no other change needed. See lib/placeholders.ts.
+  // Jason's own words. The note stays hidden while any paragraph or the name
+  // still contains a [PLACEHOLDER], so it reappears automatically once filled.
+  // See lib/placeholders.ts.
   founder: {
     heading: 'A note from our founder',
-    body: '[FOUNDER BIO. Commercial background across defence, rail and major infrastructure. Two or three sentences in the first person: the sectors worked in, the scale of the work, and why that commercial grounding shapes how Vopria approaches AI.]',
-    name: '[FOUNDER NAME]',
+    body: [
+      "I'm Jason, founder of Vopria. My career has been in commercial and procurement roles in some of the most demanding environments in the UK, including Defence Intelligence at the Ministry of Defence, BAE Systems, Network Rail and Transport for London. That's where I learned how organisations really work: the processes, the handoffs, and where time and money quietly leak away. The lessons apply to any business, from a 10-person firm to a national programme.",
+      "I'm also a builder. I use AI every day to design and build working software, automate my own workflows and cut admin out of both my working and personal life. Vopria brings those two things together: a commercial eye for where the value is, and the hands-on ability to build what captures it.",
+    ],
+    name: 'Jason',
     role: 'Founder, Vopria',
+    /** Stands in until a photograph is supplied. */
+    initial: 'J',
   },
 } as const
 
