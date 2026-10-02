@@ -27,10 +27,10 @@ export const site = {
  */
 export const nav = [
   { label: 'Services', href: '/#services' },
-  { label: 'Method', href: '/#how-we-work' },
+  { label: 'How we work', href: '/working-with-us' },
   { label: 'What you get', href: '/what-you-get' },
   { label: 'Safe AI', href: '/safe-ai' },
-  { label: 'Working with us', href: '/working-with-us' },
+  { label: 'Staying competitive', href: '/staying-competitive' },
   { label: 'FAQ', href: '/faq' },
 ] as const
 
@@ -51,11 +51,17 @@ export const pages = {
     description:
       'Shadow AI, acceptable use policies, approved business-grade tools, UK GDPR and human oversight. How we help UK organisations adopt AI safely.',
   },
+  stayingCompetitive: {
+    path: '/staying-competitive',
+    title: 'Staying competitive',
+    description:
+      'In every sector some uses of AI are becoming the baseline while others still set a business apart. We show you where yours sits against both.',
+  },
   workingWithUs: {
     path: '/working-with-us',
     title: 'Working with us',
     description:
-      'What a Vopria engagement looks like from first call to measured result, with illustrative examples of the kind of work it produces.',
+      'The Vopria Discovery Method, and what an engagement looks like from first call to measured result, with illustrative examples of the kind of work it produces.',
   },
   faq: {
     path: '/faq',
@@ -77,7 +83,7 @@ export const hero = {
   subheading:
     'We dig into your processes, procedures and workflows to find the efficiency opportunities that are unique to your business. Then we show you exactly where AI raises productivity, train your team to use it with confidence, and build the tools if you want us to.',
   primaryCta: { label: cta.primary, href: '/contact' },
-  secondaryCta: { label: cta.secondary, href: '/#how-we-work' },
+  secondaryCta: { label: cta.secondary, href: '/working-with-us' },
   assurances: ['No generic playbooks', 'Commercially measured', 'UK-based'],
 } as const
 
@@ -117,6 +123,12 @@ export const maturity = {
   trainingLink: {
     text: 'AI Capability Training is how we move teams up the ladder',
     href: '/#services',
+  },
+  // Keeps a contact route within reach of the ladder, which otherwise sits
+  // more than a screen from one now the method section has moved off.
+  contactLink: {
+    text: 'Not sure which stage your team is at? Ask us',
+    href: '/contact',
   },
   stages: [
     {
@@ -196,6 +208,12 @@ export const services = {
       body: 'For businesses just starting out: an AI policy your staff will actually follow, approved business-grade tools, the security basics, and training to get everyone moving in the same direction.',
     },
   ],
+  // The method itself lives on /working-with-us; the homepage keeps a single
+  // line pointing at it rather than the full four-step section.
+  methodLink: {
+    text: 'See how we work: Map, Measure, Model, Mobilise',
+    href: '/working-with-us',
+  },
   followOn: {
     heading: 'Then, if you want us to',
     intro:
@@ -496,41 +514,6 @@ export const faq = {
       question: "What if we're not ready to use AI yet?",
       answer:
         'That is exactly what AI Foundations is for. Plenty of businesses need the policy, the approved tools and the basic training in place before any of the rest makes sense. Starting there is a perfectly sensible answer, and often the right one. [REVIEW]',
-    },
-  ],
-} as const
-
-/**
- * Cards at the foot of the home page pointing to the detail pages. The menu is
- * the primary route to these, but nobody should have to open a menu to find
- * out the rest of the site exists.
- */
-export const furtherReading = {
-  id: 'further-reading',
-  eyebrow: 'Read further',
-  heading: 'More detail, when you want it.',
-  intro:
-    'We have kept this page to the essentials. These go deeper on the parts people usually ask about.',
-  items: [
-    {
-      href: '/what-you-get',
-      title: 'What you get',
-      body: 'The five deliverables every engagement produces, including an illustrative Opportunity Matrix.',
-    },
-    {
-      href: '/safe-ai',
-      title: 'Safe AI adoption',
-      body: 'Shadow AI, acceptable use policies, approved tools, UK GDPR and human oversight.',
-    },
-    {
-      href: '/working-with-us',
-      title: 'Working with us',
-      body: 'What an engagement looks like from first call to measured result, with example outcomes.',
-    },
-    {
-      href: '/faq',
-      title: 'Questions',
-      body: 'Timescales, how much of your team’s time it takes, data handling, and who owns what we build.',
     },
   ],
 } as const

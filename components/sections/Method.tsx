@@ -1,5 +1,5 @@
 import { method } from '@/content/site'
-import { Section, SectionHeading } from '../ui'
+import { Section, SectionHeading, type HeadingLevel } from '../ui'
 import { Reveal } from '../Reveal'
 
 /**
@@ -11,7 +11,11 @@ import { Reveal } from '../Reveal'
  * Keeps the `how-we-work` anchor id (from content/site.ts) so links published
  * before the method was branded still land in the right place.
  */
-export function Method() {
+export function Method({ headingLevel = 'h2' }: { headingLevel?: HeadingLevel } = {}) {
+  // One level below the section heading, so a page whose section leads with an
+  // h1 never jumps straight to h3.
+  const ItemHeading = headingLevel === 'h1' ? 'h2' : 'h3'
+
   return (
     <Section id={method.id} tone="canvas" labelledBy="method-heading">
       <Reveal>
@@ -20,7 +24,8 @@ export function Method() {
           eyebrow={method.eyebrow}
           heading={method.heading}
           intro={method.intro}
-        />
+        as={headingLevel}
+          />
       </Reveal>
 
       <ol className="relative mt-12 grid gap-8 md:grid-cols-4 md:gap-6">
@@ -48,7 +53,7 @@ export function Method() {
               </span>
 
               <div className="flex flex-col gap-2 pt-1 md:pt-0">
-                <h3 className="text-lg font-extrabold tracking-tight text-ink">{step.name}</h3>
+                <ItemHeading className="text-lg font-extrabold tracking-tight text-ink">{step.name}</ItemHeading>
                 <p className="max-w-sm text-[0.95rem] leading-relaxed text-ink-muted">{step.body}</p>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import { competitive } from '@/content/site'
-import { Section, SectionHeading } from '../ui'
+import { Section, SectionHeading, type HeadingLevel } from '../ui'
 import { Reveal } from '../Reveal'
 
 /**
@@ -10,7 +10,11 @@ import { Reveal } from '../Reveal'
  * the only gradient band on the page, and it should stay that way or it stops
  * reading as the end of the argument.
  */
-export function Competitive() {
+export function Competitive({ headingLevel = 'h2' }: { headingLevel?: HeadingLevel } = {}) {
+  // One level below the section heading, so a page whose section leads with an
+  // h1 never jumps straight to h3.
+  const ItemHeading = headingLevel === 'h1' ? 'h2' : 'h3'
+
   return (
     <Section id={competitive.id} tone="sunken" labelledBy="competitive-heading">
       <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
@@ -19,6 +23,7 @@ export function Competitive() {
             id="competitive-heading"
             eyebrow={competitive.eyebrow}
             heading={competitive.heading}
+          as={headingLevel}
           />
           <p className="mt-5 max-w-prose text-lg leading-relaxed text-ink-soft">
             {competitive.body}
@@ -40,9 +45,9 @@ export function Competitive() {
                   style={{ opacity: index === 0 ? 0.45 : 1 }}
                 />
                 <div className="pl-3">
-                  <h3 className="text-base font-extrabold tracking-tight text-ink">
+                  <ItemHeading className="text-base font-extrabold tracking-tight text-ink">
                     {marker.label}
-                  </h3>
+                  </ItemHeading>
                   <p className="mt-1.5 text-[0.925rem] leading-relaxed text-ink-muted">
                     {marker.body}
                   </p>

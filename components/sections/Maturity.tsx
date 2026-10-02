@@ -105,13 +105,22 @@ export function Maturity() {
           </p>
           {/* The ladder describes the destination; this is the service that
               actually gets a team there. */}
-          <a
-            href={maturity.trainingLink.href}
-            className="inline-flex items-center gap-1.5 rounded text-sm font-semibold text-accent underline underline-offset-4 transition hover:text-accent-hover"
-          >
-            {maturity.trainingLink.text}
-            <ArrowIcon />
-          </a>
+          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-6">
+            <a
+              href={maturity.trainingLink.href}
+              className="inline-flex items-center gap-1.5 rounded text-sm font-semibold text-accent underline underline-offset-4 transition hover:text-accent-hover"
+            >
+              {maturity.trainingLink.text}
+              <ArrowIcon />
+            </a>
+            <a
+              href={maturity.contactLink.href}
+              className="inline-flex items-center gap-1.5 rounded text-sm font-semibold text-accent underline underline-offset-4 transition hover:text-accent-hover"
+            >
+              {maturity.contactLink.text}
+              <ArrowIcon />
+            </a>
+          </div>
         </div>
       </Reveal>
     </Section>

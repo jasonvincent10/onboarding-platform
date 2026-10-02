@@ -12,6 +12,7 @@ const PUBLIC_ROUTES: {
   { path: '/', priority: 1, changeFrequency: 'monthly' },
   { path: '/what-you-get', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/safe-ai', priority: 0.8, changeFrequency: 'monthly' },
+  { path: '/staying-competitive', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/working-with-us', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/faq', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/contact', priority: 0.9, changeFrequency: 'yearly' },

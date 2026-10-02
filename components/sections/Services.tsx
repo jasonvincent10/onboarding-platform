@@ -30,6 +30,18 @@ export function Services({ bookingUrl }: { bookingUrl: string }) {
         ))}
       </div>
 
+      {/* The method used to run as a full section here. One line now, since
+          the four steps live on /working-with-us. */}
+      <Reveal delay={140}>
+        <a
+          href={services.methodLink.href}
+          className="mt-6 inline-flex items-center gap-2 rounded text-[0.95rem] font-semibold text-accent underline underline-offset-4 transition hover:text-accent-hover"
+        >
+          {services.methodLink.text}
+          <ArrowIcon />
+        </a>
+      </Reveal>
+
       {/* Follow-on work, visually separated so it reads as a later choice. */}
       <div className="mt-16">
         <Reveal>
