@@ -36,7 +36,9 @@ const stageStyles = [
   {
     lift: 'lg:mt-0',
     badge: 'bg-primary text-white',
-    card: 'border-primary/25 bg-canvas-raised shadow-lifted',
+    // The glow is the lifted shadow, moved onto a pseudo-element so it can
+    // fade in last. See .glow-last in globals.css.
+    card: 'border-primary/25 bg-canvas-raised glow-last',
     bar: 'from-primary-soft to-primary',
   },
 ] as const
@@ -62,7 +64,13 @@ export function Maturity() {
             const style = stageStyles[index]
 
             return (
-              <Reveal as="li" key={stage.number} delay={index * 110} className={style.lift}>
+              <Reveal
+                as="li"
+                key={stage.number}
+                delay={index * 80}
+                variant="quick"
+                className={style.lift}
+              >
                 <article
                   className={cx(
                     'group flex h-full flex-col gap-4 rounded-3xl border p-6 transition duration-300 hover:-translate-y-1',
@@ -83,7 +91,7 @@ export function Maturity() {
 
                   <div
                     aria-hidden="true"
-                    className={cx('h-1 w-full rounded-full bg-gradient-to-r', style.bar)}
+                    className={cx('bar-fill h-1 w-full rounded-full bg-gradient-to-r', style.bar)}
                   />
 
                   <p className="text-[0.95rem] font-semibold leading-relaxed text-ink">

@@ -1,6 +1,13 @@
 'use client'
 
-import { useEffect, useRef, useState, type ElementType, type ReactNode } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ElementType,
+  type ReactNode,
+} from 'react'
 
 /**
  * Fades and slides its children in when they scroll into view.
@@ -17,11 +24,18 @@ export function Reveal({
   className = '',
   /** Stagger within a group, in milliseconds. */
   delay = 0,
+  /**
+   * `quick` is the shorter reveal for small grouped items. Its delay is set as
+   * a custom property, not an inline transition-delay, so it can be dropped on
+   * narrow screens and read by decorations inside the card.
+   */
+  variant = 'default',
 }: {
   children: ReactNode
   as?: ElementType
   className?: string
   delay?: number
+  variant?: 'default' | 'quick'
 }) {
   const ref = useRef<HTMLElement>(null)
   const [revealed, setRevealed] = useState(false)
@@ -55,12 +69,19 @@ export function Reveal({
     return () => observer.disconnect()
   }, [])
 
+  const quick = variant === 'quick'
+  const style = !delay
+    ? undefined
+    : quick
+      ? ({ '--reveal-delay': `${delay}ms` } as CSSProperties)
+      : { transitionDelay: `${delay}ms` }
+
   return (
     <Tag
       ref={ref}
-      className={`reveal ${className}`}
+      className={`reveal ${quick ? 'reveal-quick ' : ''}${className}`}
       data-revealed={revealed ? 'true' : 'false'}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+      style={style}
     >
       {children}
     </Tag>

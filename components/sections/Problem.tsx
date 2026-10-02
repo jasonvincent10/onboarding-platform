@@ -26,8 +26,8 @@ export function Problem() {
 
         <ul className="flex flex-col gap-4 self-center">
           {problem.points.map((point, index) => (
-            <Reveal as="li" key={point.title} delay={index * 90}>
-              <div className="flex gap-4 rounded-2xl border border-line bg-canvas p-6 transition hover:border-accent-mist hover:shadow-card">
+            <Reveal as="li" key={point.title} delay={index * 90} variant="quick">
+              <div className="card-hover flex gap-4 rounded-2xl border border-line bg-canvas p-6">
                 <StalledIcon />
                 <div className="flex flex-col gap-1.5">
                   <h3 className="text-base font-bold text-ink">{point.title}</h3>
@@ -55,14 +55,22 @@ function StalledIcon() {
       focusable="false"
     >
       <rect width="36" height="36" rx="10" fill="#2C1D58" />
+      {/* pathLength="1" lets the CSS draw the line with a dash of length 1,
+          whatever the path's real length. */}
       <path
+        className="draw-line"
         d="M9 24l5-6 4 3"
+        pathLength={1}
         stroke="#C4B5FD"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeDasharray="1"
       />
+      {/* Already dashed, so it cannot be drawn the same way. It fades in once
+          the rising line has finished, as the stall. */}
       <path
+        className="draw-after"
         d="M18 21h9"
         stroke="#A78BFA"
         strokeWidth="2"

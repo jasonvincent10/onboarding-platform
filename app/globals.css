@@ -38,6 +38,10 @@
 
     /* Height of the sticky header, so anchored sections can offset by it. */
     --header-height: 4.25rem;
+
+    /* Strong ease-out for entrances. The built-in `ease-out` is too weak to
+       read as deliberate. */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   html {
@@ -101,6 +105,105 @@
   .reveal[data-revealed='true'] {
     opacity: 1;
     transform: none;
+  }
+
+  /* A quicker reveal for small, grouped items (the problem cards and the
+     maturity ladder). On narrow screens it is a plain fade-up with no
+     stagger: the cards stack, so each one scrolls in on its own and a delay
+     would only read as lag. The stagger and the longer rise only apply on
+     wide screens, where the group is seen at once. The delay is a custom
+     property rather than an inline transition-delay so that the decorations
+     inside a card can time themselves off it. */
+  .reveal-quick {
+    transform: translateY(8px);
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out);
+  }
+
+  @media (min-width: 1024px) {
+    .reveal-quick {
+      transform: translateY(12px);
+      transition-duration: 350ms;
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+  }
+
+  /* The glow under ladder stage 4. It lives on a pseudo-element so it can be
+     faded with opacity; animating box-shadow itself would repaint every frame. */
+  .glow-last {
+    position: relative;
+  }
+
+  .glow-last::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: theme('boxShadow.lifted');
+    pointer-events: none;
+  }
+
+  /* Hover is gated to real pointers, because a touch screen fires a hover on
+     tap and leaves it stuck. */
+  .card-hover {
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .card-hover:hover {
+      border-color: theme('colors.accent.mist');
+      box-shadow: theme('boxShadow.card');
+    }
+  }
+
+  /* Decorations that play once their card has revealed: the problem icon's
+     line drawing in, each ladder bar filling, and stage 4's glow arriving
+     last. Wide screens only, and only when motion is welcome. Everywhere else
+     these sit in their final state, which is also what you get with JS off. */
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .draw-line {
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 400ms var(--ease-out);
+      transition-delay: calc(var(--reveal-delay, 0ms) + 150ms);
+    }
+
+    .draw-after {
+      opacity: 0;
+      transition: opacity 250ms var(--ease-out);
+      transition-delay: calc(var(--reveal-delay, 0ms) + 450ms);
+    }
+
+    .bar-fill {
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 400ms var(--ease-out);
+      transition-delay: calc(var(--reveal-delay, 0ms) + 120ms);
+    }
+
+    .glow-last::after {
+      opacity: 0;
+      transition: opacity 300ms var(--ease-out);
+      transition-delay: calc(var(--reveal-delay, 0ms) + 350ms);
+    }
+
+    [data-revealed='true'] .draw-line {
+      stroke-dashoffset: 0;
+    }
+
+    [data-revealed='true'] .draw-after {
+      opacity: 1;
+    }
+
+    [data-revealed='true'] .bar-fill {
+      transform: none;
+    }
+
+    [data-revealed='true'] .glow-last::after {
+      opacity: 1;
+    }
   }
 }
 
