@@ -52,7 +52,7 @@ export function Hero({ bookingUrl }: { bookingUrl: string }) {
           </Reveal>
         </div>
 
-        <Reveal delay={200} className="hidden lg:block">
+        <Reveal delay={200}>
           <LadderVisual />
         </Reveal>
       </div>
@@ -77,35 +77,49 @@ function Backdrop() {
  * before the visitor scrolls.
  */
 function LadderVisual() {
+  // Heights are percentages of the plot, not fixed pixels, so the one height
+  // value below scales the whole graphic. Fixed pixels were why this used to
+  // be desktop-only: a 256px bar does not belong under the hero copy on a
+  // phone, and hiding it left mobile and tablet with no hero visual at all.
   const bars = [
-    { height: 88, label: 'Assist' },
-    { height: 136, label: 'Accelerate' },
-    { height: 192, label: 'Automate' },
-    { height: 256, label: 'Agentic' },
+    { height: 34, label: 'Assist' },
+    { height: 53, label: 'Accelerate' },
+    { height: 75, label: 'Automate' },
+    { height: 100, label: 'Agentic' },
   ]
 
   return (
     <div
       aria-hidden="true"
-      className="relative rounded-4xl border border-line bg-canvas-raised/80 p-8 shadow-lifted backdrop-blur-sm"
+      className="relative rounded-3xl border border-line bg-canvas-raised/80 p-5 shadow-lifted backdrop-blur-sm sm:rounded-4xl sm:p-6 lg:p-8"
     >
-      <div className="flex h-[19rem] items-end justify-between gap-4">
+      {/* Bars and labels are separate rows rather than four stacked columns.
+          A percentage height only resolves against a parent with a definite
+          height, so the bars must sit directly inside the fixed-height row. */}
+      <div className="grid h-36 grid-cols-4 items-end gap-2 sm:h-48 sm:gap-4 lg:h-64">
         {bars.map((bar, index) => (
-          <div key={bar.label} className="flex flex-1 flex-col items-center gap-3">
-            <div
-              className="w-full rounded-t-xl rounded-b-md bg-brand-gradient"
-              style={{
-                height: `${bar.height}px`,
-                opacity: 0.35 + index * 0.215,
-              }}
-            />
-            <span className="text-[0.7rem] font-semibold uppercase tracking-wide text-ink-muted">
-              {bar.label}
-            </span>
-          </div>
+          <div
+            key={bar.label}
+            className="w-full rounded-t-lg rounded-b-sm bg-brand-gradient sm:rounded-t-xl sm:rounded-b-md"
+            style={{
+              height: `${bar.height}%`,
+              opacity: 0.35 + index * 0.215,
+            }}
+          />
         ))}
       </div>
-      <div className="mt-6 flex items-center justify-between border-t border-line pt-5 text-xs font-medium text-ink-muted">
+
+      <div className="mt-2 grid grid-cols-4 gap-2 sm:mt-3 sm:gap-4">
+        {bars.map((bar) => (
+          <span
+            key={bar.label}
+            className="truncate text-center text-[0.55rem] font-semibold uppercase tracking-tight text-ink-muted sm:text-[0.7rem] sm:tracking-wide"
+          >
+            {bar.label}
+          </span>
+        ))}
+      </div>
+      <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-4 text-[0.65rem] font-medium text-ink-muted sm:mt-6 sm:pt-5 sm:text-xs">
         <span>Where most teams are</span>
         <span className="text-accent">Where the value is</span>
       </div>
