@@ -43,7 +43,7 @@ export const pages = {
     path: '/what-you-get',
     title: 'What you get',
     description:
-      'The five deliverables every Vopria engagement produces: an AI Maturity Profile, Opportunity Matrix, Deep-Dive Packs, AI Opportunity Report and Impact Report.',
+      'The six deliverables a Vopria engagement can produce: an AI Maturity Profile, Opportunity Matrix, Deep-Dive Packs, Knowledge Base Blueprint, AI Opportunity Report and Impact Report.',
   },
   safeAi: {
     path: '/safe-ai',
@@ -273,9 +273,13 @@ export const method = {
 export const deliverables = {
   id: 'what-you-get',
   eyebrow: 'What you get',
-  heading: 'Five things you keep.',
+  heading: 'Six things you keep.',
   intro:
     'Not a slide deck and a handshake. Every engagement produces documents your team can act on long after we have left.',
+  note: 'The exact set depends on the route you choose.',
+  // Closing line above the CTA. Was hardcoded in the component; moved here so
+  // all copy on the page is editable in one place.
+  closing: 'Whatever your engagement produces is yours to keep, whether or not you ask us to build anything.',
   items: [
     {
       title: 'AI Maturity Profile',
@@ -290,12 +294,16 @@ export const deliverables = {
       body: 'Step-by-step analysis of your highest-value processes as they run today, alongside the AI-enabled future state and what it takes to get there.',
     },
     {
+      title: 'Knowledge Base Blueprint',
+      body: 'A clear map of how your AI tools will be set up to understand your business: which systems they connect to, the processes they follow and who owns each part.',
+    },
+    {
       title: 'AI Opportunity Report',
       body: 'Your findings and roadmap, written up in full and presented in person to your leadership team rather than emailed over.',
     },
     {
       title: 'Impact Report',
-      body: 'Results measured against the baseline we took at the start, so the value is evidenced rather than asserted.',
+      body: 'Once changes are in place, results measured against the baseline we took at the start, so the value is evidenced rather than asserted.',
     },
   ],
   matrix: {

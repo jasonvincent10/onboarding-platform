@@ -23,6 +23,7 @@ export function Deliverables({
   // One level below the section heading, so a page whose section leads with an
   // h1 never jumps straight to h3.
   const ItemHeading = headingLevel === 'h1' ? 'h2' : 'h3'
+
   return (
     <Section id={deliverables.id} tone="raised" labelledBy="deliverables-heading">
       <Reveal>
@@ -31,8 +32,13 @@ export function Deliverables({
           eyebrow={deliverables.eyebrow}
           heading={deliverables.heading}
           intro={deliverables.intro}
-        as={headingLevel}
+          as={headingLevel}
         />
+        {/* Sits under the standfirst rather than inside it: the list is what an
+            engagement can produce, not a fixed bundle every client receives. */}
+        <p className="mt-3 max-w-prose text-[0.975rem] font-semibold text-accent">
+          {deliverables.note}
+        </p>
       </Reveal>
 
       <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12">
@@ -71,7 +77,7 @@ export function Deliverables({
       <Reveal delay={140}>
         <div className="mt-12 flex flex-col items-start gap-4 rounded-2xl bg-accent-veil px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-xl text-[0.975rem] font-semibold leading-relaxed text-accent">
-            Every one of these is yours to keep, whether or not you ask us to build anything.
+            {deliverables.closing}
           </p>
           <ButtonLink href={bookingUrl} size="md" className="shrink-0">
             Book a discovery call
