@@ -62,7 +62,12 @@ export function Reveal({
           }
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+      // The quick reveal waits until the card is properly on screen, a third
+      // of it visible and clear of the bottom fifth, so its motion plays where
+      // the reader is looking rather than at the very edge of the viewport.
+      quick
+        ? { threshold: 0.35, rootMargin: '0px 0px -20% 0px' }
+        : { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
     )
 
     observer.observe(element)

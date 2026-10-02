@@ -42,6 +42,18 @@
     /* Strong ease-out for entrances. The built-in `ease-out` is too weak to
        read as deliberate. */
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+    /* Section motion timings (problem cards and maturity ladder). Every
+       duration and offset for those animations lives here, so the pace can be
+       tuned in one place. Sized to be watched, not merely noticed. */
+    --motion-card: 700ms;        /* each card's fade and rise, wide screens */
+    --motion-card-mobile: 600ms; /* the plain fade-up on narrow screens */
+    --motion-draw: 800ms;        /* icon line drawing in, ladder bar filling */
+    --motion-draw-after: 350ms;  /* how long after its card the draw starts */
+    --motion-stall: 500ms;       /* the dashed stall line fading in */
+    --motion-stall-after: 1000ms;
+    --motion-glow: 700ms;        /* stage 4's glow fading in */
+    --motion-glow-after: 700ms;
   }
 
   html {
@@ -115,16 +127,16 @@
      property rather than an inline transition-delay so that the decorations
      inside a card can time themselves off it. */
   .reveal-quick {
-    transform: translateY(8px);
+    transform: translateY(12px);
     transition:
-      opacity 300ms var(--ease-out),
-      transform 300ms var(--ease-out);
+      opacity var(--motion-card-mobile) var(--ease-out),
+      transform var(--motion-card-mobile) var(--ease-out);
   }
 
   @media (min-width: 1024px) {
     .reveal-quick {
-      transform: translateY(12px);
-      transition-duration: 350ms;
+      transform: translateY(20px);
+      transition-duration: var(--motion-card);
       transition-delay: var(--reveal-delay, 0ms);
     }
   }
@@ -166,27 +178,27 @@
   @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
     .draw-line {
       stroke-dashoffset: 1;
-      transition: stroke-dashoffset 400ms var(--ease-out);
-      transition-delay: calc(var(--reveal-delay, 0ms) + 150ms);
+      transition: stroke-dashoffset var(--motion-draw) var(--ease-out);
+      transition-delay: calc(var(--reveal-delay, 0ms) + var(--motion-draw-after));
     }
 
     .draw-after {
       opacity: 0;
-      transition: opacity 250ms var(--ease-out);
-      transition-delay: calc(var(--reveal-delay, 0ms) + 450ms);
+      transition: opacity var(--motion-stall) var(--ease-out);
+      transition-delay: calc(var(--reveal-delay, 0ms) + var(--motion-stall-after));
     }
 
     .bar-fill {
       transform: scaleX(0);
       transform-origin: left center;
-      transition: transform 400ms var(--ease-out);
-      transition-delay: calc(var(--reveal-delay, 0ms) + 120ms);
+      transition: transform var(--motion-draw) var(--ease-out);
+      transition-delay: calc(var(--reveal-delay, 0ms) + var(--motion-draw-after));
     }
 
     .glow-last::after {
       opacity: 0;
-      transition: opacity 300ms var(--ease-out);
-      transition-delay: calc(var(--reveal-delay, 0ms) + 350ms);
+      transition: opacity var(--motion-glow) var(--ease-out);
+      transition-delay: calc(var(--reveal-delay, 0ms) + var(--motion-glow-after));
     }
 
     [data-revealed='true'] .draw-line {

@@ -67,7 +67,7 @@ export function Maturity() {
               <Reveal
                 as="li"
                 key={stage.number}
-                delay={index * 80}
+                delay={index * 220}
                 variant="quick"
                 className={style.lift}
               >
