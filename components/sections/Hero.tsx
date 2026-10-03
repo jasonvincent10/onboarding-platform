@@ -18,17 +18,17 @@ export function Hero({ bookingUrl }: { bookingUrl: string }) {
             <Eyebrow>{hero.eyebrow}</Eyebrow>
           </Reveal>
 
-          <Reveal delay={60}>
+          <Reveal step={1}>
             <h1 className="max-w-xl text-4xl font-extrabold leading-[1.08] tracking-tight text-ink sm:text-5xl md:text-[3.5rem]">
               {hero.heading}
             </h1>
           </Reveal>
 
-          <Reveal delay={120}>
+          <Reveal step={2}>
             <p className="max-w-prose text-lg leading-relaxed text-ink-soft">{hero.subheading}</p>
           </Reveal>
 
-          <Reveal delay={180} className="w-full">
+          <Reveal step={3} className="w-full">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <ButtonLink href={bookingUrl} size="lg">
                 {hero.primaryCta.label}
@@ -40,7 +40,7 @@ export function Hero({ bookingUrl }: { bookingUrl: string }) {
             </div>
           </Reveal>
 
-          <Reveal delay={240}>
+          <Reveal step={4}>
             <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-muted">
               {hero.assurances.map((item) => (
                 <li key={item} className="flex items-center gap-2">
@@ -52,7 +52,7 @@ export function Hero({ bookingUrl }: { bookingUrl: string }) {
           </Reveal>
         </div>
 
-        <Reveal delay={200}>
+        <Reveal step={3}>
           <LadderVisual />
         </Reveal>
       </div>

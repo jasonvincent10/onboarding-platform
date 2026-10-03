@@ -38,7 +38,7 @@ export function Method({ headingLevel = 'h2' }: { headingLevel?: HeadingLevel } 
         />
 
         {method.steps.map((step, index) => (
-          <Reveal as="li" key={step.number} delay={index * 100} className="relative">
+          <Reveal as="li" key={step.number} step={index} className="relative">
             {/* Mobile rail, drawn between markers rather than past the last one. */}
             {index < method.steps.length - 1 ? (
               <span

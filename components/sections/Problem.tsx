@@ -15,7 +15,7 @@ export function Problem() {
             />
           </Reveal>
 
-          <Reveal delay={80}>
+          <Reveal step={1}>
             <div className="flex max-w-prose flex-col gap-4 text-lg leading-relaxed text-ink-soft">
               {problem.body.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
@@ -26,7 +26,7 @@ export function Problem() {
 
         <ul className="flex flex-col gap-4 self-center">
           {problem.points.map((point, index) => (
-            <Reveal as="li" key={point.title} delay={index * 200} variant="quick">
+            <Reveal as="li" key={point.title} step={index}>
               <div className="card-hover flex gap-4 rounded-2xl border border-line bg-canvas p-6">
                 <StalledIcon />
                 <div className="flex flex-col gap-1.5">

@@ -43,11 +43,12 @@
        read as deliberate. */
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
-    /* Section motion timings (problem cards and maturity ladder). Every
-       duration and offset for those animations lives here, so the pace can be
-       tuned in one place. Sized to be watched, not merely noticed. */
-    --motion-card: 700ms;        /* each card's fade and rise, wide screens */
+    /* Scroll motion timings for the whole site. Every reveal and every
+       decoration reads from these, so the pace is tuned in one place. Sized to
+       be watched, not merely noticed. */
+    --motion-card: 700ms;        /* each element's fade and rise, wide screens */
     --motion-card-mobile: 600ms; /* the plain fade-up on narrow screens */
+    --motion-stagger: 200ms;     /* gap between items in a group, wide screens */
     --motion-draw: 800ms;        /* icon line drawing in, ladder bar filling */
     --motion-draw-after: 350ms;  /* how long after its card the draw starts */
     --motion-stall: 500ms;       /* the dashed stall line fading in */
@@ -106,27 +107,15 @@
      in components/Reveal.tsx adds [data-revealed] to play them in. With JS off
      the observer never runs, so the <noscript> block in app/layout.tsx resets
      these to their final state — content must never depend on motion to appear. */
+  /* On narrow screens it is a plain fade-up with no stagger: items stack, so
+     each one scrolls in on its own and a delay would only read as lag. The
+     stagger and the longer rise apply on wide screens, where a group is seen
+     at once. --reveal-delay is derived from the item's step so that the
+     decorations inside a card (icon line, ladder bar, glow) can time
+     themselves off it. */
   .reveal {
+    --reveal-delay: calc(var(--reveal-step, 0) * var(--motion-stagger));
     opacity: 0;
-    transform: translateY(18px);
-    transition:
-      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .reveal[data-revealed='true'] {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* A quicker reveal for small, grouped items (the problem cards and the
-     maturity ladder). On narrow screens it is a plain fade-up with no
-     stagger: the cards stack, so each one scrolls in on its own and a delay
-     would only read as lag. The stagger and the longer rise only apply on
-     wide screens, where the group is seen at once. The delay is a custom
-     property rather than an inline transition-delay so that the decorations
-     inside a card can time themselves off it. */
-  .reveal-quick {
     transform: translateY(12px);
     transition:
       opacity var(--motion-card-mobile) var(--ease-out),
@@ -134,11 +123,16 @@
   }
 
   @media (min-width: 1024px) {
-    .reveal-quick {
+    .reveal {
       transform: translateY(20px);
       transition-duration: var(--motion-card);
-      transition-delay: var(--reveal-delay, 0ms);
+      transition-delay: var(--reveal-delay);
     }
+  }
+
+  .reveal[data-revealed='true'] {
+    opacity: 1;
+    transform: none;
   }
 
   /* The glow under ladder stage 4. It lives on a pseudo-element so it can be

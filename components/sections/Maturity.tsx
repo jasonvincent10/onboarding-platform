@@ -67,8 +67,7 @@ export function Maturity() {
               <Reveal
                 as="li"
                 key={stage.number}
-                delay={index * 220}
-                variant="quick"
+                step={index}
                 className={style.lift}
               >
                 <article
@@ -105,7 +104,7 @@ export function Maturity() {
         </ol>
       </div>
 
-      <Reveal delay={120}>
+      <Reveal>
         <div className="mt-12 flex flex-col items-center gap-3 rounded-2xl bg-accent-veil px-6 py-5 text-center">
           <p className="flex items-center gap-3 text-base font-semibold text-accent sm:text-lg">
             <RiseIcon />

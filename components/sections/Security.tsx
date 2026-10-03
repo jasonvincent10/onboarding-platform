@@ -35,7 +35,7 @@ export function Security({
 
       <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {security.points.map((point, index) => (
-          <Reveal as="li" key={point.title} delay={index * 80}>
+          <Reveal as="li" key={point.title} step={index % 3}>
             <article className="flex h-full flex-col gap-3 rounded-2xl border border-line bg-canvas-raised p-6 transition hover:border-accent-mist">
               <SecurityIcon index={index} />
               <ItemHeading className="text-base font-extrabold tracking-tight text-ink">{point.title}</ItemHeading>
@@ -45,7 +45,7 @@ export function Security({
         ))}
       </ul>
 
-      <Reveal delay={120}>
+      <Reveal>
         <div className="mt-10 flex flex-col items-start gap-5 rounded-3xl border border-accent-mist bg-brand-gradient-soft p-7 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
           <div className="flex flex-col gap-2">
             <ItemHeading className="text-lg font-extrabold tracking-tight text-ink sm:text-xl">

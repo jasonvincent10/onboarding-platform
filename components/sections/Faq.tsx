@@ -47,7 +47,7 @@ export function Faq({ headingLevel = 'h2' }: { headingLevel?: HeadingLevel } = {
 
         <div className="flex flex-col gap-3">
           {faq.items.map((item, index) => (
-            <Reveal key={item.question} delay={index * 70}>
+            <Reveal key={item.question}>
               <details className="group rounded-2xl border border-line bg-canvas transition hover:border-accent-mist open:border-accent-mist open:shadow-card">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-2xl px-6 py-5 text-base font-bold text-ink [&::-webkit-details-marker]:hidden">
                   {item.question}

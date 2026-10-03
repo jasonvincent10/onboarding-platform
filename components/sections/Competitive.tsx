@@ -30,7 +30,7 @@ export function Competitive({ headingLevel = 'h2' }: { headingLevel?: HeadingLev
           </p>
         </Reveal>
 
-        <Reveal delay={100} className="self-center">
+        <Reveal step={1} className="self-center">
           <ul className="flex flex-col gap-4">
             {competitive.markers.map((marker, index) => (
               <li

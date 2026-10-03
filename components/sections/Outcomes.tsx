@@ -25,7 +25,7 @@ export function Outcomes({ headingLevel = 'h2' }: { headingLevel?: HeadingLevel 
         />
       </Reveal>
 
-      <Reveal delay={60}>
+      <Reveal step={1}>
         <p className="mt-5 flex max-w-prose items-start gap-2.5 rounded-xl border border-line-strong bg-canvas-raised px-4 py-3 text-sm text-ink-muted">
           <InfoIcon />
           <span>{outcomes.disclaimer}</span>
@@ -34,7 +34,7 @@ export function Outcomes({ headingLevel = 'h2' }: { headingLevel?: HeadingLevel 
 
       <ul className="mt-10 grid gap-5 md:grid-cols-3">
         {outcomes.items.map((item, index) => (
-          <Reveal as="li" key={item.title} delay={index * 95}>
+          <Reveal as="li" key={item.title} step={index}>
             <article className="flex h-full flex-col gap-4 rounded-3xl border border-line bg-canvas-raised p-7 transition duration-300 hover:-translate-y-1 hover:shadow-card">
               <span className="w-fit rounded-full bg-accent-veil px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.1em] text-accent">
                 {item.stage}
@@ -50,7 +50,7 @@ export function Outcomes({ headingLevel = 'h2' }: { headingLevel?: HeadingLevel 
         ))}
       </ul>
 
-      <Reveal delay={120}>
+      <Reveal>
         <p className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-[0.975rem] text-ink-soft">
           {outcomes.ctaText}
           <a

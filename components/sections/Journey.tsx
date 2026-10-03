@@ -34,7 +34,7 @@ export function Journey({
 
       <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
         {journey.steps.map((step, index) => (
-          <Reveal as="li" key={step.name} delay={index * 70} className="relative">
+          <Reveal as="li" key={step.name} step={index % 3} className="relative">
             <div className="flex h-full gap-4">
               <div className="flex flex-col items-center">
                 <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-base font-extrabold text-white shadow-card">
@@ -63,7 +63,7 @@ export function Journey({
         ))}
       </ol>
 
-      <Reveal delay={120}>
+      <Reveal>
         <div className="mt-10 flex flex-col items-start gap-4 rounded-2xl bg-accent-veil px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[0.975rem] font-semibold leading-relaxed text-accent">
             {journey.cta.text}

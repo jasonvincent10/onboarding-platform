@@ -44,7 +44,7 @@ export function Deliverables({
       <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12">
         <ol className="order-2 flex flex-col gap-3 lg:order-1">
           {deliverables.items.map((item, index) => (
-            <Reveal as="li" key={item.title} delay={index * 70}>
+            <Reveal as="li" key={item.title}>
               <article className="flex gap-4 rounded-2xl border border-line bg-canvas p-5 transition hover:border-accent-mist sm:p-6">
                 <span
                   aria-hidden="true"
@@ -67,14 +67,14 @@ export function Deliverables({
           widens the whole page on narrow screens.
         */}
         <Reveal
-          delay={120}
+          step={1}
           className="order-1 min-w-0 lg:order-2 lg:sticky lg:top-28 lg:self-start"
         >
           <OpportunityMatrix />
         </Reveal>
       </div>
 
-      <Reveal delay={140}>
+      <Reveal>
         <div className="mt-12 flex flex-col items-start gap-4 rounded-2xl bg-accent-veil px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-xl text-[0.975rem] font-semibold leading-relaxed text-accent">
             {deliverables.closing}

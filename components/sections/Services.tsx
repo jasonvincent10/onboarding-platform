@@ -24,7 +24,7 @@ export function Services({ bookingUrl }: { bookingUrl: string }) {
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {services.items.map((item, index) => (
-          <Reveal key={item.slug} delay={index * 90}>
+          <Reveal key={item.slug} step={index}>
             <EntryCard item={item} index={index} />
           </Reveal>
         ))}
@@ -32,7 +32,7 @@ export function Services({ bookingUrl }: { bookingUrl: string }) {
 
       {/* The method used to run as a full section here. One line now, since
           the four steps live on /working-with-us. */}
-      <Reveal delay={140}>
+      <Reveal step={3}>
         <a
           href={services.methodLink.href}
           className="mt-6 inline-flex items-center gap-2 rounded text-[0.95rem] font-semibold text-accent underline underline-offset-4 transition hover:text-accent-hover"
@@ -57,7 +57,7 @@ export function Services({ bookingUrl }: { bookingUrl: string }) {
 
         <div className="mt-8 grid gap-5 lg:grid-cols-2">
           {services.followOn.items.map((item, index) => (
-            <Reveal key={item.slug} delay={index * 90}>
+            <Reveal key={item.slug} step={index}>
               {item.highlight ? (
                 <HighlightCard item={item} bookingUrl={bookingUrl} />
               ) : (

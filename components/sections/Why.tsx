@@ -31,7 +31,7 @@ export function Why() {
             <Reveal
               as="li"
               key={point.title}
-              delay={index * 80}
+              step={index % 2}
               // An odd number of points beside the founder note would leave the
               // last one stranded in a half-empty row, so it takes the full
               // width instead and the row reads as intended.
@@ -51,7 +51,7 @@ export function Why() {
         </ul>
 
         {showFounder ? (
-          <Reveal delay={160}>
+          <Reveal step={1}>
             <FounderNote />
           </Reveal>
         ) : null}
